@@ -1,0 +1,268 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,,800,900);
+@import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');
+
+html,
+body {
+    overflow-x: hidden;
+    width: 100%;
+    height: auto;
+}
+
+body {
+    font-family: 'Raleway', sans-serif;
+    position: relative;
+    padding: 0 1em 3em 1em;
+
+}
+
+
+/* Logo */
+
+.title {
+    font-weight: 800;
+    color: transparent;
+    font-size: 120px;
+    background: url("https://phandroid.s3.amazonaws.com/wp-content/uploads/2014/05/rainbow-nebula.jpg") repeat;
+    background-position: 40% 50%;
+    -webkit-background-clip: text;
+    text-align: center;
+    line-height: 90px;
+    letter-spacing: -8px;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.subtitle {
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    padding-top: 10px;
+}
+
+
+/* Nav */
+
+.animate {
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+.nav-controller {
+    padding: 5px 6px 1px;
+    border: 5px solid rgb(51, 51, 51);
+    color: rgb(51, 51, 51);
+    border-radius: 25px;
+    font-size: 12pt;
+    cursor: pointer;
+    z-index: 300;
+    margin: auto;
+}
+
+nav~.nav-controller>.controller-open {
+    display: inline-block;
+}
+
+nav~.nav-controller>.controller-close {
+    display: none;
+}
+
+nav.focus~.nav-controller>.controller-open {
+    display: none;
+}
+
+nav.focus~.nav-controller>.controller-close {
+    display: inline-block;
+}
+
+nav {
+    position: absolute;
+    top: 0px;
+    right: -100%;
+    padding-top: 65px;
+    padding-bottom: 15px;
+    height: 100%;
+    max-width: 200px;
+    text-align: right;
+    background-color: rgb(255, 255, 255);
+    box-shadow: -3px 0px 3px 0px rgba(160, 160, 160, 0.30);
+    z-index: 100;
+}
+
+nav.focus {
+    right: 0px;
+}
+
+nav>.divider {
+    content: '';
+    border-bottom: 1px solid rgb(230, 230, 230);
+    max-height: 1px;
+    overflow: hidden;
+    margin: 15px 0px;
+}
+
+nav>h4,
+nav>p,
+nav>ul {
+    padding: 0px 10px;
+}
+
+nav>h4 {
+    font-family: 'Anton', sans-serif;
+}
+
+nav>ul {
+    list-style: none;
+}
+
+nav>ul>li {
+    margin: 5px 0px;
+}
+
+nav>ul>li>a {
+    color: rgb(190, 190, 190);
+}
+
+nav>ul>li>a:hover {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: rgb(51, 51, 51);
+    text-decoration: none;
+}
+
+
+/* post */
+
+section {
+    width: 100%;
+    float: left;
+}
+
+.text-center {
+    display: flex;
+    justify-content: center;
+}
+
+.banner-section {
+    height: 380px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    background-position: 0;
+}
+
+.post-title-block {
+    padding: 100px 0;
+}
+
+.post-title-block h1 {
+    color: #fff;
+    font-size: 85px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.post-title-block li {
+    font-size: 20px;
+    color: #fff;
+}
+
+.image-block {
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+
+/* chapitre blog  */
+
+#lien>h1 {
+    font-size: 1.5em;
+}
+
+.img-responsive {
+    max-width: 400px;
+    height: 200px !important;
+}
+
+#lien {
+    width: 600px !important;
+    text-align: justify !important;
+    color: black !important;
+    text-decoration: none !important;
+}
+
+blockquote {
+    font-family: 'Nunito', sans-serif;
+    text-align: justify;
+    font-weight: 500;
+}
+
+blockquote::first-letter {
+    font-size: 2em;
+    font-style: italic;
+    padding-left: 2em;
+}
+
+#styleBloc {
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+/*Commentaire*/
+.com {
+    margin: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    background: #eee;
+    padding: 1em;
+}
+
+
+/* footer */
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 45%;
+}
+
+@media screen and (min-width:320px) and (max-width:768px) {
+    .post-title-block h1 {
+        font-size: 45px;
+    }
+
+    .title {
+        font-size: 61px;
+    }
+
+    h1 {
+        font-size: 2.2em !important;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    blockquote::first-letter {
+        padding-left: 1em;
+    }
+
+    .img-responsive {
+        max-width: 250px !important;
+        height: 200px !important;
+    }
+
+    /* footer */
+
+    footer {
+        position: absolute;
+        bottom: 0;
+        left: 40px;
+    }
+}
