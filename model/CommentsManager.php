@@ -43,7 +43,7 @@ class CommentsManager extends Manager
         $sql = "
                 INSERT INTO comments(name, comment, post_id, date_comment)
                 VALUES(:name, :comment, :post_id, NOW())
-               ";
+              ";
         $req = $this->dbConnect()->prepare($sql);
         $req->execute($comment);
     }
