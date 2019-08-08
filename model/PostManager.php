@@ -1,5 +1,8 @@
 <?php
+declare (strict_types = 1);
 namespace Openclassroom\Blog\Model;
+
+use \PDO;
 
 require_once 'model/Manager.php';
 
@@ -12,9 +15,9 @@ class PostManager extends Manager
      *
      * @return object
      */
-    public function get_post()
+    public function get_post(int $id): ?object
     {
-        $req = $this->dbConnect()->query("
+        $query = $this->dbConnect()->prepare("
             SELECT  posts.id,
                     posts.title,
                     posts.content,
@@ -24,11 +27,11 @@ class PostManager extends Manager
             FROM    posts
             JOIN    admins
             ON      name_post = admins.name
-            WHERE   posts.id = '{$_GET['id']}'
+            WHERE   posts.id = :id
             AND     posts.posted = '1'
             ");
-
-        $result = $req->fetchObject();
+        $query->execute(['id' => $id]);
+        $result = $query->fetch(PDO::FETCH_OBJ);
         return $result;
     }
 
@@ -40,9 +43,9 @@ class PostManager extends Manager
      *
      * @return array
      */
-    public function get_posts()
+    public function get_posts(): ?array
     {
-        $req = $this->dbConnect()->query("
+        $query = $this->dbConnect()->query("
         SELECT  posts.id,
                 posts.title,
                 posts.image_posts,
@@ -56,13 +59,7 @@ class PostManager extends Manager
         ORDER BY date_posts DESC
         LIMIT 0,2
         ");
-
-        $results = array();
-
-        while ($rows = $req->fetchObject()) {
-            $results[] = $rows;
-        }
-
+        $results = $query->fetchAll(PDO::FETCH_OBJ);
         return $results;
     }
 
@@ -72,10 +69,10 @@ class PostManager extends Manager
      *
      * @return object
      */
-    public function getPosts()
+    public function getPosts(): ?array
     {
 
-        $req = $this->dbConnect()->query("
+        $query = $this->dbConnect()->query("
         SELECT *
         FROM posts
         WHERE posted='1'
@@ -83,12 +80,7 @@ class PostManager extends Manager
         ASC
         ");
 
-        $results = array();
-
-        while ($rows = $req->fetchObject()) {
-            $results[] = $rows;
-        }
-
+        $results = $query->fetchAll(PDO::FETCH_OBJ);
         return $results;
     }
 }

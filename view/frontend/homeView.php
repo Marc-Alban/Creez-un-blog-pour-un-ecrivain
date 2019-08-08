@@ -1,4 +1,5 @@
 <?php
+declare (strict_types = 1);
 ob_start();
 ?>
 <main role="main" class="container">
@@ -20,7 +21,8 @@ ob_start();
                 chapitres:
             </h3>
             <?php foreach ($posts as $chapitre): ?>
-            <!-- chapitre 1 -->
+
+            <!-- chapitre -->
             <div class="col-md-12">
                 <div
                     class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">

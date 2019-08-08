@@ -1,5 +1,5 @@
 <?php
-
+declare (strict_types = 1);
 use Openclassroom\Blog\Model\CommentsManager;
 use Openclassroom\Blog\Model\PostManager;
 
@@ -9,12 +9,22 @@ require 'model/PostManager.php';
 /**
  * Renvoie les commentaires sur la page post
  */
-function getComment()
+function getComment(int $id): void
 {
     $commentManager = new CommentsManager;
-    $responses = $commentManager->get_comments();
 
+    $responses = $commentManager->get_comments($id);
     require 'view/frontend/postView.php';
+}
+
+/**
+ * Insert les commentaires en BDD
+ */
+function comment($name, $comment, $id)
+{
+    $commentManager = new CommentsManager;
+
+    $responses = $commentManager->comment($name, $comment, $id);
 }
 
 /**
@@ -36,20 +46,12 @@ function getHome()
 }
 
 /**
- * Renvoie le header (menu)
- */
-// function getHeader()
-// {
-//     require 'view/frontend/headerView.php';
-// }
-
-/**
  * Renvoie le post sur la page post
  */
-function getPost()
+function getPost(int $id): void
 {
     $postManager = new PostManager;
-    $post = $postManager->get_post();
+    $post = $postManager->get_post($id);
     require 'view/frontend/postView.php';
 }
 
@@ -61,4 +63,14 @@ function listPosts()
     $postManager = new PostManager;
     $posts = $postManager->getPosts();
     require 'view/frontend/chapitreView.php';
+}
+
+/**
+ *Signalement -- Commentaire
+ */
+
+function signalComment($id, $admin)
+{
+    $commentManager = new CommentsManager;
+    $commentManager->alertComment($id, $admin);
 }

@@ -17,6 +17,7 @@
     <!-- Corps de la page  -->
     <header>
         <?=$header?>
+
     </header>
     <main>
         <?=$content?>

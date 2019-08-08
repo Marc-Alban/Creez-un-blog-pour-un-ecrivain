@@ -1,4 +1,5 @@
 <?php
+declare (strict_types = 1);
 ob_start();
 $title = 'Chapitre ' . $post->title . ' - Jean Forteroche';
 ?>
@@ -23,39 +24,14 @@ $title = 'Chapitre ' . $post->title . ' - Jean Forteroche';
         </div>
         <hr>
         <div class="row">
-            <?php
-if (isset($_POST) && isset($_POST['envoie'])) {
-
-    $name = htmlspecialchars(trim($_POST['pseudo']));
-    $comment = htmlspecialchars(trim($_POST['comment']));
-    $errors = [];
-
-    if (empty($name) || empty($comment)) {
-        $errors['empty'] = 'Tous les champs sont vides';
-    }
-
-    if (!empty($errors)) {
-
-        ?>
             <div class="alert alert-danger col-12 col-md-6" role="alert">
                 <?php
 foreach ($errors as $error) {
-            echo $error . '<br>';
-        }
-    } else {
-        ?>
-            </div>
-            <?php
-comment($name, $comment);
-
-        ?>
-            <script>
-            window.location.replace("index.php?page=post&id=<?=$_GET['id']?>");
-            </script>
-            <?php
-}
+    echo $error . '<br>';
 }
 ?>
+            </div>
+
             <h4>Commentaires:</h4>
             <br><br>
             <form class="col-md-8 col-12" method="POST">
@@ -73,7 +49,6 @@ comment($name, $comment);
 
             <div class="col-12 com">
                 <?php
-
 if ($responses != false) {
     foreach ($responses as $response) {
         ?>
