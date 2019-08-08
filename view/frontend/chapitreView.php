@@ -1,5 +1,4 @@
 <?php
-$posts = getPosts();
 ob_start();
 $title = 'Chapitres - Jean Forteroche';
 ?>

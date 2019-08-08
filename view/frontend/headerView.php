@@ -14,12 +14,10 @@ ob_start();
             <nav class="animate ">
                 <ul>
                     <li>
-                        <a class="btn btn-sm nav-link m-2 <?=($page == 'home') ? 'active' : ''?>"
-                            href="index.php?page=home">Accueil</a>
+                        <a class="btn btn-sm nav-link m-2" href="index.php?page=home">Accueil</a>
                     </li>
                     <li>
-                        <a class="btn btn-sm nav-link m-2 <?=($page == 'chapitre') ? 'active' : ''?>"
-                            href="index.php?page=chapitre">Chapitres</a>
+                        <a class="btn btn-sm nav-link m-2 " href="index.php?page=chapitres">Chapitres</a>
                     </li>
                 </ul>
                 <hr>

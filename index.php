@@ -4,6 +4,7 @@ try {
     if (isset($_GET['page'])) {
         if ($_GET['page'] == 'home') {
             getHome();
+            getHeader();
         } elseif ($_GET['page'] == 'post') {
             if (isset($_GET['id']) && $_GET['id'] > 0) {
                 getPost();
@@ -14,6 +15,8 @@ try {
             } else {
                 throw new Exception('Aucun identifiant de billet envoyé');
             }
+        } elseif ($_GET['page'] == 'chapitres') {
+            listPosts();
         } elseif ($_GET['page'] == 'error') {
             getError();
         }
