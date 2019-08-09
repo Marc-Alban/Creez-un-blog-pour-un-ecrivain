@@ -4,12 +4,9 @@ try {
     if (isset($_GET['page'])) {
         if ($_GET['page'] == 'home') {
             // Page Accueil -- Récupération de chapitre (2)
-            getHeader();
             getHome();
-            getFooter();
         } elseif ($_GET['page'] == 'post') {
             if (isset($_GET['id']) && $_GET['id'] > 0) {
-                getHeader();
                 // Récupération d'un chapitre avec id dans l'url
                 getPost($_GET['id']);
                 // Récupération des commentaires d'un chapitre avec id passé dans l'url
@@ -38,9 +35,7 @@ try {
         }
     } else {
         // Page Accueil
-        getHeader();
         getHome();
-        getFooter();
     }
 } catch (Exception $e) {
     echo 'Erreur : ' . $e->getMessage();

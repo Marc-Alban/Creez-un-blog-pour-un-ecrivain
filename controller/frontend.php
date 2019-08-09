@@ -40,29 +40,6 @@ function getError()
 
 /**
  * Renvoie les posts sur la page Accueil
- */
-function getFooter()
-{
-    ob_start();
-    require 'view/frontend/footerView.php';
-    $footer = ob_get_clean();
-    require 'view/frontend/template.php';
-
-}
-
-/**
- * Renvoie les posts sur la page Accueil
- */
-function getHeader()
-{
-    ob_start();
-    require 'view/frontend/headerView.php';
-    $header = ob_get_clean();
-    require 'view/frontend/template.php';
-
-}
-/**
- * Renvoie les posts sur la page Accueil
  * et le contenu
  */
 function getHome()
@@ -70,7 +47,9 @@ function getHome()
     $postManager = new PostManager;
     $posts = $postManager->get_posts();
     ob_start();
+    require 'view/frontend/headerView.php';
     require 'view/frontend/homeView.php';
+    require 'view/frontend/footerView.php';
     $content = ob_get_clean();
     require 'view/frontend/template.php';
 }
@@ -83,8 +62,10 @@ function getPost(int $id): void
     $postManager = new PostManager;
     $post = $postManager->get_post($id);
     ob_start();
+    require 'view/frontend/headerView.php';
     require 'view/frontend/postView.php';
-    $content = ob_get_contents();
+    require 'view/frontend/footerView.php';
+    $content = ob_get_clean();
     require 'view/frontend/template.php';
 }
 
@@ -95,7 +76,12 @@ function listPosts()
 {
     $postManager = new PostManager;
     $posts = $postManager->getPosts();
+    ob_start();
+    require 'view/frontend/headerView.php';
     require 'view/frontend/chapitreView.php';
+    require 'view/frontend/footerView.php';
+    $content = ob_get_clean();
+    require 'view/frontend/template.php';
 }
 
 /**
