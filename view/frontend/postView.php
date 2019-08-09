@@ -62,5 +62,5 @@ if ($responses != false) {
             </div>
         </div>
     </div>
-    </div> <!-- /container -->
+    </div>
 </section>

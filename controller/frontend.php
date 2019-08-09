@@ -9,11 +9,12 @@ require 'model/PostManager.php';
 /**
  * Renvoie les commentaires sur la page post
  */
-function getComment(int $id): void
+function getComment(int $id): array
 {
     $commentManager = new CommentsManager;
-    require 'view/frontend/postView.php';
     $responses = $commentManager->get_comments($id);
+    return $responses;
+    require 'view/frontend/postView.php';
 }
 
 /**
@@ -22,8 +23,7 @@ function getComment(int $id): void
 function comment($name, $comment, $id)
 {
     $commentManager = new CommentsManager;
-
-    $responses = $commentManager->comment($name, $comment, $id);
+    $commentManager->comment($name, $comment, $id);
 }
 
 /**
