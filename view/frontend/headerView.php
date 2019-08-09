@@ -10,7 +10,6 @@ ob_start();
                 </a>
                 <div class="subtitle">Auteur, Ecrivain</div>
             </div>
-            <!-- Menu top bar -->
             <nav class="animate ">
                 <ul>
                     <li>
@@ -33,7 +32,6 @@ ob_start();
 }
 ?>
             </nav>
-
             <div class="nav-controller">
                 <span class="controller-open">Menu</span>
                 <span class="controller-close">X</span>
@@ -43,6 +41,7 @@ ob_start();
 </header>
 </div>
 <?php
-$header = ob_get_clean();
-require 'template.php';
+$header = ob_get_contents();
+require_once 'template.php';
+
 ?>

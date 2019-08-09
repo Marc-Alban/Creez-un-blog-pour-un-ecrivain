@@ -1,7 +1,4 @@
-<?php
-declare (strict_types = 1);
-ob_start();
-?>
+<?php ob_start();?>
 <main role="main" class="container">
     <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
         <div class="col-md-9 px-0">
@@ -62,7 +59,6 @@ ob_start();
 
 </main><!-- /.container -->
 
-<?php
-$content = ob_get_clean();
-require 'template.php';
-?>
+<?php $content = ob_get_contents();?>
+
+<?php require 'template.php';?>

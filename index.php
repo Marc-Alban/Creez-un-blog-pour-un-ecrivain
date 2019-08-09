@@ -1,5 +1,5 @@
 <?php
-declare (strict_types = 1);
+
 require_once 'controller/frontend.php';
 try {
     if (isset($_GET['page'])) {
@@ -19,6 +19,8 @@ try {
                     if (!empty($name) || !empty($comment)) {
                         if (empty($errors)) {
                             comment($name, $comment, $id);
+                        } else {
+                            echo $errors;
                         }
                     } else {
                         $errors = 'Tous les champs sont vides';
