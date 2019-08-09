@@ -1,4 +1,3 @@
-<?php ob_start();?>
 <main role="main" class="container">
     <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
         <div class="col-md-9 px-0">
@@ -58,4 +57,3 @@
     </div><!-- /.row -->
 
 </main><!-- /.container -->
-<?php require 'template.php';?>

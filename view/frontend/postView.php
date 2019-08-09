@@ -1,5 +1,4 @@
 <?php
-ob_start();
 $title = 'Chapitre ' . $post->title . ' - Jean Forteroche';
 ?>
 
@@ -65,8 +64,3 @@ if ($responses != false) {
     </div>
     </div> <!-- /container -->
 </section>
-
-<?php
-$content = ob_get_clean();
-require 'template.php';
-?>

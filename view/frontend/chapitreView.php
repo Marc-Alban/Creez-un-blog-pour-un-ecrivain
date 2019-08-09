@@ -1,5 +1,4 @@
 <?php
-ob_start();
 $title = 'Chapitres - Jean Forteroche';
 ?>
 <section class="blog-me pt-100 pb-100" id="blog">
@@ -23,7 +22,3 @@ $title = 'Chapitres - Jean Forteroche';
         </div>
     </div>
 </section>
-<?php
-$content = ob_get_clean();
-require 'template.php';
-?>

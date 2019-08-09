@@ -12,9 +12,8 @@ require 'model/PostManager.php';
 function getComment(int $id): void
 {
     $commentManager = new CommentsManager;
-
-    $responses = $commentManager->get_comments($id);
     require 'view/frontend/postView.php';
+    $responses = $commentManager->get_comments($id);
 }
 
 /**
@@ -32,7 +31,11 @@ function comment($name, $comment, $id)
  */
 function getError()
 {
+    ob_start();
     require 'view/frontend/error.php';
+    $error = ob_get_clean();
+    require 'view/frontend/template.php';
+
 }
 
 /**
@@ -40,8 +43,10 @@ function getError()
  */
 function getFooter()
 {
+    ob_start();
     require 'view/frontend/footerView.php';
-    $footer = ob_get_contents();
+    $footer = ob_get_clean();
+    require 'view/frontend/template.php';
 
 }
 
@@ -50,19 +55,24 @@ function getFooter()
  */
 function getHeader()
 {
+    ob_start();
     require 'view/frontend/headerView.php';
-    $header = ob_get_contents();
+    $header = ob_get_clean();
+    require 'view/frontend/template.php';
 
 }
 /**
  * Renvoie les posts sur la page Accueil
+ * et le contenu
  */
 function getHome()
 {
     $postManager = new PostManager;
     $posts = $postManager->get_posts();
+    ob_start();
     require 'view/frontend/homeView.php';
-    $content = ob_get_contents();
+    $content = ob_get_clean();
+    require 'view/frontend/template.php';
 }
 
 /**
@@ -72,8 +82,10 @@ function getPost(int $id): void
 {
     $postManager = new PostManager;
     $post = $postManager->get_post($id);
-    $content = ob_get_contents();
+    ob_start();
     require 'view/frontend/postView.php';
+    $content = ob_get_contents();
+    require 'view/frontend/template.php';
 }
 
 /**

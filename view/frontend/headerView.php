@@ -1,6 +1,3 @@
-<?php
-ob_start();
-?>
 <div class="container">
     <header class="blog-header py-3">
         <div class="row justify-content-between align-items-center">
@@ -40,4 +37,3 @@ ob_start();
 </div>
 </header>
 </div>
-<?php require_once 'template.php';?>
