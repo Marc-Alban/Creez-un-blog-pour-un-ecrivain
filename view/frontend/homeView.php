@@ -58,7 +58,4 @@
     </div><!-- /.row -->
 
 </main><!-- /.container -->
-
-<?php $content = ob_get_contents();?>
-
 <?php require 'template.php';?>

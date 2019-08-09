@@ -40,8 +40,4 @@ ob_start();
 </div>
 </header>
 </div>
-<?php
-$header = ob_get_contents();
-require_once 'template.php';
-
-?>
+<?php require_once 'template.php';?>

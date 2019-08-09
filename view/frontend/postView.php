@@ -24,11 +24,9 @@ $title = 'Chapitre ' . $post->title . ' - Jean Forteroche';
         <hr>
         <div class="row">
             <div class="alert alert-danger col-12 col-md-6" role="alert">
-                <?php
-foreach ($errors as $error) {
-    echo $error . '<br>';
-}
-?>
+                <?php foreach ($errors as $error): ?>
+                <p><?=$error?></p>
+                <?php endforeach?>
             </div>
 
             <h4>Commentaires:</h4>

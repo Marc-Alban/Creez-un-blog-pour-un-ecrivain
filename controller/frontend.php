@@ -38,11 +38,31 @@ function getError()
 /**
  * Renvoie les posts sur la page Accueil
  */
+function getFooter()
+{
+    require 'view/frontend/footerView.php';
+    $footer = ob_get_contents();
+
+}
+
+/**
+ * Renvoie les posts sur la page Accueil
+ */
+function getHeader()
+{
+    require 'view/frontend/headerView.php';
+    $header = ob_get_contents();
+
+}
+/**
+ * Renvoie les posts sur la page Accueil
+ */
 function getHome()
 {
     $postManager = new PostManager;
     $posts = $postManager->get_posts();
     require 'view/frontend/homeView.php';
+    $content = ob_get_contents();
 }
 
 /**
@@ -52,6 +72,7 @@ function getPost(int $id): void
 {
     $postManager = new PostManager;
     $post = $postManager->get_post($id);
+    $content = ob_get_contents();
     require 'view/frontend/postView.php';
 }
 
