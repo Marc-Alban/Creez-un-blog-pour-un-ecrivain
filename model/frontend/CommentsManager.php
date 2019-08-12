@@ -12,9 +12,9 @@ class CommentsManager extends Manager
     /**
      * Renvoie les commentaires sur la page post
      *
-     * @return array
+     * @return
      */
-    public function get_comments(int $id): array
+    public function get_comments(int $id)
     {
         $query = $this->dbConnect()->prepare("
                                                 SELECT *
@@ -24,7 +24,7 @@ class CommentsManager extends Manager
                                                 DESC
                                             ");
         $query->execute(['id' => $id]);
-        $results = $query->fetchAll(PDO::FETCH_ASSOC);
+        $results = $query->fetchAll(PDO::FETCH_OBJ);
         return $results;
     }
 
@@ -33,7 +33,7 @@ class CommentsManager extends Manager
      *
      * @return string
      */
-    public function comment(string $name, string $comment, int $post_id)
+    public function setComment(string $name, string $comment, int $post_id)
     {
         $comment = array(
             'name' => $name,

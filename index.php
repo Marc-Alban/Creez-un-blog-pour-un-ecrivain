@@ -5,23 +5,23 @@ require_once 'controller/backend.php';
 try {
     if (isset($_GET['page'])) {
         //----------------------------------------------------Frontend-------------------------------------//
-        // Page Accueil -- Récupération de chapitre (2)
+        // Page Accueil --
         if ($_GET['page'] == 'home') {
             getHome();
-            //Si récupère page post
+            //Page Post
         } elseif ($_GET['page'] == 'post') {
             if (isset($_GET['id']) && $_GET['id'] > 0) {
-                // Récupération d'un chapitre avec id dans l'url
-                getPost($_GET['id']);
-                // Récupération des commentaires d'un chapitre avec id passé dans l'url
-                getComment($_GET['id']);
+                // Récupération d'un chapitre avec id dans l'url avec commentaire ou pas
+                requireView($_GET['id']);
+
                 if (isset($_POST) && isset($_POST['envoie'])) {
                     $name = htmlspecialchars(trim($_POST['name']));
                     $comment = htmlspecialchars(trim($_POST['comment']));
                     $errors = [];
                     if (!empty($name) || !empty($comment)) {
                         if (empty($errors)) {
-                            comment($name, $comment, $_GET['id']);
+                            //Insertion d'un commentaire en bdd
+                            instComment($name, $comment, $_GET['id']);
                         }
                     } else {
                         $errors = 'Tous les champs sont vides';
@@ -60,16 +60,75 @@ try {
             }
         } else if ($_GET['page'] == 'dashboard') {
             if (isset($_SESSION['pass'])) {
-                $tables = [
-                    "Publications" => "posts",
-                    "Commentaires" => "comments",
-                ];
+                getDashboard();
+            }
+        } else if ($_GET['page'] == 'list') {
+            if (isset($_SESSION['pass'])) {
+                getList();
+            }
+        } else if ($_GET['page'] == 'postEdit') {
+            if (isset($_SESSION['pass'])) {
+                getPostEdit($_GET['id']);
+                if (isset($_GET['id']) && $_GET['id'] > 0) {
+                    if (isset($_POST['submit'])) {
+                        $title = htmlspecialchars(trim($_POST['title']));
+                        $content = htmlspecialchars(trim($_POST['content']));
+                        $posted = (isset($_POST['public']) == 'on') ? "1" : "0";
+                        // $errors = [];
+                        if (!empty($title) || !empty($content)) {
+                            if (!empty($title)) {
+                                if (!empty($content)) {
+                                    updatePost($title, $content, $posted, $_GET['id']);
+                                } else {
+                                    throw new Exception('Veuillez mettre un contenu !');
+                                }
+                            } else {
+                                throw new Exception('Veuillez mettre un titre !');
+                            }
+                        } else {
+                            throw new Exception('Veuillez remplir tous les champs !');
+                        }
+                    }
 
-                $colors = [
-                    "posts" => "blue",
-                    "comments" => "green",
-                ];
-                getDashboard($tables, $colors);
+                } else {
+                    throw new Exception('Aucun identifiant envoyé !');
+                }
+            }
+        } else if ($_GET['page'] == 'write') {
+            if (isset($_SESSION['pass'])) {
+                getWrite();
+                if (isset($_POST['submit'])) {
+                    $title = htmlspecialchars(trim($_POST['title']));
+                    $content = htmlspecialchars(trim($_POST['description']));
+                    $posted = ($_POST['public'] == 1) ? "1" : "0";
+                    $name = 'Jean';
+                    //Erreur comment les afficher dans un tableau  voir avec prof !?
+                    //$errors = [];
+                    if (!empty($title) || !empty($content)) {
+                        if (!empty($title)) {
+                            if (!empty($content)) {
+                                $file = $_FILES['image']['name'];
+                                $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
+                                $extention = strrchr($file, '.');
+                                if (!in_array($extention, $extentions) || $extentions = ".png") {
+                                    if (!empty($name)) {
+                                        PostWrite($title, $content, $name, $posted, $_FILES['image']['tmp_name'], $extention);
+                                    } else {
+                                        throw new Exception('Nom manquant !');
+                                    }
+                                } else {
+                                    throw new Exception('Image n\'est pas valide! ');
+                                }
+                            } else {
+                                throw new Exception('Veuillez renseigner du contenu ! ');
+                            }
+                        } else {
+                            throw new Exception('Veuillez renseigner un titre !');
+                        }
+                    } else {
+                        throw new Exception('Veuillez remplir les champs');
+                    }
+                }
             }
         }
     } else {
@@ -87,69 +146,7 @@ try {
 // post.php
 
 // $post = get_post();
-// if ($post == false) {
-//     header("Location: index.php?page=error");
-// }
-// if (isset($_POST['submit'])) {
-//     $title = htmlspecialchars(trim($_POST['title']));
-//     $content = htmlspecialchars(trim($_POST['content']));
-//     $posted = (isset($_POST['public']) == on) ? "1" : "0";
-
-//     $errors = [];
-
-//     if (!empty($title) || !empty($content)) {
-//         if (!empty($title)) {
-//             if (!empty($content)) {
-//                 edit($title, $content, $posted, $_GET['id']);
-//             } else {
-//                 $errors['content'] = "Veuillez mettre un contenu !";
-// }
-//         } else {
-//             $errors['title'] = "Veuillez mettre un titre !";
-//         }
-//     } else {
-//         $errors['empty'] = "Veuillez remplir tous les champs !";
-//     }
-// }
 
 // if (isset($_POST['delete'])) {
 //     deletePost();
-// }
-//--------------------------------------------------------------
-//--------------------------------------------------------------
-
-//write.php
-
-// if (isset($_POST['post'])) {
-//     $title = htmlspecialchars(trim($_POST['title']));
-//     $content = htmlspecialchars(trim($_POST['description']));
-//     $posted = ($_POST['public'] == 1) ? "1" : "0";
-//     $name = ($_SESSION['pass']) ? 'Jean' : '';
-//     $errors = [];
-
-//     if (!empty($title) || !empty($content)) {
-//         if (!empty($title)) {
-//             if (!empty($content)) {
-//                 $file = $_FILES['image']['name'];
-//                 $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
-//                 $extention = strrchr($file, '.');
-
-//                 if (!in_array($extention, $extentions) || $extentions = ".png") {
-//                     if (!empty($name)) {
-//                         post($title, $content, $name, $posted, $_FILES['image']['tmp_name'], $extention);
-//                     } else {
-//                         $errors['name'] = "Nom manquant ! ";
-//                     }
-//                 } else {
-//                     $errors['image'] = "Image n'est pas valable ! ";
-//                 }
-//             } else {
-//                 $errors['content'] = "Veuillez renseigner du contenu ! ";
-//             }
-//         } else {
-//             $errors['title'] = "Veuillez renseigner un titre !";
-//         }
-//     } else {
-//         $errors['empty'] = "Veuillez remplir les champs";
-//     }
 // }

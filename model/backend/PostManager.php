@@ -19,7 +19,7 @@ class PostManager extends Manager
     public function get_post(int $id)
     {
 
-        $req = $this->dbConnect()->query("
+        $query = $this->dbConnect()->query("
             SELECT  posts.id,
                     posts.title,
                     posts.image_posts,
@@ -33,7 +33,7 @@ class PostManager extends Manager
             WHERE posts.id = " . $id
         );
 
-        $result = $req->fetchAll(PDO::FETCH_ASSOC);
+        $result = $query->fetch(PDO::FETCH_OBJ);
         return $result;
     }
 
@@ -45,7 +45,7 @@ class PostManager extends Manager
      * @param boolean $posted -> public ou non
      * @param integer $id
      */
-    public function edit(string $title, string $content, bool $posted, int $id)
+    public function edit(string $title, string $content, int $posted, int $id)
     {
         $e = [
             'title' => $title,
@@ -54,11 +54,9 @@ class PostManager extends Manager
             'id' => $id,
         ];
 
-        $sql = "UPDATE posts SET title = :title, content = :content, date_posts = NOW(), posted = :posted WHERE id = :id ";
-        $req = $this->dbConnect()->prepare($sql);
+        $query = "UPDATE posts SET title = :title, content = :content, date_posts = NOW(), posted = :posted WHERE id = :id ";
+        $req = $this->dbConnect()->prepare($query);
         $req->execute($e);
-
-        header("Location: index.php?page=post&id=" . $id);
     }
 
     /**
@@ -84,7 +82,7 @@ class PostManager extends Manager
      * @param [type] $tmp_name
      * @param [type] $extention
      */
-    public function post($title, $content, $name, $posted, $tmp_name, $extention)
+    public function postWrite($title, $content, $name, $posted, $tmp_name, $extention)
     {
 
         $req = $this->dbConnect()->query('SELECT MAX(id) FROM posts ORDER BY id DESC');
@@ -95,7 +93,7 @@ class PostManager extends Manager
             $id = "post";
             $extention = ".png";
         } else {
-            move_uploaded_file($tmp_name, "../img/post/" . $id . $extention);
+            move_uploaded_file($tmp_name, "public/img/post/" . $id . $extention);
         }
 
         $p = [

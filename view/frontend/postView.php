@@ -1,5 +1,5 @@
 <?php
-$title = 'Chapitre ' . $post->title . ' - Jean Forteroche';
+$title = $post->title . ' - Jean Forteroche';
 ?>
 
 <section class="post-content-section">
@@ -22,13 +22,13 @@ $title = 'Chapitre ' . $post->title . ' - Jean Forteroche';
         </div>
         <hr>
         <div class="row">
-            <?php if (!empty($errors)) {?>
+            <?php if (!empty($errors)): ?>
             <?php foreach ($errors as $error): ?>
             <div class="alert alert-danger col-12 col-md-6" role="alert">
                 <p><?=$error?></p>
             </div>
             <?php endforeach?>
-            <?php }?>
+            <?php endif?>
 
             <h4>Commentaires:</h4>
             <br><br>
@@ -39,28 +39,22 @@ $title = 'Chapitre ' . $post->title . ' - Jean Forteroche';
                     <label for="name">Votre pseudo</label>
                 </div>
                 <div class="form-group">
-                    <textarea id="message" name="comment" class="form-control" require></textarea>
+                    <textarea id="message " name="comment" class="form-control" require></textarea>
                     <label for="message">Message</label>
                 </div>
                 <button type="submit" name="envoie" class="btn btn-primary">Envoyer</button>
             </form>
 
             <div class="col-12 com">
-                <?php
-if (isset($responses) && $response != false) {
-    foreach ($responses as $response) {
-        ?>
+                <?php foreach ($responses as $response): ?>
+
                 <div class="blockquote col-12">
                     <?=$response->name?> le <?=date("d/m/Y", strtotime($response->date_comment))?> :
                     <?=nl2br($response->comment)?>.
                     <a href="index.php?page=see_comment&id=<?=$response->id?>">(Signaler)</a>
                 </div>
-                <?php
-}
-} else {
-    echo 'Aucun commentaires publié... Soyer le premier ! ';
-}
-?>
+                <?php endforeach;?>
+                <?=(isset($responses) && $responses == null) ? 'Aucun commentaires publié... Soyer le premier ! ' : '';?>
             </div>
         </div>
     </div>

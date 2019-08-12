@@ -1,3 +1,4 @@
+<?php $title = "Accueil - Livre Jean Forteroche"?>
 <main role="main" class="container">
     <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
         <div class="col-md-9 px-0">
