@@ -1,5 +1,10 @@
 <?php
+namespace Openclassroom\Blog\Model\Backend;
+
 use Openclassroom\Blog\Model\Manager;
+use \PDO;
+
+require_once 'model/Manager.php';
 
 class PostManager extends Manager
 {

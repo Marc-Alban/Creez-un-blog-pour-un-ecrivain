@@ -19,12 +19,12 @@
                 <hr>
                 <p>Admin</p>
                 <?php if (isset($user)) {?>
-                <a class="btn btn-sm btn-outline-secondary m-2" href="admin/index.php?page=dashboard">Back Office</a>
-                <a class="btn btn-sm btn-outline-secondary m-2" href="admin/index.php?page=logout">Déconexion</a>
+                <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=dashboard">Back Office</a>
+                <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=logout">Déconexion</a>
                 <?php
 } else {
     ?>
-                <a class="btn btn-sm btn-outline-secondary m-2" href="admin/index.php?page=login">Back Office</a>
+                <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=login">Back Office</a>
                 <?php
 }
 ?>

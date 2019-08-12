@@ -1,8 +1,10 @@
 <?php
+session_start();
 require_once 'controller/frontend.php';
-(isset($_SESSION['pass'])) ? $user = $_SESSION['pass'] : "";
+require_once 'controller/backend.php';
 try {
     if (isset($_GET['page'])) {
+        //----------------------------------------------------Frontend-------------------------------------//
         // Page Accueil -- Récupération de chapitre (2)
         if ($_GET['page'] == 'home') {
             getHome();
@@ -36,11 +38,40 @@ try {
         } elseif ($_GET['page'] == 'error') {
             // Renvoie vers la page Error
             getError();
-            //Récupère la page ...
-        } //  elseif ($_GET['page'] == '' ) {
-        //     // Renvoie vers la page Error
+            //----------------------------------------------------Backend-------------------------------------//
+            //Si récupère page login
+        } elseif ($_GET['page'] == 'login') {
+            //Renvoie la page Login du dashboard
+            if (!isset($_SESSION['pass'])) {
+                getLogin();
+                if (isset($_POST['submit'])) {
+                    $password = htmlspecialchars(trim($_POST['password']));
+                    if (empty($password)) {
+                        throw new Exception('Champs n\'est pas remplis !');
+                    } else if (password_verify($password, getUser())) {
+                        $_SESSION['pass'] = getUser();
+                        header('Location: index.php?page=dashboard');
+                    } else {
+                        throw new Exception('Ce mot de passe n\'est pas bon pas !');
+                    }
+                }
+            } else {
+                header('Location: index.php?page=dashboard');
+            }
+        } else if ($_GET['page'] == 'dashboard') {
+            if (isset($_SESSION['pass'])) {
+                $tables = [
+                    "Publications" => "posts",
+                    "Commentaires" => "comments",
+                ];
 
-        // }
+                $colors = [
+                    "posts" => "blue",
+                    "comments" => "green",
+                ];
+                getDashboard($tables, $colors);
+            }
+        }
     } else {
         // Page Accueil
         getHome();
@@ -51,20 +82,6 @@ try {
 
 // login.php
 
-// if (isset($_POST['submit'])) {
-//     $password = htmlspecialchars(trim($_POST['password']));
-//     $errors = [];
-
-//     if (empty($password)) {
-//         $errors['empty'] = "Tous les champs ne sont pas remplis !";
-//     } else if (password_verify($_POST['password'], is_admin($password))) {
-//         $errors['exists'] = "Ce mot de passe n'est pas bon pas !";
-//     }
-// else {
-//     $_SESSION['pass'] = $password;
-//     header('Location: index.php?page=dashboard');
-// }
-// }
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 // post.php
