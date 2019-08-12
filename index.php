@@ -22,6 +22,7 @@ try {
                         if (empty($errors)) {
                             //Insertion d'un commentaire en bdd
                             instComment($name, $comment, $_GET['id']);
+
                         }
                     } else {
                         $errors = 'Tous les champs sont vides';
@@ -68,7 +69,6 @@ try {
             }
         } else if ($_GET['page'] == 'postEdit') {
             if (isset($_SESSION['pass'])) {
-                getPostEdit($_GET['id']);
                 if (isset($_GET['id']) && $_GET['id'] > 0) {
                     if (isset($_POST['submit'])) {
                         $title = htmlspecialchars(trim($_POST['title']));
@@ -79,6 +79,7 @@ try {
                             if (!empty($title)) {
                                 if (!empty($content)) {
                                     updatePost($title, $content, $posted, $_GET['id']);
+                                    header('Location: index.php?page=postEdit&id=' . $_GET['id']);
                                 } else {
                                     throw new Exception('Veuillez mettre un contenu !');
                                 }
@@ -93,6 +94,7 @@ try {
                 } else {
                     throw new Exception('Aucun identifiant envoyé !');
                 }
+                getPostEdit($_GET['id']);
             }
         } else if ($_GET['page'] == 'write') {
             if (isset($_SESSION['pass'])) {
@@ -138,15 +140,3 @@ try {
 } catch (Exception $e) {
     echo 'Erreur : ' . $e->getMessage();
 }
-
-// login.php
-
-//--------------------------------------------------------------
-//--------------------------------------------------------------
-// post.php
-
-// $post = get_post();
-
-// if (isset($_POST['delete'])) {
-//     deletePost();
-// }

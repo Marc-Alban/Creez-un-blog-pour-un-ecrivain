@@ -46,7 +46,7 @@ function updatePost($title, $content, $posted, $id)
 {
     $postManager = new PostManager;
     $postManager->edit($title, $content, $posted, $id);
-    header('Location: index.php?page=list');
+
 }
 
 function getWrite()
