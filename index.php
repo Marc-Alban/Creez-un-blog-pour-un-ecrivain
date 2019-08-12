@@ -29,7 +29,7 @@ try {
         } elseif ($_GET['page'] == 'chapitres') {
             // Affichage des chapitres
             listPosts();
-        } elseif ($_GET['page'] == 'error') {
+        } elseif ($_GET['page'] == 'error' || $_GET['page'] != $page) {
             // Renvoie vers la page Error
             getError();
         }

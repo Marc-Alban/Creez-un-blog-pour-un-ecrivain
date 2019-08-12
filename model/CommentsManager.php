@@ -13,7 +13,7 @@ class CommentsManager extends Manager
      *
      * @return array
      */
-    public function get_comments(int $id): ?array
+    public function get_comments(int $id): array
     {
         $query = $this->dbConnect()->prepare("
                                                 SELECT *
@@ -23,7 +23,7 @@ class CommentsManager extends Manager
                                                 DESC
                                             ");
         $query->execute(['id' => $id]);
-        $results = $query->fetchAll(PDO::FETCH_OBJ);
+        $results = $query->fetchAll(PDO::FETCH_ASSOC);
         return $results;
     }
 

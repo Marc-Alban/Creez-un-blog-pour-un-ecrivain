@@ -9,18 +9,17 @@ require 'model/PostManager.php';
 /**
  * Renvoie les commentaires sur la page post
  */
-function getComment(int $id): array
+function getComment(int $id)
 {
     $commentManager = new CommentsManager;
     $responses = $commentManager->get_comments($id);
-    return $responses;
-    require 'view/frontend/postView.php';
+    return $responses[0];
 }
 
 /**
  * Insert les commentaires en BDD
  */
-function comment($name, $comment, $id)
+function comment(string $name, string $comment, int $id)
 {
     $commentManager = new CommentsManager;
     $commentManager->comment($name, $comment, $id);
@@ -32,8 +31,8 @@ function comment($name, $comment, $id)
 function getError()
 {
     ob_start();
-    require 'view/frontend/error.php';
-    $error = ob_get_clean();
+    require 'view/frontend/errorView.php';
+    $content = ob_get_clean();
     require 'view/frontend/template.php';
 
 }
