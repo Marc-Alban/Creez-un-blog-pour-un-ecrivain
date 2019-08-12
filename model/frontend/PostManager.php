@@ -1,7 +1,8 @@
 <?php
 declare (strict_types = 1);
-namespace Openclassroom\Blog\Model;
+namespace Openclassroom\Blog\Model\Frontend;
 
+use Openclassroom\Blog\Model\Manager;
 use \PDO;
 
 require_once 'model/Manager.php';

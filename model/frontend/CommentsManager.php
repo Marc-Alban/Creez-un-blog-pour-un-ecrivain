@@ -1,7 +1,8 @@
 <?php
 declare (strict_types = 1);
-namespace Openclassroom\Blog\Model;
+namespace Openclassroom\Blog\Model\Frontend;
 
+use Openclassroom\Blog\Model\Manager;
 use \PDO;
 
 require_once 'model/Manager.php';
@@ -32,7 +33,7 @@ class CommentsManager extends Manager
      *
      * @return string
      */
-    public function comment(string $name, string $comment, int $post_id): ?string
+    public function comment(string $name, string $comment, int $post_id)
     {
         $comment = array(
             'name' => $name,

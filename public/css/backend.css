@@ -1,0 +1,200 @@
+/* Générale */
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #000000;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+a:hover {
+    color: #000000;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+/* nav bar */
+.navbar-top {
+    background: #212529;
+    width: 100%;
+    z-index: 1;
+}
+
+.navbar a {
+    color: white;
+}
+
+/* Drop menu */
+.dropdown-menu li {
+    text-align: center;
+}
+
+.dropdown-menu a {
+    color: #212529;
+}
+
+/* Navigation côté */
+.side-nav {
+    background: #212529;
+    width: 100%;
+    height: 70vh;
+}
+
+.side-nav ul {
+    padding: 0;
+    margin: 0;
+}
+
+.side-nav li:hover a {
+    color: white;
+}
+
+.side-nav li {
+    margin: 2em 0;
+}
+
+.side-nav a {
+    color: white;
+    font-size: 1.2em;
+}
+
+/* Contenu */
+
+.contenu {
+    margin-top: 4em;
+}
+
+/* page dashboard */
+.listeCom {
+    text-align: center;
+}
+
+.blue {
+    background: #0b53a6 !important;
+    color: white !important;
+}
+
+.green {
+    background: #0c7a4c !important;
+    color: white !important;
+}
+
+.orange {
+    background: #bd5908 !important;
+    color: white !important;
+}
+
+/* Form page */
+.formT {
+    width: 200px;
+    overflow-x: hidden;
+}
+
+.postF input,
+.postF textarea {
+    margin: 10px 20px;
+    vertical-align: middle;
+}
+
+.postF .form-check-label {
+    margin-left: 2.4em;
+}
+
+.img-form {
+    margin-left: 50px !important;
+}
+
+/* post-dashboard */
+.img {
+    height: 200px;
+    width: 200px;
+}
+
+#title {
+    width: 90%;
+}
+
+#content {
+    height: 500px;
+    width: 240px;
+}
+
+@media all and (min-width: 768px) {
+
+    /* Navigation côté */
+    .side-nav {
+        background: #212529;
+        width: 190px;
+        height: 100vh;
+        position: fixed;
+        top: 2.5em;
+    }
+
+    /* nav bar */
+    .navbar-top {
+        background: #212529;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1;
+    }
+
+    /* Contenu */
+    .contenu {
+        margin-top: 4em;
+        margin-left: 12em;
+        width: 740px;
+    }
+
+
+    /* page dashboard */
+    .listeCom {
+        display: inline-block;
+        margin: 5px;
+    }
+
+
+    /* Form page */
+    .formT {
+        width: 100%;
+    }
+
+    /* Liste chapitre */
+
+    #styleBloc {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-items: center;
+        align-content: center;
+        text-align: justify;
+    }
+
+    .timg {
+        width: 300px;
+        height: 300px;
+    }
+
+    /* post */
+    #content {
+        height: 500px;
+        width: 440px;
+    }
+
+}
+
+
+@media all and (min-width: 1024px) {
+
+    /* post */
+    #content {
+        height: 500px;
+        width: 680px;
+    }
+
+}

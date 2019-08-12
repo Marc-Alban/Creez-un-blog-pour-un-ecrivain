@@ -22,18 +22,20 @@ $title = 'Chapitre ' . $post->title . ' - Jean Forteroche';
         </div>
         <hr>
         <div class="row">
+            <?php if (!empty($errors)) {?>
+            <?php foreach ($errors as $error): ?>
             <div class="alert alert-danger col-12 col-md-6" role="alert">
-                <?php foreach ($errors as $error): ?>
                 <p><?=$error?></p>
-                <?php endforeach?>
             </div>
+            <?php endforeach?>
+            <?php }?>
 
             <h4>Commentaires:</h4>
             <br><br>
             <form class="col-md-8 col-12" method="POST">
                 <h4>Laisser un commentaires:</h4>
                 <div class="form-group">
-                    <input id="name" name="pseudo" type="text" class="form-control" require>
+                    <input id="name" name="name" type="text" class="form-control" require>
                     <label for="name">Votre pseudo</label>
                 </div>
                 <div class="form-group">
@@ -45,7 +47,7 @@ $title = 'Chapitre ' . $post->title . ' - Jean Forteroche';
 
             <div class="col-12 com">
                 <?php
-if ($responses != false) {
+if (isset($responses) && $response != false) {
     foreach ($responses as $response) {
         ?>
                 <div class="blockquote col-12">

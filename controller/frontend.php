@@ -1,10 +1,10 @@
 <?php
 
-use Openclassroom\Blog\Model\CommentsManager;
-use Openclassroom\Blog\Model\PostManager;
+use Openclassroom\Blog\Model\Frontend\CommentsManager;
+use Openclassroom\Blog\Model\Frontend\PostManager;
 
-require 'model/CommentsManager.php';
-require 'model/PostManager.php';
+require 'model/frontend/CommentsManager.php';
+require 'model/frontend/PostManager.php';
 
 /**
  * Renvoie les commentaires sur la page post

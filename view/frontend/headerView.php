@@ -18,7 +18,7 @@
                 </ul>
                 <hr>
                 <p>Admin</p>
-                <?php if (isset($_SESSION['pass'])) {?>
+                <?php if (isset($user)) {?>
                 <a class="btn btn-sm btn-outline-secondary m-2" href="admin/index.php?page=dashboard">Back Office</a>
                 <a class="btn btn-sm btn-outline-secondary m-2" href="admin/index.php?page=logout">Déconexion</a>
                 <?php
