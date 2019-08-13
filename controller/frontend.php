@@ -8,6 +8,8 @@ require 'model/frontend/PostManager.php';
 
 /**
  * Renvoie les commentaires sur la page post et le post
+ *
+ * @param integer $id
  */
 function requireView(int $id)
 {
@@ -28,6 +30,10 @@ function requireView(int $id)
 
 /**
  * Insert les commentaires en BDD
+ *
+ * @param string $name
+ * @param string $comment
+ * @param integer $id
  */
 function instComment(string $name, string $comment, int $id)
 {
@@ -80,11 +86,12 @@ function listPosts()
 }
 
 /**
- *Signalement -- Commentaire
+ * Signalement -- Commentaire
+ *
+ * @param integer $commentid
  */
-
-function signalComment($id, $admin)
+function signalComment(int $commentid)
 {
     $commentManager = new CommentsManager;
-    $commentManager->alertComment($id, $admin);
+    $commentManager->alertComment($commentid);
 }

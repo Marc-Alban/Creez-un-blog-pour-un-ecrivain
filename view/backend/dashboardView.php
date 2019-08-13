@@ -12,19 +12,17 @@
                 </tr>
             </thead>
             <tbody>
-                <?php
-if (!empty($comments)) {
-    foreach ($comments as $comment) {
-        ?>
+                <?php if (isset($comments)): ?>
+                <?php foreach ($comments as $comment): ?>
                 <tr id="commentaire_<?=$comment->id?>">
                     <th scope="row"><?=$comment->title?></th>
                     <td><?=substr($comment->comment, 0, 100)?>...</td>
                     <td>
-                        <a href="index.php?page=see_comment&id=<?=$comment->id?>" id="<?=$comment->id?>"
+                        <a href="index.php?page=dashboard&id=<?=$comment->id?>&/val" id="<?=$comment->id?>"
                             class="see_comment"><button type="button"
                                 class="btn btn-primary btn-circle btn-lg see_comment"><i
                                     class="fas fa-check-circle"></i></button></a>
-                        <a href="index.php?page=delete_comment&id=<?=$comment->id?>" id="<?=$comment->id?>"
+                        <a href="index.php?page=dashboard&id=<?=$comment->id?>&/del" id="<?=$comment->id?>"
                             class="delete_comment"><button type="button"
                                 class="btn btn-warning btn-circle btn-lg delete_comment"><i
                                     class="fas fa-trash-alt"></i></button></a>
@@ -55,11 +53,11 @@ if (!empty($comments)) {
                                         <p><?=nl2br($comment->comment)?></p>
                                     </div>
                                     <div class="modal-footer">
-                                        <a href="index.php?page=see_comment&id=<?=$comment->id?>" id="<?=$comment->id?>"
-                                            class="see_comment"><button type="button"
+                                        <a href="index.php?page=dashboard&id=<?=$comment->id?>&/val"
+                                            id="<?=$comment->id?>" class="see_comment"><button type="button"
                                                 class="btn btn-primary btn-circle btn-lg see_comment "><i
                                                     class="fas fa-check-circle"></i></button></a>
-                                        <a href="index.php?page=delete_comment&id=<?=$comment->id?>"
+                                        <a href="index.php?page=dashboard&id=<?=$comment->id?>&/del"
                                             id="<?=$comment->id?>" class="delete_comment"><button type="button"
                                                 class="btn btn-warning btn-circle btn-lg  delete_comment"><i
                                                     class="fas fa-trash-alt"></i></button></a>
@@ -71,18 +69,9 @@ if (!empty($comments)) {
                         <!-- end modal -->
                     </td>
                 </tr>
-                <?php
-}
-} else {?>
-                <tr>
-                    <td></td>
-                    <td>
-                        <center>Aucun commentaires dans le tableau</center>
-                    </td>
-                </tr>
-                <?php
-}
-?>
+                <?php endforeach?>
+                <?php endif?>
+                <?=(isset($comments)) ? '' : '<tr><td><center>Aucun commentaires dans le tableau</center></td></tr>'?>
             </tbody>
         </table>
         <!-- fin table -->

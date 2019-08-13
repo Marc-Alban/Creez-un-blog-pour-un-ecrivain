@@ -1,4 +1,4 @@
-<?php $title = "Accueil - Livre Jean Forteroche"?>
+<?php $title = "Accueil - Livre Jean Forteroche";?>
 <main role="main" class="container">
     <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
         <div class="col-md-9 px-0">
@@ -18,7 +18,6 @@
                 chapitres:
             </h3>
             <?php foreach ($posts as $chapitre): ?>
-
             <!-- chapitre -->
             <div class="col-md-12">
                 <div
@@ -36,12 +35,9 @@
                             alt="<?=$chapitre->title?>">
                     </div>
                 </div>
-            </div><!-- /.fin chapitre 1-->
+            </div>
             <?php endforeach;?>
-            <!-- Fin chapitre -->
-
-        </div><!-- /.blog-main -->
-
+        </div>
         <!-- Aside -> Infos -->
         <aside class="col-md-4 blog-sidebar">
             <div class="p-4 mb-3 bg-light rounded">
@@ -53,8 +49,6 @@
                 - une page contact<br />
                 Bonne visite !!</p>
             </div>
-        </aside><!-- /.blog-sidebar -->
-
-    </div><!-- /.row -->
-
+        </aside>
+    </div>
 </main><!-- /.container -->

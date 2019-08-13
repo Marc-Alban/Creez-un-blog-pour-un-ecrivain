@@ -1,1 +1,1 @@
-<p>Livre - Copyright 2019<a href="https://marcalban.fr/"> - Fatellim</a>.</p>
+<p>Livre - Copyright 2019 - Jean Forteroche</a></p>

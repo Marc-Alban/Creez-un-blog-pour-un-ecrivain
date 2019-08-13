@@ -1,5 +1,4 @@
 <?php
-declare (strict_types = 1);
 namespace Openclassroom\Blog\Model\Frontend;
 
 use Openclassroom\Blog\Model\Manager;
@@ -16,37 +15,35 @@ class PostManager extends Manager
      *
      * @return object
      */
-    public function get_post(int $id): ?object
+    public function get_post(int $id)
     {
-        $query = $this->dbConnect()->prepare("
-            SELECT  posts.id,
-                    posts.title,
-                    posts.content,
-                    posts.image_posts,
-                    posts.date_posts,
-                    admins.name
-            FROM    posts
-            JOIN    admins
-            ON      name_post = admins.name
-            WHERE   posts.id = :id
-            AND     posts.posted = '1'
-            ");
+        $sql = "
+        SELECT  posts.id,
+                posts.title,
+                posts.content,
+                posts.image_posts,
+                posts.date_posts,
+                admins.name
+        FROM    posts
+        JOIN    admins
+        ON      name_post = admins.name
+        WHERE   posts.id = :id
+        AND     posts.posted = '1'
+        ";
+        $query = $this->dbConnect()->prepare($sql);
         $query->execute(['id' => $id]);
         $result = $query->fetch(PDO::FETCH_OBJ);
         return $result;
     }
 
     /**
-     * Renvoie les différents chapitres sur la page Accueil
+     * Renvoie les différents chapitres (limit - 2) sur la page Accueil
      * avec une jointure sur la table admin
      * pour connaitre l'auteur
-     * et limitation de deux derniers chapitres sur la page
-     *
-     * @return array
      */
-    public function get_posts(): ?array
+    public function get_posts()
     {
-        $query = $this->dbConnect()->query("
+        $sql = "
         SELECT  posts.id,
                 posts.title,
                 posts.image_posts,
@@ -59,7 +56,8 @@ class PostManager extends Manager
         WHERE posted='1'
         ORDER BY date_posts DESC
         LIMIT 0,2
-        ");
+        ";
+        $query = $this->dbConnect()->query($sql);
         $results = $query->fetchAll(PDO::FETCH_OBJ);
         return $results;
     }
@@ -70,17 +68,16 @@ class PostManager extends Manager
      *
      * @return object
      */
-    public function getPosts(): ?array
+    public function getPosts()
     {
-
-        $query = $this->dbConnect()->query("
+        $sql = "
         SELECT *
         FROM posts
         WHERE posted='1'
         ORDER BY date_posts
         ASC
-        ");
-
+        ";
+        $query = $this->dbConnect()->query($sql);
         $results = $query->fetchAll(PDO::FETCH_OBJ);
         return $results;
     }

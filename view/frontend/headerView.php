@@ -18,16 +18,12 @@
                 </ul>
                 <hr>
                 <p>Admin</p>
-                <?php if (isset($user)) {?>
+                <?php if (isset($user)): ?>
                 <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=dashboard">Back Office</a>
                 <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=logout">Déconexion</a>
-                <?php
-} else {
-    ?>
+                <?php else: ?>
                 <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=login">Back Office</a>
-                <?php
-}
-?>
+                <?php endif?>
             </nav>
             <div class="nav-controller">
                 <span class="controller-open">Menu</span>

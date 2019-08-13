@@ -1,16 +1,11 @@
-<?php
-$title = $post->title . ' - Jean Forteroche';
-?>
+<?php $title = $post->title . ' - Jean Forteroche';?>
 
 <section class="post-content-section">
     <div class="container">
-
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 post-title-block"
                 style="background-image:url('public/img/post/<?=$post->image_posts?>'); background-repeat: no-repeat;background-size: cover;">
-
                 <h1 class="text-center"><?=$post->title?></h1>
-
                 <ul class="list-inline text-center">
                     <li><?=$post->name?> |</li>
                     <li><?=$post->date_posts?></li>
@@ -51,7 +46,7 @@ $title = $post->title . ' - Jean Forteroche';
                 <div class="blockquote col-12">
                     <?=$response->name?> le <?=date("d/m/Y", strtotime($response->date_comment))?> :
                     <?=nl2br($response->comment)?>.
-                    <a href="index.php?page=see_comment&id=<?=$response->id?>">(Signaler)</a>
+                    <a href="index.php?page=post&id=<?=$_GET['id'] . '&comment_id=' . $response->id?>">(Signaler)</a>
                 </div>
                 <?php endforeach;?>
                 <?=(isset($responses) && $responses == null) ? 'Aucun commentaires publié... Soyer le premier ! ' : '';?>

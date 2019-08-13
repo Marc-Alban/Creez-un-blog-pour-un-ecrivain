@@ -18,22 +18,23 @@ class PostManager extends Manager
      */
     public function get_post(int $id)
     {
+        $sql = "
+        SELECT  posts.id,
+                posts.title,
+                posts.image_posts,
+                posts.date_posts,
+                posts.content,
+                posts.posted,
+                admins.name
+        FROM posts
+        JOIN admins
+        ON posts.name_post = admins.name
+        WHERE posts.id = :id";
 
-        $query = $this->dbConnect()->query("
-            SELECT  posts.id,
-                    posts.title,
-                    posts.image_posts,
-                    posts.date_posts,
-                    posts.content,
-                    posts.posted,
-                    admins.name
-            FROM posts
-            JOIN admins
-            ON posts.name_post = admins.name
-            WHERE posts.id = " . $id
-        );
+        $req = $this->dbConnect()->prepare($sql);
+        $req->execute(['id' => $id]);
+        $result = $req->fetch(PDO::FETCH_OBJ);
 
-        $result = $query->fetch(PDO::FETCH_OBJ);
         return $result;
     }
 
@@ -45,18 +46,32 @@ class PostManager extends Manager
      * @param boolean $posted -> public ou non
      * @param integer $id
      */
-    public function edit(string $title, string $content, int $posted, int $id)
+    public function edit($tmp_name, $extention, string $title, string $content, int $posted, int $id)
     {
+
+        $query = $this->dbConnect()->prepare('SELECT id FROM posts WHERE id = :id');
+        $query->execute(['id' => $id]);
+        $response = $query->fetch();
+        $id = $response[0];
+
+        if (!$tmp_name) {
+            $id = "post";
+            $extention = ".png";
+        } else {
+            move_uploaded_file($tmp_name, "public/img/post/" . $id . $extention);
+        }
+
         $e = [
+            'image_posts' => $id . $extention,
             'title' => $title,
             'content' => $content,
             'posted' => $posted,
             'id' => $id,
         ];
 
-        $query = "UPDATE posts SET title = :title, content = :content, date_posts = NOW(), posted = :posted WHERE id = :id ";
-        $req = $this->dbConnect()->prepare($query);
-        $req->execute($e);
+        $sql = "UPDATE posts SET image_posts = :image_posts,  title = :title, content = :content, date_posts = NOW(), posted = :posted WHERE id = :id ";
+        $query = $this->dbConnect()->prepare($sql);
+        $query->execute($e);
 
     }
 
@@ -86,9 +101,9 @@ class PostManager extends Manager
     public function postWrite($title, $content, $name, $posted, $tmp_name, $extention)
     {
 
-        $req = $this->dbConnect()->query('SELECT MAX(id) FROM posts ORDER BY id DESC');
-        $res = $req->fetch();
-        $id = $res[0];
+        $query = $this->dbConnect()->query('SELECT MAX(id) FROM posts ORDER BY id DESC');
+        $response = $query->fetch();
+        $id = $response[0];
 
         if (!$tmp_name) {
             $id = "post";
@@ -112,29 +127,22 @@ class PostManager extends Manager
 
         $req = $this->dbConnect()->prepare($sql);
         $req->execute($p);
-        header("Location: index.php?page=post&id=" . $this->dbConnect()->lastInsertId());
+        header("Location: index.php?page=list");
     }
 
     /**
      * Affiche la liste des post de la bdd, ainsi que ceux non publié
-     *
      */
     public function getPosts()
     {
-
-        $req = $this->dbConnect()->query("
-    SELECT *
-    FROM posts
-    ORDER BY date_posts
-    DESC
-    ");
-
-        $results = array();
-
-        while ($rows = $req->fetchObject()) {
-            $results[] = $rows;
-        }
-
-        return $results;
+        $sql = "
+        SELECT *
+        FROM posts
+        ORDER BY date_posts
+        DESC
+        ";
+        $query = $this->dbConnect()->query($sql);
+        $query->fetch(PDO::FETCH_OBJ);
+        return $query;
     }
 }

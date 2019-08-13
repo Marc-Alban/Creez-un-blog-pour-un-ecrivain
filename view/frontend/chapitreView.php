@@ -1,6 +1,4 @@
-<?php
-$title = 'Chapitres - Jean Forteroche';
-?>
+<?php $title = 'Chapitres - Jean Forteroche';?>
 <section class="blog-me pt-100 pb-100" id="blog">
     <div class="container">
         <div id="styleBloc">

@@ -1,6 +1,4 @@
-<?php
-if (isset($_SESSION['pass'])) {
-    ?>
+<?php if (isset($user)): ?>
 <!-- -------- Navigation côté-------------- -->
 <nav class=" nav navbar-nav side-nav">
     <ul>
@@ -10,4 +8,4 @@ if (isset($_SESSION['pass'])) {
         <li><a class="btn btn-sm nav-link m-2" href="index.php?page=list">Modifier un chapitre</a></li>
     </ul>
 </nav>
-<?php }?>
+<?php endif?>
