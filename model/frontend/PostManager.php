@@ -1,4 +1,5 @@
 <?php
+declare (strict_types = 1);
 namespace Openclassroom\Blog\Model\Frontend;
 
 use Openclassroom\Blog\Model\Manager;

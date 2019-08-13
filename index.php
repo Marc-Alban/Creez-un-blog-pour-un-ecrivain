@@ -1,6 +1,9 @@
 <?php
+declare (strict_types = 1);
 //Démarage session
 session_start();
+var_dump($user);
+die();
 // Demande les différents controllers
 require_once 'controller/frontend.php';
 require_once 'controller/backend.php';
@@ -10,7 +13,6 @@ $cheminLocal = realpath('index.php');
 $cheminRemplacer = str_replace("/", "\\", $serveurChemin);
 //Essaie:: url pour avoir la page correspondante
 try {
-
     //Si dans l'url il y a le mot page alors :
     if (isset($_GET['page'])) {
 
@@ -35,8 +37,12 @@ try {
                     if (!empty($name) || !empty($comment)) {
                         //Vérification des érreurs
                         if (empty($errors)) {
+                            //Recupération de l'id
+                            $idRecup = $_GET['id'];
+                            //fonction qui transforme la chaine en integer
+                            $id = intval($idRecup);
                             //Insertion d'un commentaire en bdd
-                            instComment($name, $comment, $_GET['id']);
+                            instComment($name, $comment, $id);
                             //Redirection sur la même page afin d'actualiser
                             header('Location: index.php?page=post&id=' . $_GET['id']);
                         }
@@ -46,12 +52,19 @@ try {
                 }
                 //Test si il y a le mot page, l'identifiant ainsi que comment_id
                 if ($_GET['page'] === 'post' && $_GET['id'] && isset($_GET['comment_id']) && $_GET['comment_id']) {
+                    //Recupération de l'id
+                    $idRecup = $_GET['comment_id'];
+                    //fonction qui transforme la chaine en integer
+                    $id = intval($idRecup);
                     //signale le commentaire
-                    signalComment($_GET['comment_id']);
+                    signalComment($id);
                 }
-
+                //Recupération de l'id
+                $idRecup = $_GET['id'];
+                //fonction qui transforme la chaine en integer
+                $id = intval($idRecup);
                 // Récupération de la vue d'un chapitre avec son id dans l'url et ses commentaires
-                requireView($_GET['id']);
+                requireView($id);
 
             } else {
                 throw new Exception('Aucun identifiant de billet envoyé');
@@ -85,9 +98,9 @@ try {
                         //Vérification du mot de passe envoyé avec celui en bdd
                     } else if (password_verify($password, getUser())) {
                         //Insertion du mot de passe en Session
-                        ob_start();
                         $_SESSION['pass'] = getUser();
-                        $user = ob_get_contents();
+                        $user = $_SESSION['pass'];
+
                         //Renvoie sur le dashboard
                         header('Location: index.php?page=dashboard');
                     } else {
@@ -101,15 +114,23 @@ try {
             //Page dashboard
         } else if ($_GET['page'] == 'dashboard') {
             //Si Session
-            if (isset($user)) {
+            if (isset($_SESSION['pass'])) {
                 //Si mot dans l'url /val
                 if (isset($_GET['/val'])) {
+                    //Recupération de l'id
+                    $idRecup = $_GET['id'];
+                    //fonction qui transforme la chaine en integer
+                    $id = intval($idRecup);
                     //Valide le commentaire
-                    validateComment($_GET['id']);
+                    validateComment($id);
                     //Si mot /del
                 } else if (isset($_GET['/del'])) {
+                    //Recupération de l'id
+                    $idRecup = $_GET['id'];
+                    //fonction qui transforme la chaine en integer
+                    $id = intval($idRecup);
                     //Supprime le commentaire
-                    deleteComment($_GET['id']);
+                    deleteComment($id);
                 }
                 //Renvoie la page vue du dashboard
                 getDashboard();
@@ -117,7 +138,7 @@ try {
             //Page chapitre -- dashboard
         } else if ($_GET['page'] == 'list') {
             //Si Session existe
-            if (isset($user)) {
+            if (isset($_SESSION['pass'])) {
                 //Renvoie la page vue des chapitres dans le dashboard
                 getList();
             }
@@ -132,7 +153,7 @@ try {
 
                         $title = htmlspecialchars(trim($_POST['title']));
                         $content = htmlspecialchars(trim($_POST['content']));
-                        $posted = (isset($_POST['public']) == 'on') ? "1" : "0";
+                        $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
                         $file = $_FILES['image']['name'];
                         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
                         $extention = strrchr($file, '.');
@@ -146,8 +167,12 @@ try {
                                 if (!empty($content)) {
                                     //Vérification de l'extention par rapport au tableau extention(s) ou bien à l'extention .png
                                     if (in_array($extention, $extentions) || $extention = ".png") {
+                                        //Recupération de l'id
+                                        $idRecup = $_GET['id'];
+                                        //fonction qui transforme la chaine en integer
+                                        $id = intval($idRecup);
                                         //Mise à jour du chapitre
-                                        updatePost($_FILES['image']['tmp_name'], $extention, $title, $content, $posted, $_GET['id']);
+                                        updatePost($_FILES['image']['tmp_name'], $extention, $title, $content, $posted, $id);
                                     } else {
                                         throw new Exception('Image n\'est pas valide! ');
                                     }
@@ -161,8 +186,12 @@ try {
                             throw new Exception('Veuillez remplir tous les champs !');
                         }
                     }
+                    //Recupération de l'id
+                    $idRecup = $_GET['id'];
+                    //fonction qui transforme la chaine en integer
+                    $id = intval($idRecup);
                     //Récupère un post en fonction de l'id
-                    getPostEdit($_GET['id']);
+                    getPostEdit($id);
                 } else {
                     throw new Exception('Aucun identifiant envoyé !');
                 }
@@ -170,13 +199,13 @@ try {
             //Page ecriture d'un chapitre
         } else if ($_GET['page'] == 'write') {
             // Si session
-            if (isset($user)) {
+            if (isset($_SESSION['pass'])) {
                 //test envoie
                 if (isset($_POST['submit'])) {
 
                     $title = htmlspecialchars(trim($_POST['title']));
                     $content = htmlspecialchars(trim($_POST['description']));
-                    $posted = ($_POST['public'] == 1) ? "1" : "0";
+                    $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
                     $name = 'Jean';
                     $errors = [];
                     //Test si champs vide

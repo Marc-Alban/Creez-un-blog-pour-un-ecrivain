@@ -1,5 +1,5 @@
 <?php
-
+declare (strict_types = 1);
 use Openclassroom\Blog\Model\Backend\CommentManager;
 use Openclassroom\Blog\Model\backend\DashboardManager;
 use Openclassroom\Blog\Model\Backend\PostManager;
@@ -35,7 +35,7 @@ function validateComment(int $id)
 }
 
 /**
- *Supréssion du commentaire
+ *Supression du commentaire
  *et renvoie sur la page destinaire
  *
  * @param integer $id

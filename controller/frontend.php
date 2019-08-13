@@ -1,5 +1,5 @@
 <?php
-
+declare (strict_types = 1);
 use Openclassroom\Blog\Model\Frontend\CommentsManager;
 use Openclassroom\Blog\Model\Frontend\PostManager;
 
@@ -10,6 +10,7 @@ require 'model/frontend/PostManager.php';
  * Renvoie les commentaires sur la page post et le post
  *
  * @param integer $id
+ * @return void
  */
 function requireView(int $id)
 {
