@@ -170,16 +170,16 @@ try {
                                 if (!empty($content)) {
                                     //Vérification de l'extention par rapport au tableau extention(s) ou bien à l'extention .png
                                     if (in_array($extention, $extentions) || $extention = ".png") {
-                                        // var_dump($_POST);
-                                        // die();
                                         //Recupération de l'id
                                         $idRecup = $_GET['id'];
                                         //fonction qui transforme la chaine en integer
                                         $id = intval($idRecup);
                                         //Mise à jour du chapitre
                                         updatePost($id, $title, $content, $_FILES['image']['tmp_name'], $extention, $posted);
+                                        //Redirection sur la même page pour actualiser les données;
+                                        header('Location: index.php?page=postEdit&id=' . $_GET['id']);
                                     } else {
-                                        throw new Exception('Image n\'est pas valide! ');
+                                        $errors = ('Image n\'est pas valide! ');
                                     }
                                 } else {
                                     throw new Exception('Veuillez mettre un contenu !');
@@ -207,6 +207,7 @@ try {
                     $id = intval($idRecup);
                     //Récupère un post en fonction de l'id
                     getPostEdit($id);
+
                 } else {
                     throw new Exception('Aucun identifiant envoyé !');
                 }
