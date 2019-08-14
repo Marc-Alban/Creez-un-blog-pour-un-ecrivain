@@ -35,18 +35,26 @@ class PostManager extends Manager
     /**
      * Met à jour le poste modifié en BDD
      *
+     * @param integer $id
      * @param string $title
      * @param string $content
-     * @param boolean $posted -> public ou non
-     * @param integer $id
+     * @param string $tmp_name
+     * @param string $extention
+     * @param integer $posted
+     * @return void
      */
-    public function edit($tmp_name, $extention, string $title, string $content, int $posted, int $id)
+    public function edit(int $id, string $title, string $content, string $tmp_name, string $extention, int $posted)
     {
+        $sql_id = "
+        SELECT id
+        FROM posts
+        WHERE id = :id
+        ";
 
-        $query = $this->dbConnect()->prepare('SELECT id FROM posts WHERE id = :id');
-        $query->execute([':id' => $id]);
-        $response = $query->fetch();
-        $id = $response[0];
+        $req = $this->dbConnect()->prepare($sql_id);
+        $req->execute([':id' => $id]);
+        $response = $req->fetch(PDO::FETCH_ASSOC);
+        $id = $response['id'];
 
         if (!$tmp_name) {
             $id = "post";
@@ -56,17 +64,24 @@ class PostManager extends Manager
         }
 
         $e = [
-            'image_posts' => $id . $extention,
-            'title' => $title,
-            'content' => $content,
-            'posted' => $posted,
-            'id' => $id,
+            ':id' => $id,
+            ':title' => $title,
+            ':content' => $content,
+            ':image_posts' => $id . $extention,
+            ':posted' => $posted,
         ];
 
-        $sql = "UPDATE posts SET image_posts = :image_posts,  title = :title, content = :content, date_posts = NOW(), posted = :posted WHERE id = :id ";
+        $sql = "
+        UPDATE posts
+        SET title = :title,
+            content = :content,
+            image_posts = :image_posts,
+            date_posts = NOW(),
+            posted = :posted
+        WHERE id = :id ";
+
         $query = $this->dbConnect()->prepare($sql);
         $query->execute($e);
-
     }
 
     /**
@@ -77,8 +92,13 @@ class PostManager extends Manager
      */
     public function deletePost(int $id)
     {
-        $sql = "DELETE FROM posts WHERE id = " . $id;
-        $this->dbConnect()->exec($sql);
+        $sql = "
+        DELETE FROM posts
+        WHERE id = :id
+        ";
+
+        $query = $this->dbConnect()->prepare($sql);
+        $query->execute(['id' => $id]);
         header("Location: index.php?page=list");
     }
 
@@ -94,9 +114,15 @@ class PostManager extends Manager
      */
     public function postWrite($title, $content, $name, $posted, $tmp_name, $extention)
     {
+        $sql_id = "
+        SELECT MAX(id)
+        FROM posts
+        ORDER BY id
+        DESC
+        ";
 
-        $query = $this->dbConnect()->query('SELECT MAX(id) FROM posts ORDER BY id DESC');
-        $response = $query->fetch();
+        $req = $this->dbConnect()->query($sql_id);
+        $response = $req->fetch();
         $id = $response[0];
 
         if (!$tmp_name) {
@@ -119,8 +145,8 @@ class PostManager extends Manager
     VALUES(:title, :content, :name_post, :image_posts, NOW(), :posted)
     ";
 
-        $req = $this->dbConnect()->prepare($sql);
-        $req->execute($p);
+        $query = $this->dbConnect()->prepare($sql);
+        $query->execute($p);
         header("Location: index.php?page=list");
     }
 

@@ -170,12 +170,14 @@ try {
                                 if (!empty($content)) {
                                     //Vérification de l'extention par rapport au tableau extention(s) ou bien à l'extention .png
                                     if (in_array($extention, $extentions) || $extention = ".png") {
+                                        // var_dump($_POST);
+                                        // die();
                                         //Recupération de l'id
                                         $idRecup = $_GET['id'];
                                         //fonction qui transforme la chaine en integer
                                         $id = intval($idRecup);
                                         //Mise à jour du chapitre
-                                        updatePost($_FILES['image']['tmp_name'], $extention, $title, $content, $posted, $id);
+                                        updatePost($id, $title, $content, $_FILES['image']['tmp_name'], $extention, $posted);
                                     } else {
                                         throw new Exception('Image n\'est pas valide! ');
                                     }
@@ -189,6 +191,16 @@ try {
                             throw new Exception('Veuillez remplir tous les champs !');
                         }
                     }
+
+                    if (isset($_POST['deleted'])) {
+                        //Recupération de l'id
+                        $idRecup = $_GET['id'];
+                        //fonction qui transforme la chaine en integer
+                        $id = intval($idRecup);
+                        //Suprime le post à l'id
+                        PostDelete($id);
+                    }
+
                     //Recupération de l'id
                     $idRecup = $_GET['id'];
                     //fonction qui transforme la chaine en integer

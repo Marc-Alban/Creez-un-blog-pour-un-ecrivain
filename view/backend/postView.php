@@ -13,7 +13,7 @@
         </div>
         <?php endif?>
         <form method="POST" class="col-12 col-md-9 postF" enctype="multipart/form-data">
-            <p><label for="title">Changer d'image:
+            <p><label for="image">Changer d'image:
                     <input type="file" name="image">
                 </label>
             </p>
@@ -23,7 +23,7 @@
                         name="content"><?=$posts->content?></textarea></p>
             <div class="form-check">
                 <input type="checkbox" name="public" class="form-check-input" id="Check1"
-                    <?=($posts->posted == '1') ? 'checked' : ''?>>
+                    <?=($posts->posted == 1) ? 'checked' : ''?>>
                 <label class="form-check-label" for="Check1">Public</label>
             </div>
             <div class="d-flex justify-content-center">

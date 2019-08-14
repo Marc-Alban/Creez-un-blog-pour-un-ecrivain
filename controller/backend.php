@@ -81,19 +81,31 @@ function getPostEdit(int $id)
 /**
  * Fonction pour mettre à jour
  *
- * @param string $tmp_name
- * @param string $extention
+ * @param integer $id
  * @param string $title
  * @param string $content
+ * @param string $tmp_name
+ * @param string $extention
  * @param integer $posted
+ * @return void
+ */
+function updatePost(int $id, string $title, string $content, string $tmp_name, string $extention, int $posted)
+{
+    $postManager = new PostManager;
+    $postManager->edit($id, $title, $content, $tmp_name, $extention, $posted);
+
+}
+
+/**
+ * Permet de suprimer un post
+ *
  * @param integer $id
  * @return void
  */
-function updatePost(string $tmp_name, string $extention, string $title, string $content, int $posted, int $id)
+function PostDelete(int $id)
 {
     $postManager = new PostManager;
-    $postManager->edit($tmp_name, $extention, $title, $content, $posted, $id);
-
+    $postManager->deletePost($id);
 }
 
 /**
