@@ -26,9 +26,9 @@ class DashboardManager extends Manager
      *
      * @param string $user
      */
-    public function logoutUser(string $user)
+    public function logoutUser()
     {
-        unset($user);
+        session_destroy();
         header("Location: index.php?page=home");
     }
 

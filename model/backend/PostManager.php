@@ -12,31 +12,24 @@ class PostManager extends Manager
 
     /**
      * Renvoie le chapitre sur la page post en bdd
-     * avec une jointure sur la table admin
-     * pour connaitre l'auteur
      *
-     * @param integer $id
      */
     public function get_post(int $id)
     {
         $sql = "
-        SELECT  posts.id,
-                posts.title,
-                posts.image_posts,
-                posts.date_posts,
-                posts.content,
-                posts.posted,
-                admins.name
-        FROM posts
-        JOIN admins
-        ON posts.name_post = admins.name
-        WHERE posts.id = :id";
+        SELECT  title,
+                content,
+                image_posts,
+                date_posts,
+                posted
+        FROM    posts
+        WHERE   id = :id
+        ";
 
-        $req = $this->dbConnect()->prepare($sql);
-        $req->execute(['id' => $id]);
-        $result = $req->fetch(PDO::FETCH_OBJ);
-
-        return $result;
+        $query = $this->dbConnect()->prepare($sql);
+        $query->execute([":id" => $id]);
+        $req = $query->fetchAll(PDO::FETCH_OBJ);
+        return $req;
     }
 
     /**
@@ -51,7 +44,7 @@ class PostManager extends Manager
     {
 
         $query = $this->dbConnect()->prepare('SELECT id FROM posts WHERE id = :id');
-        $query->execute(['id' => $id]);
+        $query->execute([':id' => $id]);
         $response = $query->fetch();
         $id = $response[0];
 
@@ -143,7 +136,7 @@ class PostManager extends Manager
         DESC
         ";
         $query = $this->dbConnect()->query($sql);
-        $query->fetch(PDO::FETCH_OBJ);
-        return $query;
+        $req = $query->fetchAll(PDO::FETCH_OBJ);
+        return $req;
     }
 }

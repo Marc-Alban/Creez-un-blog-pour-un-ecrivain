@@ -2,8 +2,6 @@
 declare (strict_types = 1);
 //Démarage session
 session_start();
-var_dump($user);
-die();
 // Demande les différents controllers
 require_once 'controller/frontend.php';
 require_once 'controller/backend.php';
@@ -75,6 +73,11 @@ try {
             //Renvoie la page vue des chapitres
             listPosts();
 
+            //Page logout
+        } elseif ($_GET['page'] == 'logout') {
+            //Fonction déconnexion
+            logOut();
+
             //Page error ---> a modifier en fonction de ce que marque l'utilisateur dans l'url
         } elseif ($_GET['page'] == 'error') {
             //Renvoie la page vue de Error
@@ -99,8 +102,7 @@ try {
                     } else if (password_verify($password, getUser())) {
                         //Insertion du mot de passe en Session
                         $_SESSION['pass'] = getUser();
-                        $user = $_SESSION['pass'];
-
+                        $user = &$_SESSION['pass'];
                         //Renvoie sur le dashboard
                         header('Location: index.php?page=dashboard');
                     } else {
@@ -113,6 +115,7 @@ try {
             }
             //Page dashboard
         } else if ($_GET['page'] == 'dashboard') {
+
             //Si Session
             if (isset($_SESSION['pass'])) {
                 //Si mot dans l'url /val

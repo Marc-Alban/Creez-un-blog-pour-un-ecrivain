@@ -5,8 +5,8 @@ use Openclassroom\Blog\Model\backend\DashboardManager;
 use Openclassroom\Blog\Model\Backend\PostManager;
 
 require 'model/backend/CommentsManager.php';
-require 'model/backend/PostManager.php';
 require 'model/backend/DashboardManager.php';
+require 'model/backend/PostManager.php';
 
 /**
  * Retourne la page home du dashboard
@@ -143,4 +143,16 @@ function getUser()
     $dashboardManager = new DashboardManager;
     $pass = $dashboardManager->isAdmin();
     return $pass;
+}
+
+/**
+ * Permet la déconnexion de l'utilisateur
+ * Supprime la session en court
+ *
+ *  */
+function logOut()
+{
+    $dashboardManager = new DashboardManager;
+    $dashboardManager->logoutUser();
+
 }

@@ -19,8 +19,7 @@ class PostManager extends Manager
     public function get_post(int $id)
     {
         $sql = "
-        SELECT  posts.id,
-                posts.title,
+        SELECT  posts.title,
                 posts.content,
                 posts.image_posts,
                 posts.date_posts,
@@ -32,8 +31,8 @@ class PostManager extends Manager
         AND     posts.posted = '1'
         ";
         $query = $this->dbConnect()->prepare($sql);
-        $query->execute(['id' => $id]);
-        $result = $query->fetch(PDO::FETCH_OBJ);
+        $query->execute([':id' => $id]);
+        $result = $query->fetchAll(PDO::FETCH_OBJ);
         return $result;
     }
 

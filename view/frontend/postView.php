@@ -1,19 +1,20 @@
-<?php $title = $post->title . ' - Jean Forteroche';?>
-
 <section class="post-content-section">
     <div class="container">
         <div class="row">
+            <?php foreach ($post as $posts): ?>
+            <?php $title = $posts->title . ' - Jean Forteroche';?>
             <div class="col-lg-12 col-md-12 col-sm-12 post-title-block"
-                style="background-image:url('public/img/post/<?=$post->image_posts?>'); background-repeat: no-repeat;background-size: cover;">
-                <h1 class="text-center"><?=$post->title?></h1>
+                style="background-image:url('public/img/post/<?=$posts->image_posts?>'); background-repeat: no-repeat;background-size: cover;">
+                <h1 class="text-center"><?=$posts->title?></h1>
                 <ul class="list-inline text-center">
-                    <li><?=$post->name?> |</li>
-                    <li><?=$post->date_posts?></li>
+                    <li><?=$posts->name?> |</li>
+                    <li><?=$posts->date_posts?></li>
                 </ul>
             </div>
             <div class="col-lg-9 col-md-9 col-sm-12">
-                <blockquote class="mg-4"><?=nl2br($post->content)?></blockquote>
+                <blockquote class="mg-4"><?=nl2br($posts->content)?></blockquote>
             </div>
+            <?php endforeach?>
         </div>
         <hr>
         <div class="row">
