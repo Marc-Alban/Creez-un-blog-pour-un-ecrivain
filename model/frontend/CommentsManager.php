@@ -13,6 +13,7 @@ class CommentsManager extends Manager
  * Renvoie les commentaires sur la page post
  *
  * @param integer $id
+ * @return void
  */
     public function get_comments(int $id)
     {
@@ -35,6 +36,7 @@ class CommentsManager extends Manager
      * @param string $name
      * @param string $comment
      * @param integer $post_id
+     * @return void
      */
     public function setComment(string $name, string $comment, int $post_id)
     {
@@ -51,11 +53,12 @@ class CommentsManager extends Manager
         $req->execute($comment);
     }
 
-    /**
-     * Signalement Commentaire en bdd
-     *
-     * @param integer $commentid
-     */
+/**
+ * Signalement Commentaire en bdd
+ *
+ * @param integer $commentid
+ * @return void
+ */
     public function alertComment(int $commentid)
     {
         if (isset($commentid)) {

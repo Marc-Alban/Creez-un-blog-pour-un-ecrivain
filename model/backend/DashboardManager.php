@@ -9,9 +9,11 @@ require_once 'model/Manager.php';
 class DashboardManager extends Manager
 {
 
-    /**
-     * Retourne true si utilisateur en bdd ou false si utilisateur non présent
-     */
+/**
+ * Retourne true si utilisateur en bdd ou false si utilisateur non présent
+ *
+ * @return string
+ */
     public function isAdmin()
     {
         $query = $this->dbConnect()->query("SELECT password_admin FROM admins");
@@ -20,12 +22,12 @@ class DashboardManager extends Manager
         return $pass;
     }
 
-    /**
-     * Permet la déconnexion de l'utilisateur
-     * Supprime la session en court
-     *
-     * @param string $user
-     */
+/**
+ * Permet la déconnexion de l'utilisateur
+ * Supprime la session en court
+ *
+ * @return void
+ */
     public function logoutUser()
     {
         session_destroy();

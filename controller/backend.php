@@ -10,6 +10,8 @@ require 'model/backend/PostManager.php';
 
 /**
  * Retourne la page home du dashboard
+ *
+ * @return void
  */
 function getDashboard()
 {
@@ -25,8 +27,10 @@ function getDashboard()
 
 /**
  * Validation du commentaire
- *et renvoie sur la page destinaire
- * @param int $id
+ * et renvoie sur la page destinaire
+ *
+ * @param integer $id
+ * @return void
  */
 function validateComment(int $id)
 {
@@ -35,10 +39,11 @@ function validateComment(int $id)
 }
 
 /**
- *Supression du commentaire
- *et renvoie sur la page destinaire
+ * Supression du commentaire
+ * et renvoie sur la page destinaire
  *
  * @param integer $id
+ * @return void
  */
 function deleteComment(int $id)
 {
@@ -49,6 +54,8 @@ function deleteComment(int $id)
 /**
  * Récupère la liste des chapitres
  * publié ou pas
+ *
+ * @return void
  */
 function getList()
 {
@@ -65,7 +72,9 @@ function getList()
 /**
  * Permet de récupérer un post
  * et de l'éditer
+ *
  * @param integer $id
+ * @return void
  */
 function getPostEdit(int $id)
 {
@@ -110,6 +119,8 @@ function PostDelete(int $id)
 
 /**
  * Récupère la page pour écrire un post
+ *
+ * @return void
  */
 function getWrite()
 {
@@ -129,6 +140,7 @@ function getWrite()
  * @param integer $posted
  * @param string $tmp_name
  * @param string $extention
+ * @return void
  */
 function PostWrite(string $title, string $content, string $name, int $posted, string $tmp_name, string $extention)
 {
@@ -138,6 +150,8 @@ function PostWrite(string $title, string $content, string $name, int $posted, st
 
 /**
  * Renvoie la page login sur le dashboard
+ *
+ * @return void
  */
 function getLogin()
 {
@@ -149,6 +163,8 @@ function getLogin()
 
 /**
  * Fonction qui permet de récuperer le mot de passe de l'admin
+ *
+ * @return void
  */
 function getUser()
 {
@@ -161,7 +177,8 @@ function getUser()
  * Permet la déconnexion de l'utilisateur
  * Supprime la session en court
  *
- *  */
+ * @return void
+ */
 function logOut()
 {
     $dashboardManager = new DashboardManager;

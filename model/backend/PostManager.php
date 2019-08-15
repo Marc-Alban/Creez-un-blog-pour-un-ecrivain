@@ -10,10 +10,12 @@ require_once 'model/Manager.php';
 class PostManager extends Manager
 {
 
-    /**
-     * Renvoie le chapitre sur la page post en bdd
-     *
-     */
+/**
+ * Renvoie le chapitre sur la page post en bdd
+ *
+ * @param integer $id
+ * @return void
+ */
     public function get_post(int $id)
     {
         $sql = "
@@ -102,17 +104,18 @@ class PostManager extends Manager
         header("Location: index.php?page=list");
     }
 
-    /**
-     * Insert en bdd un nouveau post en bdd
-     *
-     * @param [type] $title
-     * @param [type] $content
-     * @param [type] $name
-     * @param [type] $posted
-     * @param [type] $tmp_name
-     * @param [type] $extention
-     */
-    public function postWrite($title, $content, $name, $posted, $tmp_name, $extention)
+/**
+ * Insert en bdd un nouveau post en bdd
+ *
+ * @param string $title
+ * @param string $content
+ * @param string $name
+ * @param integer $posted
+ * @param string $tmp_name
+ * @param string $extention
+ * @return void
+ */
+    public function postWrite(string $title, string $content, string $name, int $posted, string $tmp_name, string $extention)
     {
         $sql_id = "
         SELECT MAX(id)
@@ -152,6 +155,8 @@ class PostManager extends Manager
 
     /**
      * Affiche la liste des post de la bdd, ainsi que ceux non publié
+     *
+     * @return void
      */
     public function getPosts()
     {

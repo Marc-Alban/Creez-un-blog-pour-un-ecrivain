@@ -35,6 +35,7 @@ function requireView(int $id)
  * @param string $name
  * @param string $comment
  * @param integer $id
+ * @return void
  */
 function instComment(string $name, string $comment, int $id)
 {
@@ -44,6 +45,8 @@ function instComment(string $name, string $comment, int $id)
 
 /**
  * Renvoie la page erreur
+ *
+ * @return void
  */
 function getError()
 {
@@ -58,6 +61,8 @@ function getError()
 /**
  * Renvoie les posts sur la page Accueil
  * et le contenu
+ *
+ * @return void
  */
 function getHome()
 {
@@ -73,6 +78,8 @@ function getHome()
 
 /**
  * Renvoie les posts sur la page chapitres
+ *
+ * @return void
  */
 function listPosts()
 {
@@ -90,6 +97,7 @@ function listPosts()
  * Signalement -- Commentaire
  *
  * @param integer $commentid
+ * @return void
  */
 function signalComment(int $commentid)
 {

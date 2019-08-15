@@ -9,13 +9,14 @@ require_once 'model/Manager.php';
 
 class PostManager extends Manager
 {
-    /**
-     * Renvoie le chapitre sur la page post
-     * avec une jointure sur la table admin
-     * pour connaitre l'auteur
-     *
-     * @return object
-     */
+/**
+ * Renvoie le chapitre sur la page post
+ * avec une jointure sur la table admin
+ * pour connaitre l'auteur
+ *
+ * @param integer $id
+ * @return object
+ */
     public function get_post(int $id)
     {
         $sql = "
@@ -36,11 +37,13 @@ class PostManager extends Manager
         return $result;
     }
 
-    /**
-     * Renvoie les différents chapitres (limit - 2) sur la page Accueil
-     * avec une jointure sur la table admin
-     * pour connaitre l'auteur
-     */
+/**
+ * Renvoie les différents chapitres (limit - 2) sur la page Accueil
+ * avec une jointure sur la table admin
+ * pour connaitre l'auteur
+ *
+ * @return object
+ */
     public function get_posts()
     {
         $sql = "

@@ -11,6 +11,8 @@ class CommentManager extends Manager
 {
     /**
      * Affiche les commentaires écrit dans le front sur le dashboard
+     *
+     * @return void
      */
     public function get_comment()
     {
@@ -32,11 +34,12 @@ class CommentManager extends Manager
         return $results;
     }
 
-    /**
-     * Permet de supprimer un commentaire en bdd
-     *
-     * @param integer $id
-     */
+/**
+ * Permet de supprimer un commentaire en bdd
+ *
+ * @param integer $id
+ * @return void
+ */
     public function delComments(int $id)
     {
         $query = $this->dbConnect()->prepare("DELETE FROM comments WHERE id = :id");
@@ -48,6 +51,7 @@ class CommentManager extends Manager
      * Permet de valider le commentaire et de le remettre à la valeur 0 dans la table seen
      *
      * @param integer $id
+     * @return void
      */
     public function valComment(int $id)
     {

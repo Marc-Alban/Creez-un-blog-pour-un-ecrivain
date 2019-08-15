@@ -12,6 +12,11 @@ class Manager
     private $dbuser = 'root';
     private $dbpass = '';
 
+    /**
+     * Connexion à la BDD
+     *
+     * @return void
+     */
     protected function dbConnect()
     {
         try
