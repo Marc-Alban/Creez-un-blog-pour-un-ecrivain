@@ -5,7 +5,7 @@
         <li><a class="btn btn-sm nav-link m-2" href="index.php?page=home">Retour Site</a></li>
         <li><a class="btn btn-sm nav-link m-2" href="index.php?page=dashboard">Dashboard</a></li>
         <li><a class="btn btn-sm nav-link m-2" href="index.php?page=write">Ecrire un chapitre</a></li>
-        <li><a class="btn btn-sm nav-link m-2" href="index.php?page=list">Modifier un chapitre</a></li>
+        <li><a class="btn btn-sm nav-link m-2" href="index.php?page=list">Liste des Chapitres</a></li>
     </ul>
 </nav>
 <?php endif?>

@@ -19,7 +19,7 @@
                                 <br>
                                 <?=substr(nl2br($chapitre->content), 0, 250)?>
                             </p>
-                            <p class=" btn btn-primary">Modifier l'chapitre</p>
+                            <p class=" btn btn-primary">Modifier le chapitre</p>
                         </a>
                     </div>
                     <?php endforeach;?>
