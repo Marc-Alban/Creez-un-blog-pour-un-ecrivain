@@ -14,7 +14,7 @@ class CommentManager extends Manager
      *
      * @return void
      */
-    public function get_comment()
+    public function getComments()
     {
 
         $query = $this->dbConnect()->query("
@@ -40,7 +40,7 @@ class CommentManager extends Manager
  * @param integer $id
  * @return void
  */
-    public function delComments(int $id)
+    public function deleteComments(int $id)
     {
         $query = $this->dbConnect()->prepare("DELETE FROM comments WHERE id = :id");
         $query->execute(["id" => $id]);
@@ -53,7 +53,7 @@ class CommentManager extends Manager
      * @param integer $id
      * @return void
      */
-    public function valComment(int $id)
+    public function validateComments(int $id)
     {
         $query = $this->dbConnect()->prepare("UPDATE comments SET seen = '0' WHERE id = :id");
         $query->execute(["id" => $id]);

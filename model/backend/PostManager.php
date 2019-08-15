@@ -16,7 +16,7 @@ class PostManager extends Manager
  * @param integer $id
  * @return void
  */
-    public function get_post(int $id)
+    public function getChapitre(int $id)
     {
         $sql = "
         SELECT  title,
@@ -35,7 +35,25 @@ class PostManager extends Manager
     }
 
     /**
-     * Met à jour le poste modifié en BDD
+     * Affiche la liste des post de la bdd, ainsi que ceux non publié
+     *
+     * @return void
+     */
+    public function getChapitres()
+    {
+        $sql = "
+        SELECT *
+        FROM posts
+        ORDER BY date_posts
+        DESC
+        ";
+        $query = $this->dbConnect()->query($sql);
+        $req = $query->fetchAll(PDO::FETCH_OBJ);
+        return $req;
+    }
+
+    /**
+     * Met à jour le chapitre modifié en BDD
      *
      * @param integer $id
      * @param string $title
@@ -45,7 +63,7 @@ class PostManager extends Manager
      * @param integer $posted
      * @return void
      */
-    public function edit(int $id, string $title, string $content, string $tmp_name, string $extention, int $posted)
+    public function editChapitre(int $id, string $title, string $content, string $tmp_name, string $extention, int $posted)
     {
         $sql_id = "
         SELECT id
@@ -92,7 +110,7 @@ class PostManager extends Manager
      * @param integer $id
      * @return void
      */
-    public function deletePost(int $id)
+    public function deleteChapitre(int $id)
     {
         $sql = "
         DELETE FROM posts
@@ -115,7 +133,7 @@ class PostManager extends Manager
  * @param string $extention
  * @return void
  */
-    public function postWrite(string $title, string $content, string $name, int $posted, string $tmp_name, string $extention)
+    public function chapitreWrite(string $title, string $content, string $name, int $posted, string $tmp_name, string $extention)
     {
         $sql_id = "
         SELECT MAX(id)
@@ -153,21 +171,4 @@ class PostManager extends Manager
         header("Location: index.php?page=list");
     }
 
-    /**
-     * Affiche la liste des post de la bdd, ainsi que ceux non publié
-     *
-     * @return void
-     */
-    public function getPosts()
-    {
-        $sql = "
-        SELECT *
-        FROM posts
-        ORDER BY date_posts
-        DESC
-        ";
-        $query = $this->dbConnect()->query($sql);
-        $req = $query->fetchAll(PDO::FETCH_OBJ);
-        return $req;
-    }
 }

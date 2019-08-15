@@ -3,8 +3,8 @@ declare (strict_types = 1);
 //Démarage session
 session_start();
 // Demande les différents controllers
-require_once 'controller/frontend.php';
-require_once 'controller/backend.php';
+require_once 'controller/frontendController.php';
+require_once 'controller/backendController.php';
 //Chemin absolue
 $serveurChemin = $_SERVER['SCRIPT_FILENAME'];
 $cheminLocal = realpath('index.php');
@@ -18,7 +18,7 @@ try {
         // Page Accueil --
         if ($_GET['page'] == 'home') {
             //Renvoie la page vue de l'accueil
-            getHome();
+            getHomeViewAction();
 
             //Page post
         } elseif ($_GET['page'] == 'post') {
@@ -40,7 +40,7 @@ try {
                             //fonction qui transforme la chaine en integer
                             $id = intval($idRecup);
                             //Insertion d'un commentaire en bdd
-                            instComment($name, $comment, $id);
+                            insertCommentAction($name, $comment, $id);
                             //Redirection sur la même page afin d'actualiser
                             header('Location: index.php?page=post&id=' . $_GET['id']);
                         }
@@ -55,14 +55,14 @@ try {
                     //fonction qui transforme la chaine en integer
                     $id = intval($idRecup);
                     //signale le commentaire
-                    signalComment($id);
+                    signalCommentAction($id);
                 }
                 //Recupération de l'id
                 $idRecup = $_GET['id'];
                 //fonction qui transforme la chaine en integer
                 $id = intval($idRecup);
                 // Récupération de la vue d'un chapitre avec son id dans l'url et ses commentaires
-                requireView($id);
+                chapitreViewAction($id);
 
             } else {
                 throw new Exception('Aucun identifiant de billet envoyé');
@@ -71,12 +71,12 @@ try {
             //Page chapitres
         } elseif ($_GET['page'] == 'chapitres') {
             //Renvoie la page vue des chapitres
-            listPosts();
+            ChapitresAction();
 
             //Page logout
         } elseif ($_GET['page'] == 'logout') {
             //Fonction déconnexion
-            logOut();
+            logoutAction();
 
             //Page error ---> a modifier en fonction de ce que marque l'utilisateur dans l'url
         } elseif ($_GET['page'] == 'error') {
@@ -90,7 +90,7 @@ try {
             //Si pas de session avec un mot de passe
             if (!isset($_SESSION['pass'])) {
                 //Renvoie la page vue de login
-                getLogin();
+                getLoginViewAction();
                 //Test si il y a un envoie
                 if (isset($_POST['submit'])) {
                     //insertion du mot de passe envoyé dans une variable
@@ -99,9 +99,9 @@ try {
                     if (empty($password)) {
                         throw new Exception('Champs n\'est pas remplis !');
                         //Vérification du mot de passe envoyé avec celui en bdd
-                    } else if (password_verify($password, getUser())) {
+                    } else if (password_verify($password, getUserPassAction())) {
                         //Insertion du mot de passe en Session
-                        $_SESSION['pass'] = getUser();
+                        $_SESSION['pass'] = getUserPassAction();
                         $user = &$_SESSION['pass'];
                         //Renvoie sur le dashboard
                         header('Location: index.php?page=dashboard');
@@ -125,7 +125,7 @@ try {
                     //fonction qui transforme la chaine en integer
                     $id = intval($idRecup);
                     //Valide le commentaire
-                    validateComment($id);
+                    validateCommentAction($id);
                     //Si mot /del
                 } else if (isset($_GET['/del'])) {
                     //Recupération de l'id
@@ -133,17 +133,17 @@ try {
                     //fonction qui transforme la chaine en integer
                     $id = intval($idRecup);
                     //Supprime le commentaire
-                    deleteComment($id);
+                    deleteCommentAction($id);
                 }
                 //Renvoie la page vue du dashboard
-                getDashboard();
+                getDashboardAction();
             }
             //Page chapitre -- dashboard
         } else if ($_GET['page'] == 'list') {
             //Si Session existe
             if (isset($_SESSION['pass'])) {
                 //Renvoie la page vue des chapitres dans le dashboard
-                getList();
+                getChapitresAction();
             }
             //Page MAJ chapitre
         } else if ($_GET['page'] == 'postEdit') {
@@ -175,7 +175,7 @@ try {
                                         //fonction qui transforme la chaine en integer
                                         $id = intval($idRecup);
                                         //Mise à jour du chapitre
-                                        updatePost($id, $title, $content, $_FILES['image']['tmp_name'], $extention, $posted);
+                                        updateChapitreAction($id, $title, $content, $_FILES['image']['tmp_name'], $extention, $posted);
                                         //Redirection sur la même page pour actualiser les données;
                                         header('Location: index.php?page=postEdit&id=' . $_GET['id']);
                                     } else {
@@ -198,7 +198,7 @@ try {
                         //fonction qui transforme la chaine en integer
                         $id = intval($idRecup);
                         //Suprime le post à l'id
-                        PostDelete($id);
+                        deleteChapitreAction($id);
                     }
 
                     //Recupération de l'id
@@ -206,7 +206,7 @@ try {
                     //fonction qui transforme la chaine en integer
                     $id = intval($idRecup);
                     //Récupère un post en fonction de l'id
-                    getPostEdit($id);
+                    getChapitreEditAction($id);
 
                 } else {
                     throw new Exception('Aucun identifiant envoyé !');
@@ -239,7 +239,7 @@ try {
                                     //test champs vide name
                                     if (!empty($name)) {
                                         //Insertion du chapitre en bdd
-                                        PostWrite($title, $content, $name, $posted, $_FILES['image']['tmp_name'], $extention);
+                                        chapitreWriteAction($title, $content, $name, $posted, $_FILES['image']['tmp_name'], $extention);
                                     } else {
                                         throw new Exception('Nom manquant !');
                                     }
@@ -257,7 +257,7 @@ try {
                     }
                 }
                 //Renvoie la page vue d'écriture d'un chapitre
-                getWrite();
+                getWriteViewAction();
             }
         }
         //Test du chemin absolue si seulement index.php sans de page dans l'url

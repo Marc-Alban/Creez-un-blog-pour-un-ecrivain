@@ -19,6 +19,7 @@ class Manager
      */
     protected function dbConnect()
     {
+        var_dump('*************************************Coucou******************************************');
         try
         {
             $bdd = new PDO('mysql:host=' . $this->dbhost . ';dbname=' . $this->dbname . ';charset=utf8', $this->dbuser, $this->dbpass);

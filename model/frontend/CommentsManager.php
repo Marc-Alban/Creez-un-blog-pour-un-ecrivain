@@ -15,7 +15,7 @@ class CommentsManager extends Manager
  * @param integer $id
  * @return void
  */
-    public function get_comments(int $id)
+    public function getComments(int $id)
     {
         $sql = "
         SELECT *
@@ -59,7 +59,7 @@ class CommentsManager extends Manager
  * @param integer $commentid
  * @return void
  */
-    public function alertComment(int $commentid)
+    public function signalComment(int $commentid)
     {
         if (isset($commentid)) {
             $sql = "
