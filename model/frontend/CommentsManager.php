@@ -24,7 +24,7 @@ class CommentsManager extends Manager
         ORDER BY date_comment
         DESC
         ";
-        $query = $this->dbConnect()->prepare($sql);
+        $query = $this->getPDO()->prepare($sql);
         $query->execute(['id' => $id]);
         $results = $query->fetchAll(PDO::FETCH_OBJ);
         return $results;
@@ -49,7 +49,7 @@ class CommentsManager extends Manager
             'comment' => $comment,
             'post_id' => $post_id,
         );
-        $req = $this->dbConnect()->prepare($sql);
+        $req = $this->getPDO()->prepare($sql);
         $req->execute($comment);
     }
 
@@ -67,7 +67,7 @@ class CommentsManager extends Manager
             SET seen = '1' WHERE id = :id
             ";
 
-            $query = $this->dbConnect()->prepare($sql);
+            $query = $this->getPDO()->prepare($sql);
             $query->execute(['id' => $commentid]);
         }
     }

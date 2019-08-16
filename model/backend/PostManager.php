@@ -28,7 +28,7 @@ class PostManager extends Manager
         WHERE   id = :id
         ";
 
-        $query = $this->dbConnect()->prepare($sql);
+        $query = $this->getPDO()->prepare($sql);
         $query->execute([":id" => $id]);
         $req = $query->fetchAll(PDO::FETCH_OBJ);
         return $req;
@@ -47,7 +47,7 @@ class PostManager extends Manager
         ORDER BY date_posts
         DESC
         ";
-        $query = $this->dbConnect()->query($sql);
+        $query = $this->getPDO()->query($sql);
         $req = $query->fetchAll(PDO::FETCH_OBJ);
         return $req;
     }
@@ -71,7 +71,7 @@ class PostManager extends Manager
         WHERE id = :id
         ";
 
-        $req = $this->dbConnect()->prepare($sql_id);
+        $req = $this->getPDO()->prepare($sql_id);
         $req->execute([':id' => $id]);
         $response = $req->fetch(PDO::FETCH_ASSOC);
         $id = $response['id'];
@@ -100,7 +100,7 @@ class PostManager extends Manager
             posted = :posted
         WHERE id = :id ";
 
-        $query = $this->dbConnect()->prepare($sql);
+        $query = $this->getPDO()->prepare($sql);
         $query->execute($e);
     }
 
@@ -117,7 +117,7 @@ class PostManager extends Manager
         WHERE id = :id
         ";
 
-        $query = $this->dbConnect()->prepare($sql);
+        $query = $this->getPDO()->prepare($sql);
         $query->execute(['id' => $id]);
         header("Location: index.php?page=list");
     }
@@ -142,7 +142,7 @@ class PostManager extends Manager
         DESC
         ";
 
-        $req = $this->dbConnect()->query($sql_id);
+        $req = $this->getPDO()->query($sql_id);
         $response = $req->fetch();
         $id = $response[0];
 
@@ -166,7 +166,7 @@ class PostManager extends Manager
     VALUES(:title, :content, :name_post, :image_posts, NOW(), :posted)
     ";
 
-        $query = $this->dbConnect()->prepare($sql);
+        $query = $this->getPDO()->prepare($sql);
         $query->execute($p);
         header("Location: index.php?page=list");
     }

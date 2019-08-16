@@ -17,7 +17,7 @@ class CommentManager extends Manager
     public function getComments()
     {
 
-        $query = $this->dbConnect()->query("
+        $query = $this->getPDO()->query("
     SELECT  comments.id,
             comments.name,
             comments.date_comment,
@@ -42,7 +42,7 @@ class CommentManager extends Manager
  */
     public function deleteComments(int $id)
     {
-        $query = $this->dbConnect()->prepare("DELETE FROM comments WHERE id = :id");
+        $query = $this->getPDO()->prepare("DELETE FROM comments WHERE id = :id");
         $query->execute(["id" => $id]);
         header('Location: index.php?page=dashboard');
     }
@@ -55,7 +55,7 @@ class CommentManager extends Manager
      */
     public function validateComments(int $id)
     {
-        $query = $this->dbConnect()->prepare("UPDATE comments SET seen = '0' WHERE id = :id");
+        $query = $this->getPDO()->prepare("UPDATE comments SET seen = '0' WHERE id = :id");
         $query->execute(["id" => $id]);
         header('Location: index.php?page=dashboard');
     }

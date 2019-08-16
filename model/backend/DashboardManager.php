@@ -16,7 +16,7 @@ class DashboardManager extends Manager
  */
     public function getPass()
     {
-        $query = $this->dbConnect()->query("SELECT password_admin FROM admins");
+        $query = $this->getPDO()->query("SELECT password_admin FROM admins");
         $req = $query->fetch();
         $pass = $req[0];
         return $pass;

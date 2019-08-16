@@ -7,26 +7,29 @@ use \PDO;
 class Manager
 {
 
-    private $dbhost = 'localhost';
-    private $dbname = 'blog';
-    private $dbuser = 'root';
-    private $dbpass = '';
+    protected $dbName;
+    protected $dbUser;
+    protected $dbPass;
+    protected $dbHost;
+    protected $pdo;
 
-    /**
-     * Connexion à la BDD
-     *
-     * @return void
-     */
-    protected function dbConnect()
+    public function __construct($dbName = 'blog', $dbUser = 'root', $dbPass = '', $dbHost = 'localhost')
     {
-        var_dump('*************************************Coucou******************************************');
-        try
-        {
-            $bdd = new PDO('mysql:host=' . $this->dbhost . ';dbname=' . $this->dbname . ';charset=utf8', $this->dbuser, $this->dbpass);
-            $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-            return $bdd;
-        } catch (PDOexception $e) {
-            die('Une erreur est survenu lors de la connexion à la bas de donnée !');
+        var_dump('****************************Coco***********************');
+        $this->$dbName = $dbName;
+        $this->$dbUser = $dbUser;
+        $this->$dbPass = $dbPass;
+        $this->$dbHost = $dbHost;
+    }
+
+    protected function getPDO()
+    {
+
+        if ($this->pdo === null) {
+            $pdo = new PDO('mysql:dbname=blog;host=localhost', 'root', '');
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo = $pdo;
         }
+        return $this->pdo;
     }
 }

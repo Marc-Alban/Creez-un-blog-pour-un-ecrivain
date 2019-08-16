@@ -5,6 +5,9 @@ session_start();
 // Demande les différents controllers
 require_once 'controller/frontendController.php';
 require_once 'controller/backendController.php';
+//Instance de l'objet
+$front = new FrontendController;
+$back = new BackendController;
 //Chemin absolue
 $serveurChemin = $_SERVER['SCRIPT_FILENAME'];
 $cheminLocal = realpath('index.php');
@@ -13,56 +16,27 @@ $cheminRemplacer = str_replace("/", "\\", $serveurChemin);
 try {
     //Si dans l'url il y a le mot page alors :
     if (isset($_GET['page'])) {
-
         //----------------------------------------------------Frontend-------------------------------------//
         // Page Accueil --
         if ($_GET['page'] == 'home') {
             //Renvoie la page vue de l'accueil
-            getHomeViewAction();
-
+            $front->getHomeViewAction();
             //Page post
         } elseif ($_GET['page'] == 'post') {
             //Test si identifiant dans l'url
             if (isset($_GET['id']) && $_GET['id'] > 0) {
-                //Test si un envoie à eu lieu
+
+                $id = $_GET['id'];
+
+                if (isset($_GET['comment_id']) && $_GET['comment_id'] > 0) {
+                    $idComment = $_GET['comment_id'];
+                }
                 if (isset($_POST) && isset($_POST['envoie'])) {
-
-                    $name = htmlspecialchars(trim($_POST['name']));
-                    $comment = htmlspecialchars(trim($_POST['comment']));
-                    $errors = [];
-
-                    //Vérification des champs vides
-                    if (!empty($name) || !empty($comment)) {
-                        //Vérification des érreurs
-                        if (empty($errors)) {
-                            //Recupération de l'id
-                            $idRecup = $_GET['id'];
-                            //fonction qui transforme la chaine en integer
-                            $id = intval($idRecup);
-                            //Insertion d'un commentaire en bdd
-                            insertCommentAction($name, $comment, $id);
-                            //Redirection sur la même page afin d'actualiser
-                            header('Location: index.php?page=post&id=' . $_GET['id']);
-                        }
-                    } else {
-                        $errors = 'Tous les champs sont vides';
-                    }
+                    $name = $_POST['name'];
+                    $content = $_POST['comment'];
                 }
-                //Test si il y a le mot page, l'identifiant ainsi que comment_id
-                if ($_GET['page'] === 'post' && $_GET['id'] && isset($_GET['comment_id']) && $_GET['comment_id']) {
-                    //Recupération de l'id
-                    $idRecup = $_GET['comment_id'];
-                    //fonction qui transforme la chaine en integer
-                    $id = intval($idRecup);
-                    //signale le commentaire
-                    signalCommentAction($id);
-                }
-                //Recupération de l'id
-                $idRecup = $_GET['id'];
-                //fonction qui transforme la chaine en integer
-                $id = intval($idRecup);
-                // Récupération de la vue d'un chapitre avec son id dans l'url et ses commentaires
-                chapitreViewAction($id);
+
+                $front->chapitreViewAction($name, $content, $id, $idComment);
 
             } else {
                 throw new Exception('Aucun identifiant de billet envoyé');
@@ -71,20 +45,17 @@ try {
             //Page chapitres
         } elseif ($_GET['page'] == 'chapitres') {
             //Renvoie la page vue des chapitres
-            ChapitresAction();
-
+            $front->ChapitresAction();
             //Page logout
         } elseif ($_GET['page'] == 'logout') {
             //Fonction déconnexion
-            logoutAction();
+            $back->logoutAction();
 
             //Page error ---> a modifier en fonction de ce que marque l'utilisateur dans l'url
-        } elseif ($_GET['page'] == 'error') {
+        } elseif ($_GET['page'] == 'error' || $_GET['page'] == '' || !isset($_GET['page'])) {
             //Renvoie la page vue de Error
-            getError();
-
+            $front->getErrorAction();
             //----------------------------------------------------Backend-------------------------------------//
-
             //Page login
         } elseif ($_GET['page'] == 'login') {
             //Si pas de session avec un mot de passe
@@ -263,10 +234,10 @@ try {
         //Test du chemin absolue si seulement index.php sans de page dans l'url
     } else if ($cheminRemplacer === $cheminLocal) {
         //Renvoie la page vue  Accueil
-        getHome();
+        $front->getHomeViewAction();
     } else {
         // Page Erreur
-        getError();
+        $front->getErrorAction();
     }
     //Renvoie les erreurs si faux !
 } catch (Exception $e) {

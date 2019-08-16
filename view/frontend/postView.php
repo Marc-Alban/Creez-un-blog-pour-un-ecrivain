@@ -25,7 +25,7 @@
             </div>
             <?php endforeach?>
             <?php endif?>
-
+            <br><br>
             <h4>Commentaires:</h4>
             <br><br>
             <form class="col-md-8 col-12" method="POST">
