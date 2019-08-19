@@ -126,7 +126,7 @@ class BackendController
  * @param string $file
  * @return void
  */
-    public function getWriteViewAction(string $title = '', string $content = '', int $posted = 0, string $tmp_name = '', int $action = null, string $file = '')
+    public function getWriteViewAction(string $title = '', string $content = '', int $posted, string $tmp_name = '', int $action = null, string $file = '')
     {
         $postManager = new PostManager;
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];

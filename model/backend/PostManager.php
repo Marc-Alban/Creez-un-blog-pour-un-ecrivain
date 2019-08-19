@@ -167,7 +167,6 @@ class PostManager extends Manager
 
         $query = $this->getPDO()->prepare($sql);
         $query->execute($p);
-        header("Location: index.php?page=list");
     }
 
 }

@@ -126,25 +126,24 @@ try {
                         $tmp_name = $_FILES['image']['tmp_name'];
                         $file = $_FILES['image']['name'];
                         $id = inval($_GET['id']);
+                        ($_GET['action']) ? $action = intval($_GET['action']) : '';
 
-                        if (isset($_GET['action']) && $_GET['action'] === 1) {
-                            $action = intval($_GET['action']);
-                            $back->getChapitreEditAction($id, $title, $content, $tmp_name, $extention, $posted, $action, $file);
+                        if ($action == 1) {
+                            $back->getChapitreEditAction($id, $title, $content, $tmp_name, $posted, $action, $file);
                         }
 
                     } else if (isset($_POST['deleted'])) {
                         $id = intval($_GET['id']);
                         $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
 
-                        if (isset($_GET['action']) && $_GET['action'] === 2) {
-                            $action = intval($_GET['action']);
-                            $back->getChapitreEditAction($id, '', '', '', '', $posted, $action, '');
+                        if ($action == 2) {
+                            $back->getChapitreEditAction($id, '', '', '', $posted, $action, '');
                         }
 
                     } else {
                         $id = intval($_GET['id']);
                         $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
-                        $back->getChapitreEditAction($id, '', '', '', '', $posted, null, '');
+                        $back->getChapitreEditAction($id, '', '', '', $posted, $action, '');
                     }
                 } else {
                     throw new Exception('Aucun identifiant envoyé !');
@@ -157,6 +156,7 @@ try {
             // Si session
             if (isset($_SESSION['pass'])) {
                 //test envoie
+                ($_GET['action']) ? $action = intval($_GET['action']) : '';
                 if (isset($_POST['submit'])) {
 
                     $title = htmlspecialchars(trim($_POST['title']));
@@ -165,14 +165,13 @@ try {
                     $tmp_name = $_FILES['image']['tmp_name'];
                     $file = $_FILES['image']['name'];
 
-                    if (isset($action) && $action === 1) {
-                        $action = intval($_GET['action']);
+                    if ($action == 1) {
                         $back->getWriteViewAction($title, $content, $posted, $tmp_name, $action, $file);
                     }
                 } else {
                     $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
                     //Renvoie la page vue d'écriture d'un chapitre
-                    $back->getWriteViewAction('', '', '', $posted, '', '');
+                    $back->getWriteViewAction('', '', $posted, '', $action, '');
                 }
             }
         }
