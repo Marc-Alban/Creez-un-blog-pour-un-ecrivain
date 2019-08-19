@@ -67,17 +67,17 @@ class FrontendController
         $commentManager = new CommentsManager;
         $responses = $commentManager->getComments($id);
 
+        if (isset($idComment)) {
+            //fonction qui transforme la chaine en integer
+            $idSignal = intval($idComment);
+            $commentManager->signalComment($idSignal);
+        }
+
         if (isset($name) && isset($comment)) {
 
             htmlspecialchars(trim($name));
             htmlspecialchars(trim($comment));
             $errors = [];
-
-            if (isset($idComment)) {
-                //fonction qui transforme la chaine en integer
-                $idSignal = intval($idComment);
-                $commentManager->signalComment($idSignal);
-            }
 
             //Vérification des champs vides
             if (!empty($name) || !empty($comment)) {

@@ -6,7 +6,7 @@
         <section class="blog-me pt-100 pb-100" id="blog">
             <div class="container">
                 <div id="styleBloc">
-                    <?php foreach ($posts as $chapitre): ?>
+                    <?php foreach ($chapitres as $chapitre): ?>
                     <div class="col-md-12 col-12 blogShort">
                         <a href="index.php?page=postEdit&id=<?=$chapitre->id?>" id="lien">
                             <h1><?=$chapitre->title?>

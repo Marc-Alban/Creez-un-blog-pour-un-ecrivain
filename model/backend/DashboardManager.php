@@ -31,7 +31,6 @@ class DashboardManager extends Manager
     public function logoutUser()
     {
         session_destroy();
-        header("Location: index.php?page=home");
     }
 
 }

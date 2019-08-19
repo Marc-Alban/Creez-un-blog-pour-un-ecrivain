@@ -7,26 +7,24 @@ use \PDO;
 class Manager
 {
 
-    protected $dbName;
-    protected $dbUser;
-    protected $dbPass;
-    protected $dbHost;
-    protected $pdo;
+    private $dbHost;
+    private $dbName;
+    private $dbUser;
+    private $dbPassword;
+    private $pdo;
 
-    public function __construct($dbName = 'blog', $dbUser = 'root', $dbPass = '', $dbHost = 'localhost')
+    public function __construct($dbName = 'blog', $dbHost = 'localhost', $dbUser = 'root', $dbPassword = '')
     {
-        var_dump('****************************Coco***********************');
-        $this->$dbName = $dbName;
-        $this->$dbUser = $dbUser;
-        $this->$dbPass = $dbPass;
-        $this->$dbHost = $dbHost;
+        $this->dbHost = $dbHost;
+        $this->dbName = $dbName;
+        $this->dbUser = $dbUser;
+        $this->dbPassword = $dbPassword;
     }
 
-    protected function getPDO()
+    public function getPDO()
     {
-
-        if ($this->pdo === null) {
-            $pdo = new PDO('mysql:dbname=blog;host=localhost', 'root', '');
+        if (is_null($this->pdo)) {
+            $pdo = new PDO('mysql:host=' . $this->dbHost . ';dbname=' . $this->dbName, $this->dbUser, $this->dbPassword);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo = $pdo;
         }

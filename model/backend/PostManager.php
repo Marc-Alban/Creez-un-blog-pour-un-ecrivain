@@ -119,7 +119,6 @@ class PostManager extends Manager
 
         $query = $this->getPDO()->prepare($sql);
         $query->execute(['id' => $id]);
-        header("Location: index.php?page=list");
     }
 
 /**
@@ -133,7 +132,7 @@ class PostManager extends Manager
  * @param string $extention
  * @return void
  */
-    public function chapitreWrite(string $title, string $content, string $name, int $posted, string $tmp_name, string $extention)
+    public function chapitreWrite(string $title = '', string $content = '', string $name = '', int $posted, string $tmp_name = '', string $extention = '')
     {
         $sql_id = "
         SELECT MAX(id)

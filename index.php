@@ -3,8 +3,8 @@ declare (strict_types = 1);
 //Démarage session
 session_start();
 // Demande les différents controllers
-require_once 'controller/frontendController.php';
-require_once 'controller/backendController.php';
+require_once 'controller/FrontendController.php';
+require_once 'controller/BackendController.php';
 //Instance de l'objet
 $front = new FrontendController;
 $back = new BackendController;
@@ -25,18 +25,19 @@ try {
         } elseif ($_GET['page'] == 'post') {
             //Test si identifiant dans l'url
             if (isset($_GET['id']) && $_GET['id'] > 0) {
-
-                $id = $_GET['id'];
-
                 if (isset($_GET['comment_id']) && $_GET['comment_id'] > 0) {
-                    $idComment = $_GET['comment_id'];
-                }
-                if (isset($_POST) && isset($_POST['envoie'])) {
+                    $id = intval($_GET['id']);
+                    $idComment = intval($_GET['comment_id']);
+                    $front->chapitreViewAction('', '', $id, $idComment);
+                } else if (isset($_POST) && isset($_POST['envoie'])) {
+                    $id = intval($_GET['id']);
                     $name = $_POST['name'];
                     $content = $_POST['comment'];
+                    $front->chapitreViewAction($name, $content, $id);
+                } else {
+                    $id = intval($_GET['id']);
+                    $front->chapitreViewAction('', '', $id);
                 }
-
-                $front->chapitreViewAction($name, $content, $id, $idComment);
 
             } else {
                 throw new Exception('Aucun identifiant de billet envoyé');
@@ -58,63 +59,58 @@ try {
             //----------------------------------------------------Backend-------------------------------------//
             //Page login
         } elseif ($_GET['page'] == 'login') {
+
             //Si pas de session avec un mot de passe
             if (!isset($_SESSION['pass'])) {
-                //Renvoie la page vue de login
-                getLoginViewAction();
                 //Test si il y a un envoie
                 if (isset($_POST['submit'])) {
-                    //insertion du mot de passe envoyé dans une variable
-                    $password = htmlspecialchars(trim($_POST['password']));
-                    //si champs vide
-                    if (empty($password)) {
-                        throw new Exception('Champs n\'est pas remplis !');
-                        //Vérification du mot de passe envoyé avec celui en bdd
-                    } else if (password_verify($password, getUserPassAction())) {
-                        //Insertion du mot de passe en Session
-                        $_SESSION['pass'] = getUserPassAction();
-                        $user = &$_SESSION['pass'];
-                        //Renvoie sur le dashboard
-                        header('Location: index.php?page=dashboard');
-                    } else {
-                        throw new Exception('Ce mot de passe n\'est pas bon pas !');
-                    }
+                    //Renvoie la page vue de login
+                    $_SESSION['pass'] = $back->getLoginViewAction($_POST['password']);
+                    header('Location: index.php?page=dashboard');
+                } else {
+                    $back->getLoginViewAction();
                 }
             } else {
                 //Si il y a déjà un  mot de passe, renvoie sur le dashboard
                 header('Location: index.php?page=dashboard');
             }
+
             //Page dashboard
         } else if ($_GET['page'] == 'dashboard') {
 
             //Si Session
             if (isset($_SESSION['pass'])) {
+                if (isset($_GET['id']) && $_GET['id'] > 0) {
+                    //Recupération de l'id
+                    $idRecup = $_GET['id'];
+                    //fonction qui transforme la chaine en integer
+                    $id = intval($idRecup);
+                }
+
                 //Si mot dans l'url /val
                 if (isset($_GET['/val'])) {
-                    //Recupération de l'id
-                    $idRecup = $_GET['id'];
-                    //fonction qui transforme la chaine en integer
-                    $id = intval($idRecup);
+                    $action = 1;
                     //Valide le commentaire
-                    validateCommentAction($id);
-                    //Si mot /del
+                    $back->getDashboardAction($id, $action);
                 } else if (isset($_GET['/del'])) {
-                    //Recupération de l'id
-                    $idRecup = $_GET['id'];
-                    //fonction qui transforme la chaine en integer
-                    $id = intval($idRecup);
+                    $action = 0;
                     //Supprime le commentaire
-                    deleteCommentAction($id);
+                    $back->getDashboardAction($id, $action);
                 }
+
                 //Renvoie la page vue du dashboard
-                getDashboardAction();
+                $back->getDashboardAction();
+            } else {
+                header('Location: index.php?page=login');
             }
             //Page chapitre -- dashboard
         } else if ($_GET['page'] == 'list') {
             //Si Session existe
             if (isset($_SESSION['pass'])) {
                 //Renvoie la page vue des chapitres dans le dashboard
-                getChapitresAction();
+                $back->getChapitresAction();
+            } else {
+                header('Location: index.php?page=login');
             }
             //Page MAJ chapitre
         } else if ($_GET['page'] == 'postEdit') {
@@ -124,64 +120,37 @@ try {
                 if (isset($_GET['id']) && $_GET['id'] > 0) {
                     //Test si il y a un envoie
                     if (isset($_POST['modified'])) {
-
                         $title = htmlspecialchars(trim($_POST['title']));
                         $content = htmlspecialchars(trim($_POST['content']));
                         $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
+                        $tmp_name = $_FILES['image']['tmp_name'];
                         $file = $_FILES['image']['name'];
-                        $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
-                        $extention = strrchr($file, '.');
-                        $errors = [];
+                        $id = inval($_GET['id']);
 
-                        //Vérification des champs vides
-                        if (!empty($title) || !empty($content)) {
-                            //Vérification du champs vide title
-                            if (!empty($title)) {
-                                //Vérification du champs vide content
-                                if (!empty($content)) {
-                                    //Vérification de l'extention par rapport au tableau extention(s) ou bien à l'extention .png
-                                    if (in_array($extention, $extentions) || $extention = ".png") {
-                                        //Recupération de l'id
-                                        $idRecup = $_GET['id'];
-                                        //fonction qui transforme la chaine en integer
-                                        $id = intval($idRecup);
-                                        //Mise à jour du chapitre
-                                        updateChapitreAction($id, $title, $content, $_FILES['image']['tmp_name'], $extention, $posted);
-                                        //Redirection sur la même page pour actualiser les données;
-                                        header('Location: index.php?page=postEdit&id=' . $_GET['id']);
-                                    } else {
-                                        $errors = ('Image n\'est pas valide! ');
-                                    }
-                                } else {
-                                    throw new Exception('Veuillez mettre un contenu !');
-                                }
-                            } else {
-                                throw new Exception('Veuillez mettre un titre !');
-                            }
-                        } else {
-                            throw new Exception('Veuillez remplir tous les champs !');
+                        if (isset($_GET['action']) && $_GET['action'] === 1) {
+                            $action = intval($_GET['action']);
+                            $back->getChapitreEditAction($id, $title, $content, $tmp_name, $extention, $posted, $action, $file);
                         }
+
+                    } else if (isset($_POST['deleted'])) {
+                        $id = intval($_GET['id']);
+                        $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
+
+                        if (isset($_GET['action']) && $_GET['action'] === 2) {
+                            $action = intval($_GET['action']);
+                            $back->getChapitreEditAction($id, '', '', '', '', $posted, $action, '');
+                        }
+
+                    } else {
+                        $id = intval($_GET['id']);
+                        $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
+                        $back->getChapitreEditAction($id, '', '', '', '', $posted, null, '');
                     }
-
-                    if (isset($_POST['deleted'])) {
-                        //Recupération de l'id
-                        $idRecup = $_GET['id'];
-                        //fonction qui transforme la chaine en integer
-                        $id = intval($idRecup);
-                        //Suprime le post à l'id
-                        deleteChapitreAction($id);
-                    }
-
-                    //Recupération de l'id
-                    $idRecup = $_GET['id'];
-                    //fonction qui transforme la chaine en integer
-                    $id = intval($idRecup);
-                    //Récupère un post en fonction de l'id
-                    getChapitreEditAction($id);
-
                 } else {
                     throw new Exception('Aucun identifiant envoyé !');
                 }
+            } else {
+                header('Location: index.php?page=login');
             }
             //Page ecriture d'un chapitre
         } else if ($_GET['page'] == 'write') {
@@ -193,44 +162,22 @@ try {
                     $title = htmlspecialchars(trim($_POST['title']));
                     $content = htmlspecialchars(trim($_POST['description']));
                     $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
-                    $name = 'Jean';
-                    $errors = [];
-                    //Test si champs vide
-                    if (!empty($title) || !empty($content)) {
-                        //test champs vide title
-                        if (!empty($title)) {
-                            //test champs vide content
-                            if (!empty($content)) {
+                    $tmp_name = $_FILES['image']['tmp_name'];
+                    $file = $_FILES['image']['name'];
 
-                                $file = $_FILES['image']['name'];
-                                $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
-                                $extention = strrchr($file, '.');
-                                //test extention(s): pour  savoir si l'extention correspon aux extention dans le tableau
-                                if (in_array($extention, $extentions)) {
-                                    //test champs vide name
-                                    if (!empty($name)) {
-                                        //Insertion du chapitre en bdd
-                                        chapitreWriteAction($title, $content, $name, $posted, $_FILES['image']['tmp_name'], $extention);
-                                    } else {
-                                        throw new Exception('Nom manquant !');
-                                    }
-                                } else {
-                                    throw new Exception('Image n\'est pas valide! ');
-                                }
-                            } else {
-                                throw new Exception('Veuillez renseigner du contenu ! ');
-                            }
-                        } else {
-                            throw new Exception('Veuillez renseigner un titre !');
-                        }
-                    } else {
-                        throw new Exception('Veuillez remplir les champs');
+                    if (isset($action) && $action === 1) {
+                        $action = intval($_GET['action']);
+                        $back->getWriteViewAction($title, $content, $posted, $tmp_name, $action, $file);
                     }
+                } else {
+                    $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
+                    //Renvoie la page vue d'écriture d'un chapitre
+                    $back->getWriteViewAction('', '', '', $posted, '', '');
                 }
-                //Renvoie la page vue d'écriture d'un chapitre
-                getWriteViewAction();
             }
         }
+
+        //---------------------------------------------------------------------------Front-------------------------------------------------//
         //Test du chemin absolue si seulement index.php sans de page dans l'url
     } else if ($cheminRemplacer === $cheminLocal) {
         //Renvoie la page vue  Accueil

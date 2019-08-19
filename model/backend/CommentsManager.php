@@ -40,11 +40,11 @@ class CommentManager extends Manager
  * @param integer $id
  * @return void
  */
-    public function deleteComments(int $id)
+    public function deleteComments(int $id = null)
     {
         $query = $this->getPDO()->prepare("DELETE FROM comments WHERE id = :id");
         $query->execute(["id" => $id]);
-        header('Location: index.php?page=dashboard');
+
     }
 
     /**
@@ -53,10 +53,9 @@ class CommentManager extends Manager
      * @param integer $id
      * @return void
      */
-    public function validateComments(int $id)
+    public function validateComments(int $id = null)
     {
         $query = $this->getPDO()->prepare("UPDATE comments SET seen = '0' WHERE id = :id");
         $query->execute(["id" => $id]);
-        header('Location: index.php?page=dashboard');
     }
 }
