@@ -24,6 +24,7 @@ class Manager
     public function getPDO()
     {
         if (is_null($this->pdo)) {
+            unset($this->pdo);
             $pdo = new PDO('mysql:host=' . $this->dbHost . ';dbname=' . $this->dbName, $this->dbUser, $this->dbPassword);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo = $pdo;

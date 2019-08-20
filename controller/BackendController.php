@@ -75,7 +75,7 @@ class BackendController
         $extention = strrchr($file, '.');
         $errors = [];
 
-        if ($action === 1) {
+        if ($action == 1) {
             //Vérification des champs vides
             if (!empty($title) || !empty($content)) {
                 //Vérification du champs vide title
@@ -100,7 +100,7 @@ class BackendController
             } else {
                 $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
             }
-        } else if ($action === 2) {
+        } else if ($action == 2) {
             $postManager->deleteChapitre($id);
         } else {
             $chapitre = $postManager->getChapitre($id);
@@ -134,7 +134,7 @@ class BackendController
         $name = 'Jean';
         $errors = [];
 
-        if (isset($action) && $action === 1) {
+        if (isset($action) && $action == 1) {
             //Test si champs vide
             if (!empty($title) || !empty($content)) {
                 //test champs vide title
@@ -147,7 +147,7 @@ class BackendController
                             //test champs vide name
                             if (!empty($name)) {
                                 //Insertion du chapitre en bdd
-                                $postManager->chapitreWrite($title, $content, $name, $posted, $tmp_name, $action, $extention);
+                                $postManager->chapitreWrite($title, $content, $name, $posted, $tmp_name, $extention);
                             } else {
                                 $errors['nameEmpty'] = 'Nom manquant !';
                             }
@@ -164,7 +164,7 @@ class BackendController
                 $errors['fieldsEmpty'] = 'Veuillez remplir les champs';
             }
         } else {
-            $post = $postManager->chapitreWrite('', '', '', null, '', '');
+            $post = $postManager->chapitreWrite('', '', '', 0, '', '');
         }
 
         ob_start();

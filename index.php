@@ -126,7 +126,7 @@ try {
                         $tmp_name = $_FILES['image']['tmp_name'];
                         $file = $_FILES['image']['name'];
                         $id = inval($_GET['id']);
-                        ($_GET['action']) ? $action = intval($_GET['action']) : '';
+                        (isset($_GET['action'])) ? $action = intval($_GET['action']) : '';
 
                         if ($action == 1) {
                             $back->getChapitreEditAction($id, $title, $content, $tmp_name, $posted, $action, $file);
@@ -143,7 +143,7 @@ try {
                     } else {
                         $id = intval($_GET['id']);
                         $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
-                        $back->getChapitreEditAction($id, '', '', '', $posted, $action, '');
+                        $back->getChapitreEditAction($id, '', '', '', $posted, 0, '');
                     }
                 } else {
                     throw new Exception('Aucun identifiant envoyé !');
@@ -156,7 +156,7 @@ try {
             // Si session
             if (isset($_SESSION['pass'])) {
                 //test envoie
-                ($_GET['action']) ? $action = intval($_GET['action']) : '';
+                (isset($_GET['action'])) ? $action = intval($_GET['action']) : '';
                 if (isset($_POST['submit'])) {
 
                     $title = htmlspecialchars(trim($_POST['title']));
@@ -171,7 +171,7 @@ try {
                 } else {
                     $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
                     //Renvoie la page vue d'écriture d'un chapitre
-                    $back->getWriteViewAction('', '', $posted, '', $action, '');
+                    $back->getWriteViewAction('', '', $posted, '', 0, '');
                 }
             }
         }
