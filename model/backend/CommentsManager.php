@@ -40,11 +40,10 @@ class CommentManager extends Manager
  * @param integer $id
  * @return void
  */
-    public function deleteComments(int $id = null)
+    public function deleteComments(int $id)
     {
         $query = $this->getPDO()->prepare("DELETE FROM comments WHERE id = :id");
         $query->execute(["id" => $id]);
-
     }
 
     /**
@@ -53,7 +52,7 @@ class CommentManager extends Manager
      * @param integer $id
      * @return void
      */
-    public function validateComments(int $id = null)
+    public function validateComments(int $id)
     {
         $query = $this->getPDO()->prepare("UPDATE comments SET seen = '0' WHERE id = :id");
         $query->execute(["id" => $id]);

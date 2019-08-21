@@ -18,13 +18,12 @@
                     <th scope="row"><?=$comment->title?></th>
                     <td><?=substr($comment->comment, 0, 100)?>...</td>
                     <td>
-                        <a href="index.php?page=dashboard&id=<?=$comment->id?>&/val" id="<?=$comment->id?>"
-                            class="see_comment"><button type="button"
-                                class="btn btn-primary btn-circle btn-lg see_comment"><i
+                        <a href="index.php?page=admin&id=<?=$comment->id?>&action=valide" id="<?=$comment->id?>"
+                            class="see_comment"><button class="btn btn-primary btn-circle btn-lg see_comment"><i
                                     class="fas fa-check-circle"></i></button></a>
-                        <a href="index.php?page=dashboard&id=<?=$comment->id?>&/del" id="<?=$comment->id?>"
-                            class="delete_comment"><button type="button"
-                                class="btn btn-warning btn-circle btn-lg delete_comment"><i
+
+                        <a href="index.php?page=admin&id=<?=$comment->id?>&action=remove" id="<?=$comment->id?>"
+                            class="delete_comment"><button class="btn btn-warning btn-circle btn-lg delete_comment"><i
                                     class="fas fa-trash-alt"></i></button></a>
 
                         <!-- modal -->
@@ -53,13 +52,14 @@
                                         <p><?=nl2br($comment->comment)?></p>
                                     </div>
                                     <div class="modal-footer">
-                                        <a href="index.php?page=dashboard&id=<?=$comment->id?>&/val"
-                                            id="<?=$comment->id?>" class="see_comment"><button type="button"
-                                                class="btn btn-primary btn-circle btn-lg see_comment "><i
+                                        <a href="index.php?page=admin&id=<?=$comment->id?>&action=valide"
+                                            id="<?=$comment->id?>" class="see_comment"><button
+                                                class="btn btn-primary btn-circle btn-lg see_comment"><i
                                                     class="fas fa-check-circle"></i></button></a>
-                                        <a href="index.php?page=dashboard&id=<?=$comment->id?>&/del"
-                                            id="<?=$comment->id?>" class="delete_comment"><button type="button"
-                                                class="btn btn-warning btn-circle btn-lg  delete_comment"><i
+
+                                        <a href="index.php?page=admin&id=<?=$comment->id?>&action=remove"
+                                            id="<?=$comment->id?>" class="delete_comment"><button
+                                                class="btn btn-warning btn-circle btn-lg delete_comment"><i
                                                     class="fas fa-trash-alt"></i></button></a>
                                     </div>
 

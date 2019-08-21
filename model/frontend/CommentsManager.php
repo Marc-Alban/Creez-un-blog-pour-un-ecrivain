@@ -59,16 +59,16 @@ class CommentsManager extends Manager
  * @param integer $commentid
  * @return void
  */
-    public function signalComment(int $commentid)
+    public function signalComment(int $comment_id)
     {
-        if (isset($commentid)) {
+        if (isset($comment_id)) {
             $sql = "
             UPDATE comments
             SET seen = '1' WHERE id = :id
             ";
 
             $query = $this->getPDO()->prepare($sql);
-            $query->execute(['id' => $commentid]);
+            $query->execute(['id' => $comment_id]);
         }
     }
 

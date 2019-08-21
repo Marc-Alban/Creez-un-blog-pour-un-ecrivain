@@ -13,13 +13,13 @@
                         <a class="btn btn-sm nav-link m-2" href="index.php?page=home">Accueil</a>
                     </li>
                     <li>
-                        <a class="btn btn-sm nav-link m-2 " href="index.php?page=chapitres">Chapitres</a>
+                        <a class="btn btn-sm nav-link m-2 " href="index.php?page=chapters">Chapitres</a>
                     </li>
                 </ul>
                 <hr>
                 <p>Admin</p>
                 <?php if (isset($_SESSION['pass'])): ?>
-                <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=dashboard">Back Office</a>
+                <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=admin">Back Office</a>
                 <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=logout">Déconexion</a>
                 <?php else: ?>
                 <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=login">Back Office</a>

@@ -9,8 +9,7 @@
     <?php $title = 'Page de connexion'?>
     <form class="form-signin " method="post">
         <h1 class="h3 mb-3 font-weight-normal">Mot de passe :</h1>
-        <label for="inputPassword" class="sr-only">Mot de passe</label>
         <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Mot de passe">
-        <button class="btn btn-lg btn-primary btn-block" name="submit" type="submit">Connexion</button>
+        <button class="btn btn-lg btn-primary btn-block" name="connexion" type="submit">Connexion</button>
     </form>
 </div>

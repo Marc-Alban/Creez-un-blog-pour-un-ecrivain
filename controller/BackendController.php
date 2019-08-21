@@ -19,22 +19,30 @@ class BackendController
  * @param integer $id
  * @return void
  */
-    public function getDashboardAction(int $id = null, int $action = null)
+    public function adminAction()
     {
         $commentManager = new CommentManager;
         $comments = $commentManager->getComments();
-
-        if (isset($id) && isset($action) && $action = 1) {
-            $commentManager->validateComments($id);
-        } else {
-            $commentManager->deleteComments($id);
-        }
 
         ob_start();
         require 'view/backend/headerView.php';
         require 'view/backend/dashboardView.php';
         $content = ob_get_clean();
         require 'view/backend/template.php';
+    }
+
+    public function valideCommentAction(int $id)
+    {
+        $commentManager = new CommentManager;
+        $commentManager->validateComments($id);
+        header('Location: index.php?page=admin');
+    }
+
+    public function removeCommentAction(int $id)
+    {
+        $commentManager = new CommentManager;
+        $commentManager->deleteComments($id);
+        header('Location: index.php?page=admin');
     }
 
 /**
@@ -163,8 +171,6 @@ class BackendController
             } else {
                 $errors['fieldsEmpty'] = 'Veuillez remplir les champs';
             }
-        } else {
-            $post = $postManager->chapitreWrite('', '', '', 0, '', '');
         }
 
         ob_start();
@@ -180,29 +186,37 @@ class BackendController
  *
  * @return void
  */
-    public function getLoginViewAction($pass = '')
+    public function loginAction()
     {
-        $dashboardManager = new DashboardManager;
-        $passBdd = $dashboardManager->getPass();
-
-        //insertion du mot de passe envoyé dans une variable
-        $password = htmlspecialchars(trim($pass));
-        //si champs vide
-        if (empty($password)) {
-            $error["Champs"] = 'Champs n\'est pas remplis !';
-        }
-
-        //Vérification du mot de passe envoyé avec celui en bdd
-        if (password_verify($password, $passBdd)) {
-            return $password;
-        } else {
-            $error['Password'] = 'Ce mot de passe n\'est pas bon pas !';
-        }
-
         ob_start();
         require 'view/backend/loginView.php';
         $content = ob_get_clean();
         require 'view/backend/template.php';
+    }
+
+    public function connexionAction(int $password)
+    {
+        $dashboardManager = new DashboardManager;
+        $passwordBdd = $dashboardManager->getPass();
+        $errors = [];
+        //si champs vide
+        if (!empty($password)) {
+            if ($password > 5) {
+                $pass = strval($password);
+                //Vérification du mot de passe envoyé avec celui en bdd
+                if (password_verify($pass, $passwordBdd)) {
+                    //insertion du mot de passe envoyé dans une variable
+                    htmlspecialchars(trim($pass));
+                    return $pass;
+                } else {
+                    $errors['Password'] = 'Ce mot de passe n\'est pas bon pas !';
+                }
+            } else {
+                $errors['size'] = 'Le mot de passe doit être supérieur à 5 caractères';
+            }
+        } else {
+            $errors["Champs"] = 'Champs n\'est pas remplis !';
+        }
     }
 
     public function logoutAction()

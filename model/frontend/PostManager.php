@@ -17,7 +17,7 @@ class PostManager extends Manager
  * @param integer $id
  * @return object
  */
-    public function getChapitre(int $id)
+    public function getChapter(int $id)
     {
         $sql = "
         SELECT  posts.title,
@@ -44,7 +44,7 @@ class PostManager extends Manager
  *
  * @return object
  */
-    public function getLimitedChapitres()
+    public function getLimitedChapters()
     {
         $sql = "
         SELECT  posts.id,
@@ -71,7 +71,7 @@ class PostManager extends Manager
      *
      * @return object
      */
-    public function getChapitres()
+    public function getChapters()
     {
         $sql = "
         SELECT *

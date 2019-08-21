@@ -6,186 +6,85 @@ session_start();
 require_once 'controller/FrontendController.php';
 require_once 'controller/BackendController.php';
 //Instance de l'objet
-$front = new FrontendController;
-$back = new BackendController;
-//Chemin absolue
-$serveurChemin = $_SERVER['SCRIPT_FILENAME'];
-$cheminLocal = realpath('index.php');
-$cheminRemplacer = str_replace("/", "\\", $serveurChemin);
-//Essaie:: url pour avoir la page correspondante
-try {
-    //Si dans l'url il y a le mot page alors :
-    if (isset($_GET['page'])) {
-        //----------------------------------------------------Frontend-------------------------------------//
-        // Page Accueil --
-        if ($_GET['page'] == 'home') {
-            //Renvoie la page vue de l'accueil
-            $front->getHomeViewAction();
-            //Page post
-        } elseif ($_GET['page'] == 'post') {
-            //Test si identifiant dans l'url
-            if (isset($_GET['id']) && $_GET['id'] > 0) {
-                if (isset($_GET['comment_id']) && $_GET['comment_id'] > 0) {
-                    $id = intval($_GET['id']);
-                    $idComment = intval($_GET['comment_id']);
-                    $front->chapitreViewAction('', '', $id, $idComment);
-                } else if (isset($_POST) && isset($_POST['envoie'])) {
-                    $id = intval($_GET['id']);
-                    $name = $_POST['name'];
-                    $content = $_POST['comment'];
-                    $front->chapitreViewAction($name, $content, $id);
-                } else {
-                    $id = intval($_GET['id']);
-                    $front->chapitreViewAction('', '', $id);
-                }
+$frontController = new FrontendController;
+$backController = new BackendController;
 
-            } else {
-                throw new Exception('Aucun identifiant de billet envoyé');
+if (isset($_GET['page'])) {
+
+    if ($_GET['page'] == 'home') {
+        $frontController->homeAction();
+    } else if ($_GET['page'] == 'chapters') {
+        $frontController->chaptersAction();
+    } else if ($_GET['page'] == 'chapter') {
+
+        if (isset($_GET['id']) && $_GET['id'] > 0) {
+            $id = intval($_GET['id']);
+            if (isset($_GET['action']) && $_GET['action'] == 'signalComment') {
+                $comment_id = (isset($_GET['comment_id'])) ? intval($_GET['comment_id']) : '';
+                $frontController->signalAction($comment_id);
+                header('Location: index.php?page=chapter&id=' . $id);
             }
 
-            //Page chapitres
-        } elseif ($_GET['page'] == 'chapitres') {
-            //Renvoie la page vue des chapitres
-            $front->ChapitresAction();
-            //Page logout
-        } elseif ($_GET['page'] == 'logout') {
-            //Fonction déconnexion
-            $back->logoutAction();
-
-            //Page error ---> a modifier en fonction de ce que marque l'utilisateur dans l'url
-        } elseif ($_GET['page'] == 'error' || $_GET['page'] == '' || !isset($_GET['page'])) {
-            //Renvoie la page vue de Error
-            $front->getErrorAction();
-            //----------------------------------------------------Backend-------------------------------------//
-            //Page login
-        } elseif ($_GET['page'] == 'login') {
-
-            //Si pas de session avec un mot de passe
-            if (!isset($_SESSION['pass'])) {
-                //Test si il y a un envoie
-                if (isset($_POST['submit'])) {
-                    //Renvoie la page vue de login
-                    $_SESSION['pass'] = $back->getLoginViewAction($_POST['password']);
-                    header('Location: index.php?page=dashboard');
-                } else {
-                    $back->getLoginViewAction();
-                }
-            } else {
-                //Si il y a déjà un  mot de passe, renvoie sur le dashboard
-                header('Location: index.php?page=dashboard');
+            if (isset($_POST['submit'])) {
+                $frontController->sendCommentAction($_POST['name'], $_POST['comment'], $id);
             }
 
-            //Page dashboard
-        } else if ($_GET['page'] == 'dashboard') {
-
-            //Si Session
-            if (isset($_SESSION['pass'])) {
-                if (isset($_GET['id']) && $_GET['id'] > 0) {
-                    //Recupération de l'id
-                    $idRecup = $_GET['id'];
-                    //fonction qui transforme la chaine en integer
-                    $id = intval($idRecup);
-                }
-
-                //Si mot dans l'url /val
-                if (isset($_GET['/val'])) {
-                    $action = 1;
-                    //Valide le commentaire
-                    $back->getDashboardAction($id, $action);
-                } else if (isset($_GET['/del'])) {
-                    $action = 0;
-                    //Supprime le commentaire
-                    $back->getDashboardAction($id, $action);
-                }
-
-                //Renvoie la page vue du dashboard
-                $back->getDashboardAction();
-            } else {
-                header('Location: index.php?page=login');
-            }
-            //Page chapitre -- dashboard
-        } else if ($_GET['page'] == 'list') {
-            //Si Session existe
-            if (isset($_SESSION['pass'])) {
-                //Renvoie la page vue des chapitres dans le dashboard
-                $back->getChapitresAction();
-            } else {
-                header('Location: index.php?page=login');
-            }
-            //Page MAJ chapitre
-        } else if ($_GET['page'] == 'postEdit') {
-            //Si Session
-            if (isset($_SESSION['pass'])) {
-                //Si identifiant
-                if (isset($_GET['id']) && $_GET['id'] > 0) {
-                    //Test si il y a un envoie
-                    if (isset($_POST['modified'])) {
-                        $title = htmlspecialchars(trim($_POST['title']));
-                        $content = htmlspecialchars(trim($_POST['content']));
-                        $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
-                        $tmp_name = $_FILES['image']['tmp_name'];
-                        $file = $_FILES['image']['name'];
-                        $id = inval($_GET['id']);
-                        (isset($_GET['action'])) ? $action = intval($_GET['action']) : '';
-
-                        if ($action == 1) {
-                            $back->getChapitreEditAction($id, $title, $content, $tmp_name, $posted, $action, $file);
-                        }
-
-                    } else if (isset($_POST['deleted'])) {
-                        $id = intval($_GET['id']);
-                        $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
-
-                        if ($action == 2) {
-                            $back->getChapitreEditAction($id, '', '', '', $posted, $action, '');
-                        }
-
-                    } else {
-                        $id = intval($_GET['id']);
-                        $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
-                        $back->getChapitreEditAction($id, '', '', '', $posted, 0, '');
-                    }
-                } else {
-                    throw new Exception('Aucun identifiant envoyé !');
-                }
-            } else {
-                header('Location: index.php?page=login');
-            }
-            //Page ecriture d'un chapitre
-        } else if ($_GET['page'] == 'write') {
-            // Si session
-            if (isset($_SESSION['pass'])) {
-                //test envoie
-                (isset($_GET['action'])) ? $action = intval($_GET['action']) : '';
-                if (isset($_POST['submit'])) {
-
-                    $title = htmlspecialchars(trim($_POST['title']));
-                    $content = htmlspecialchars(trim($_POST['description']));
-                    $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
-                    $tmp_name = $_FILES['image']['tmp_name'];
-                    $file = $_FILES['image']['name'];
-
-                    if ($action == 1) {
-                        $back->getWriteViewAction($title, $content, $posted, $tmp_name, $action, $file);
-                    }
-                } else {
-                    $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
-                    //Renvoie la page vue d'écriture d'un chapitre
-                    $back->getWriteViewAction('', '', $posted, '', 0, '');
-                }
-            }
+            $frontController->chapterAction($id);
         }
-
-        //---------------------------------------------------------------------------Front-------------------------------------------------//
-        //Test du chemin absolue si seulement index.php sans de page dans l'url
-    } else if ($cheminRemplacer === $cheminLocal) {
-        //Renvoie la page vue  Accueil
-        $front->getHomeViewAction();
-    } else {
-        // Page Erreur
-        $front->getErrorAction();
+    } else if ($_GET['page'] == 'login') {
+        if (!isset($_SESSION['password'])) {
+            if (isset($_POST['connexion'])) {
+                $password = intval($_POST['password']);
+                $backController->connexionAction($password);
+                $_SESSION['password'] = $backController->connexionAction($password);
+            }
+            $backController->loginAction();
+        } else {
+            header('Location: index.php?page=admin');
+        }
+    } else if ($_GET['page'] == 'admin') {
+        if (isset($_SESSION['password'])) {
+            if (isset($_GET['id']) && $_GET['id'] > 0) {
+                $id = intval($_GET['id']);
+                if (isset($_GET['action'])) {
+                    if ($_GET['action'] == 'valide') {
+                        $backController->valideCommentAction($id);
+                    }
+                    if ($_GET['action'] == 'remove') {
+                        $backController->removeCommentAction($id);
+                    }
+                }
+            }
+            $backController->adminAction();
+        } else {
+            header('Location: index.php?page=login');
+        }
+    } else if ($_GET['page'] == 'write') {
+        if (isset($_SESSION['password'])) {
+            if ($_POST['newChapter']) {
+                $frontController->writeFormAction();
+            }
+            $frontController->writeAction();
+        } else {
+            header('Location: index.php?page=login');
+        }
+    } else if ($_GET['page'] == 'edit') {
+        if (isset($_SESSION['password'])) {
+            if (isset($_GET['id']) && $_GET['id'] > 0) {
+                $id = $_GET['id'];
+                if ($_POST['edited']) {
+                    $frontController->editFormAction($id);
+                }
+                if ($_POST['deleted']) {
+                    $frontController->deleteFormAction($id);
+                }
+                $frontController->editAction($id);
+            }
+        } else {
+            header('Location: index.php?page=login');
+        }
     }
-    //Renvoie les erreurs si faux !
-} catch (Exception $e) {
-    echo 'Erreur : ' . $e->getMessage();
+
+} else {
+    $frontController->errorAction();
 }

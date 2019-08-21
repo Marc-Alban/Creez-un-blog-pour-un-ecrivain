@@ -17,22 +17,22 @@
             <h3 class="pb-4 mb-4 font-italic border-bottom">
                 chapitres:
             </h3>
-            <?php foreach ($posts as $chapitre): ?>
-            <!-- chapitre -->
+            <?php foreach ($chapters as $chapter): ?>
+            <!-- chapter -->
             <div class="col-md-12">
                 <div
                     class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                     <div class="col p-4 d-flex flex-column position-static">
-                        <h3 class="mb-0"><?=$chapitre->title?></h3>
-                        <div class="mb-1 text-muted"><?=date("d/m/Y à H:i", strtotime($chapitre->date_posts))?>
+                        <h3 class="mb-0"><?=$chapter->title?></h3>
+                        <div class="mb-1 text-muted"><?=date("d/m/Y à H:i", strtotime($chapter->date_posts))?>
                         </div>
-                        <p class="card-text mb-auto">Auteur: <?=$chapitre->name?></p>
-                        <a href="index.php?page=post&id=<?=$chapitre->id?>" class="stretched-link">Continuer à
+                        <p class="card-text mb-auto">Auteur: <?=$chapter->name?></p>
+                        <a href="index.php?page=chapter&id=<?=$chapter->id?>" class="stretched-link">Continuer à
                             lire</a>
                     </div>
                     <div class="col-auto d-none d-lg-block">
-                        <img src="public/img/post/<?=$chapitre->image_posts?>" width='250px' class="pt-4"
-                            alt="<?=$chapitre->title?>">
+                        <img src="public/img/chapter/<?=$chapter->image_posts?>" width='250px' class="pt-4"
+                            alt="<?=$chapter->title?>">
                     </div>
                 </div>
             </div>
