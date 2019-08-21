@@ -30,6 +30,8 @@ if (isset($_GET['page'])) {
             }
 
             $frontController->chapterAction($id);
+        } else {
+            throw new Exception('Aucun identifiant envoyé !');
         }
     } else if ($_GET['page'] == 'login') {
         if (!isset($_SESSION['password'])) {
@@ -59,27 +61,54 @@ if (isset($_GET['page'])) {
         } else {
             header('Location: index.php?page=login');
         }
-    } else if ($_GET['page'] == 'write') {
+    } else if ($_GET['page'] == 'adminChapters') {
         if (isset($_SESSION['password'])) {
-            if ($_POST['newChapter']) {
-                $frontController->writeFormAction();
-            }
-            $frontController->writeAction();
+            $backController->chaptersAction();
         } else {
             header('Location: index.php?page=login');
         }
-    } else if ($_GET['page'] == 'edit') {
+    } else if ($_GET['page'] == 'write') {
         if (isset($_SESSION['password'])) {
-            if (isset($_GET['id']) && $_GET['id'] > 0) {
-                $id = $_GET['id'];
-                if ($_POST['edited']) {
-                    $frontController->editFormAction($id);
-                }
-                if ($_POST['deleted']) {
-                    $frontController->deleteFormAction($id);
-                }
-                $frontController->editAction($id);
+            if (isset($_POST['newChapter'])) {
+                $backController->writeFormAction();
             }
+            $backController->writeAction();
+        } else {
+            header('Location: index.php?page=login');
+        }
+    } else if ($_GET['page'] == 'adminEdit') {
+        if (isset($_SESSION['password'])) {
+
+            if (isset($_GET['id']) && $_GET['id'] > 0) {
+
+                $id = intval($_GET['id']);
+                $title = (isset($_POST['title'])) ? $_POST['title'] : '';
+                $content = (isset($_POST['content'])) ? $_POST['content'] : '';
+                $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
+                if (isset($_POST['modified'])) {
+                    if (isset($_FILES)) {
+                        if (!empty($_FILES['image']['name'])) {
+                            $file = $_FILES['image']['name'];
+                            $tmp_name = $_FILES['image']['tmp_name'];
+                            $backController->editImageAction($id, $title, $content, $tmp_name, $posted, $file);
+                        }
+                    }
+
+                    $backController->editAction($id, $title, $content, $posted);
+                    //header('Location: index.php?page=adminEdit');
+                }
+
+                if (isset($_POST['deleted'])) {
+                    $backController->deleteAction($id);
+                    header('Location: index.php?page=adminEdit');
+                }
+
+                $backController->updateAction($id);
+
+            } else {
+                $backController->chaptersAction();
+            }
+
         } else {
             header('Location: index.php?page=login');
         }

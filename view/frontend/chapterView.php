@@ -40,16 +40,18 @@
             <?php endforeach?>
             <?php endif?>
             <div class="col-12 com">
-                <?php foreach ($responses as $response): ?>
+                <?php foreach ($comments as $comment): ?>
 
                 <div class="blockquote col-12">
-                    <?=$response->name?> le <?=date("d/m/Y", strtotime($response->date_comment))?> :
-                    <?=nl2br($response->comment)?>.
+                    <?=$comment->name?> le <?=date("d/m/Y", strtotime($comment->date_comment))?> :
+                    <?=nl2br($comment->comment)?>
+                    <?php foreach ($chapter as $table): ?>
                     <a
-                        href="index.php?page=chapter&id=<?=$_GET['id'] . '&comment_id=' . $response->id?>&action=signalComment">(Signaler)</a>
+                        href="index.php?page=chapter&id=<?=$table->id?>&comment_id=<?=$comment->id?>&action=signalComment">(Signaler)</a>
+                    <?php endforeach?>
                 </div>
                 <?php endforeach;?>
-                <?=(isset($responses) && $responses == null) ? 'Aucun commentaires publié... Soyer le premier ! ' : '';?>
+                <?=(isset($comments) && $comments == null) ? 'Aucun commentaires publié... Soyer le premier ! ' : '';?>
             </div>
         </div>
     </div>

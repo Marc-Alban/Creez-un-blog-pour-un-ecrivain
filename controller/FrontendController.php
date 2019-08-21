@@ -66,7 +66,7 @@ class FrontendController
         $chapter = $postManager->getChapter($id);
 
         $commentManager = new CommentsManager;
-        $responses = $commentManager->getComments($id);
+        $comments = $commentManager->getComments($id);
 
         ob_start();
         require 'view/frontend/headerView.php';

@@ -31,6 +31,7 @@ class BackendController
         require 'view/backend/template.php';
     }
 
+    //########Action Commentaires Dashboard########//
     public function valideCommentAction(int $id)
     {
         $commentManager = new CommentManager;
@@ -50,14 +51,14 @@ class BackendController
  *
  * @return void
  */
-    public function getChapitresAction()
+    public function chaptersAction()
     {
         $postManager = new PostManager;
-        $chapitres = $postManager->getChapitres();
+        $chapters = $postManager->getChapters();
 
         ob_start();
         require 'view/backend/headerView.php';
-        require 'view/backend/listView.php';
+        require 'view/backend/chaptersView.php';
         $content = ob_get_clean();
         require 'view/backend/template.php';
     }
@@ -76,50 +77,79 @@ class BackendController
  * @param string $file
  * @return void
  */
-    public function getChapitreEditAction(int $id, string $title = '', string $content = '', string $tmp_name = '', int $posted = null, int $action = null, string $file = '')
+    public function updateAction(int $id)
+    {
+        $postManager = new PostManager;
+        $chapter = $postManager->getChapter($id);
+
+        ob_start();
+        require 'view/backend/headerView.php';
+        require 'view/backend/chapterView.php';
+        $content = ob_get_clean();
+        require 'view/backend/template.php';
+    }
+
+    public function editImageAction($id, $title, $content, $tmp_name, $posted, $file)
     {
         $postManager = new PostManager;
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
         $errors = [];
-
-        if ($action == 1) {
-            //Vérification des champs vides
-            if (!empty($title) || !empty($content)) {
-                //Vérification du champs vide title
-                if (!empty($title)) {
-                    //Vérification du champs vide content
-                    if (!empty($content)) {
-                        //Vérification de l'extention par rapport au tableau extention(s) ou bien à l'extention .png
-                        if (in_array($extention, $extentions) || $extention = ".png") {
-                            //Mise à jour du chapitre
-                            $postManager->editChapitre($id, $title, $content, $tmp_name, $extention, $posted);
-                            //Redirection sur la même page pour actualiser les données;
-                            header('Location: index.php?page=postEdit&id=' . $id);
-                        } else {
-                            $errors['valide'] = 'Image n\'est pas valide! ';
-                        }
+        //Vérification des champs vides
+        if (!empty($title) || !empty($content)) {
+            //Vérification du champs vide title
+            if (!empty($title)) {
+                //Vérification du champs vide content
+                if (!empty($content)) {
+                    //Vérification de l'extention par rapport au tableau extention(s) ou bien à l'extention .png
+                    if (in_array($extention, $extentions) || $extention = ".png") {
+                        //Mise à jour du chapitre
+                        $postManager->editImageChapter($id, $title, $content, $tmp_name, $extention, $posted);
                     } else {
-                        $errors['vide'] = 'Veuillez mettre un contenu !';
+                        $errors['valide'] = 'Image n\'est pas valide! ';
                     }
                 } else {
-                    $errors['title'] = 'Veuillez mettre un titre !';
+                    $errors['vide'] = 'Veuillez mettre un contenu !';
                 }
             } else {
-                $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
+                $errors['title'] = 'Veuillez mettre un titre !';
             }
-        } else if ($action == 2) {
-            $postManager->deleteChapitre($id);
         } else {
-            $chapitre = $postManager->getChapitre($id);
+            $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
         }
 
-        header("Location: index.php?page=list");
-        ob_start();
-        require 'view/backend/headerView.php';
-        require 'view/backend/postView.php';
-        $content = ob_get_clean();
-        require 'view/backend/template.php';
+    }
+
+    public function editAction($id, $title, $content, $posted)
+    {
+        $postManager = new PostManager;
+        $errors = [];
+
+        //Vérification des champs vides
+        if (!empty($title) || !empty($content)) {
+            //Vérification du champs vide title
+            if (!empty($title)) {
+                //Vérification du champs vide content
+                if (!empty($content)) {
+                    //Mise à jour du chapitre
+                    $postManager->editChapter($id, $title, $content, $posted);
+                    //Redirection sur la même page pour actualiser les données;
+                } else {
+                    $errors['vide'] = 'Veuillez mettre un contenu !';
+                }
+            } else {
+                $errors['title'] = 'Veuillez mettre un titre !';
+            }
+        } else {
+            $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
+        }
+
+    }
+
+    public function deleteAction($id)
+    {
+        $postManager = new PostManager;
+        $postManager->deleteChapter($id);
     }
 
 /**

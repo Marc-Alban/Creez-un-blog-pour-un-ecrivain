@@ -20,7 +20,8 @@ class PostManager extends Manager
     public function getChapter(int $id)
     {
         $sql = "
-        SELECT  posts.title,
+        SELECT  posts.id,
+                posts.title,
                 posts.content,
                 posts.image_posts,
                 posts.date_posts,

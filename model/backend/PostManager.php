@@ -16,10 +16,11 @@ class PostManager extends Manager
  * @param integer $id
  * @return void
  */
-    public function getChapitre(int $id)
+    public function getChapter(int $id)
     {
         $sql = "
-        SELECT  title,
+        SELECT  id,
+                title,
                 content,
                 image_posts,
                 date_posts,
@@ -39,7 +40,7 @@ class PostManager extends Manager
      *
      * @return void
      */
-    public function getChapitres()
+    public function getChapters()
     {
         $sql = "
         SELECT *
@@ -54,17 +55,10 @@ class PostManager extends Manager
 
     /**
      * Met à jour le chapitre modifié en BDD
-     *
-     * @param integer $id
-     * @param string $title
-     * @param string $content
-     * @param string $tmp_name
-     * @param string $extention
-     * @param integer $posted
-     * @return void
      */
-    public function editChapitre(int $id, string $title, string $content, string $tmp_name, string $extention, int $posted)
+    public function editImageChapter(int $id, string $title, string $content, string $tmp_name, string $extention, int $posted)
     {
+        var_dump('test');
         $sql_id = "
         SELECT id
         FROM posts
@@ -77,10 +71,14 @@ class PostManager extends Manager
         $id = $response['id'];
 
         if (!$tmp_name) {
+            var_dump('test2');
             $id = "post";
             $extention = ".png";
+            var_dump('test2bis');
         } else {
-            move_uploaded_file($tmp_name, "public/img/post/" . $id . $extention);
+            var_dump('test3', $tmp_name);
+            var_dump('test4', $extention);
+            move_uploaded_file($tmp_name, "public/img/chapter/" . $id . $extention);
         }
 
         $e = [
@@ -104,13 +102,34 @@ class PostManager extends Manager
         $query->execute($e);
     }
 
+    public function editChapter(int $id, string $title, string $content, int $posted)
+    {
+        $e = [
+            ':id' => $id,
+            ':title' => $title,
+            ':content' => $content,
+            ':posted' => $posted,
+        ];
+
+        $sql = "
+        UPDATE posts
+        SET title = :title,
+            content = :content,
+            date_posts = NOW(),
+            posted = :posted
+        WHERE id = :id ";
+
+        $query = $this->getPDO()->prepare($sql);
+        $query->execute($e);
+    }
+
     /**
      * Suprime le poste en bdd
      *
      * @param integer $id
      * @return void
      */
-    public function deleteChapitre(int $id)
+    public function deleteChapter(int $id)
     {
         $sql = "
         DELETE FROM posts
