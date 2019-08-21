@@ -164,7 +164,16 @@ class BackendController
  * @param string $file
  * @return void
  */
-    public function getWriteViewAction(string $title = '', string $content = '', int $posted, string $tmp_name = '', int $action = null, string $file = '')
+    public function writeAction()
+    {
+        ob_start();
+        require 'view/backend/headerView.php';
+        require 'view/backend/writeView.php';
+        $content = ob_get_clean();
+        require 'view/backend/template.php';
+    }
+
+    public function writeFormAction(string $title, string $description, int $posted, string $tmp_name, string $file)
     {
         $postManager = new PostManager;
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
@@ -172,20 +181,19 @@ class BackendController
         $name = 'Jean';
         $errors = [];
 
-        if (isset($action) && $action == 1) {
-            //Test si champs vide
-            if (!empty($title) || !empty($content)) {
-                //test champs vide title
-                if (!empty($title)) {
-                    //test champs vide content
-                    if (!empty($content)) {
-
+        //Test si champs vide
+        if (!empty($title) || !empty($description)) {
+            //test champs vide title
+            if (!empty($title)) {
+                //test champs vide content
+                if (!empty($description)) {
+                    if (!empty($tmp_name)) {
                         //test extention(s): pour  savoir si l'extention correspon aux extention dans le tableau
                         if (in_array($extention, $extentions)) {
                             //test champs vide name
                             if (!empty($name)) {
                                 //Insertion du chapitre en bdd
-                                $postManager->chapitreWrite($title, $content, $name, $posted, $tmp_name, $extention);
+                                $postManager->chapterWrite($title, $description, $name, $posted, $tmp_name, $extention);
                             } else {
                                 $errors['nameEmpty'] = 'Nom manquant !';
                             }
@@ -193,21 +201,17 @@ class BackendController
                             $errors['image'] = 'Image n\'est pas valide! ';
                         }
                     } else {
-                        $errors['textEmpty'] = 'Veuillez renseigner du contenu ! ';
+                        $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';
                     }
                 } else {
-                    $errors['titleEmpty'] = 'Veuillez renseigner un titre !';
+                    $errors['textEmpty'] = 'Veuillez renseigner du contenu ! ';
                 }
             } else {
-                $errors['fieldsEmpty'] = 'Veuillez remplir les champs';
+                $errors['titleEmpty'] = 'Veuillez renseigner un titre !';
             }
+        } else {
+            $errors['fieldsEmpty'] = 'Veuillez remplir les champs';
         }
-
-        ob_start();
-        require 'view/backend/headerView.php';
-        require 'view/backend/writeView.php';
-        $content = ob_get_clean();
-        require 'view/backend/template.php';
     }
 
 /**

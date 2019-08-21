@@ -41,7 +41,7 @@
             </div>
 
             <div class="d-flex justify-content-center">
-                <button type="submit" name="submit" class="btn btn-primary">Envoyer</button>
+                <button type="submit" name="newChapter" class="btn btn-primary">Envoyer</button>
             </div>
         </form>
     </div>

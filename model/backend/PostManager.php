@@ -58,7 +58,6 @@ class PostManager extends Manager
      */
     public function editImageChapter(int $id, string $title, string $content, string $tmp_name, string $extention, int $posted)
     {
-        var_dump('test');
         $sql_id = "
         SELECT id
         FROM posts
@@ -71,13 +70,9 @@ class PostManager extends Manager
         $id = $response['id'];
 
         if (!$tmp_name) {
-            var_dump('test2');
             $id = "post";
             $extention = ".png";
-            var_dump('test2bis');
         } else {
-            var_dump('test3', $tmp_name);
-            var_dump('test4', $extention);
             move_uploaded_file($tmp_name, "public/img/chapter/" . $id . $extention);
         }
 
@@ -151,7 +146,7 @@ class PostManager extends Manager
  * @param string $extention
  * @return void
  */
-    public function chapitreWrite(string $title = '', string $content = '', string $name = '', int $posted, string $tmp_name = '', string $extention = '')
+    public function chapterWrite(string $title, string $description, string $name, int $posted, string $tmp_name, string $extention)
     {
         $sql_id = "
         SELECT MAX(id)
@@ -168,12 +163,12 @@ class PostManager extends Manager
             $id = "post";
             $extention = ".png";
         } else {
-            move_uploaded_file($tmp_name, "public/img/post/" . $id . $extention);
+            move_uploaded_file($tmp_name, "public/img/chapter/" . $id . $extention);
         }
 
         $p = [
             'title' => $title,
-            'content' => $content,
+            'content' => $description,
             'name_post' => $name,
             'image_posts' => $id . $extention,
             'posted' => $posted,

@@ -70,7 +70,13 @@ if (isset($_GET['page'])) {
     } else if ($_GET['page'] == 'write') {
         if (isset($_SESSION['password'])) {
             if (isset($_POST['newChapter'])) {
-                $backController->writeFormAction();
+                $title = (isset($_POST['title'])) ? $_POST['title'] : '';
+                $description = (isset($_POST['description'])) ? $_POST['description'] : '';
+                $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
+                $tmp_name = $_FILES['image']['tmp_name'];
+                $file = $_FILES['image']['name'];
+                $backController->writeFormAction($title, $description, $posted, $tmp_name, $file);
+                header('Location: index.php?page=adminEdit');
             }
             $backController->writeAction();
         } else {
