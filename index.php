@@ -39,11 +39,14 @@ if (isset($_GET['page'])) {
                 $password = intval($_POST['password']);
                 $backController->connexionAction($password);
                 $_SESSION['password'] = $backController->connexionAction($password);
+                header('Location: index.php?page=admin');
             }
             $backController->loginAction();
         } else {
             header('Location: index.php?page=admin');
         }
+    } else if ($_GET['page'] == 'logout') {
+        $backController->logoutAction();
     } else if ($_GET['page'] == 'admin') {
         if (isset($_SESSION['password'])) {
             if (isset($_GET['id']) && $_GET['id'] > 0) {
