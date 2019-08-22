@@ -13,98 +13,80 @@ class BackendController
 
 /**
  * Retourne la page home du dashboard
- * valide un commentaire
- * suprime un commentaire
- *
- * @param integer $id
- * @return void
  */
     public function adminAction()
     {
         $commentManager = new CommentManager;
         $comments = $commentManager->getComments();
 
-        ob_start();
-        require 'view/backend/headerView.php';
-        require 'view/backend/dashboardView.php';
-        $content = ob_get_clean();
+        $viewPage = new ViewPage;
+        $content = $viewPage->getView('backend', 'dashboardView');
         require 'view/backend/template.php';
     }
 
     //########Action Commentaires Dashboard########//
-    public function valideCommentAction(int $id)
+    public function valideCommentAction(string $id)
     {
+        $idInt = intval($id);
         $commentManager = new CommentManager;
-        $commentManager->validateComments($id);
+        $commentManager->validateComments($idInt);
         header('Location: index.php?page=admin');
     }
 
-    public function removeCommentAction(int $id)
+    public function removeCommentAction(string $id)
     {
+        $idInt = intval($id);
         $commentManager = new CommentManager;
-        $commentManager->deleteComments($id);
+        $commentManager->deleteComments($idInt);
         header('Location: index.php?page=admin');
     }
 
 /**
- * Récupère la liste des chapitres
- *
- * @return void
+ * Récupère la liste des chapitres sur le dashboard
  */
     public function chaptersAction()
     {
         $postManager = new PostManager;
         $chapters = $postManager->getChapters();
 
-        ob_start();
-        require 'view/backend/headerView.php';
-        require 'view/backend/chaptersView.php';
-        $content = ob_get_clean();
+        $viewPage = new ViewPage;
+        $content = $viewPage->getView('backend', 'chaptersView');
         require 'view/backend/template.php';
     }
 
 /**
  *  Permet de récupérer un chapitre
- * et de l'éditer
- * ou de le suprimer
- *
- * @param integer $id
- * @param string $title
- * @param string $content
- * @param string $tmp_name
- * @param integer $posted
- * @param integer $action
- * @param string $file
- * @return void
  */
-    public function updateAction(int $id)
+    public function updateAction(string $id)
     {
+        $idInt = intval($id);
         $postManager = new PostManager;
-        $chapter = $postManager->getChapter($id);
+        $chapter = $postManager->getChapter($idInt);
 
-        ob_start();
-        require 'view/backend/headerView.php';
-        require 'view/backend/chapterView.php';
-        $content = ob_get_clean();
+        $viewPage = new ViewPage;
+        $content = $viewPage->getView('backend', 'chapterView');
         require 'view/backend/template.php';
     }
 
-    public function editImageAction($id, $title, $content, $tmp_name, $posted, $file)
+    public function editImageAction($id, array &$post, array &$files)
     {
+
+        $idInt = intval($id);
         $postManager = new PostManager;
+        $title = $post['title'];
+        $content = $post['content'];
+        $posted = (isset($post['public']) == 'on') ? 1 : 0;
+        $file = $files['image']['name'];
+        $tmp_name = $files['image']['tmp_name'];
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
         $errors = [];
-        //Vérification des champs vides
+
         if (!empty($title) || !empty($content)) {
-            //Vérification du champs vide title
             if (!empty($title)) {
-                //Vérification du champs vide content
                 if (!empty($content)) {
-                    //Vérification de l'extention par rapport au tableau extention(s) ou bien à l'extention .png
                     if (in_array($extention, $extentions) || $extention = ".png") {
-                        //Mise à jour du chapitre
-                        $postManager->editImageChapter($id, $title, $content, $tmp_name, $extention, $posted);
+                        $postManager->editImageChapter($idInt, $title, $content, $tmp_name, $extention, $posted);
                     } else {
                         $errors['valide'] = 'Image n\'est pas valide! ';
                     }
@@ -117,23 +99,22 @@ class BackendController
         } else {
             $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
         }
-
     }
 
-    public function editAction($id, $title, $content, $posted)
+    public function editAction($id, &$post)
     {
         $postManager = new PostManager;
+        $idInt = intval($id);
+        $title = $post['title'];
+        $content = $post['content'];
+        $posted = (isset($post['public']) == 'on') ? 1 : 0;
         $errors = [];
 
-        //Vérification des champs vides
         if (!empty($title) || !empty($content)) {
-            //Vérification du champs vide title
+
             if (!empty($title)) {
-                //Vérification du champs vide content
                 if (!empty($content)) {
-                    //Mise à jour du chapitre
-                    $postManager->editChapter($id, $title, $content, $posted);
-                    //Redirection sur la même page pour actualiser les données;
+                    $postManager->editChapter($idInt, $title, $content, $posted);
                 } else {
                     $errors['vide'] = 'Veuillez mettre un contenu !';
                 }
@@ -148,52 +129,44 @@ class BackendController
 
     public function deleteAction($id)
     {
+        $idInt = intval($id);
         $postManager = new PostManager;
-        $postManager->deleteChapter($id);
+        $postManager->deleteChapter($$idInt);
+        header('Location: index.php?page=adminEdit');
     }
 
 /**
  * Récupère la page pour écrire un post
- * et envoi en bdd si il y a un envoi
- *
- * @param string $title
- * @param string $content
- * @param integer $posted
- * @param string $tmp_name
- * @param integer $action
- * @param string $file
- * @return void
  */
     public function writeAction()
     {
-        ob_start();
-        require 'view/backend/headerView.php';
-        require 'view/backend/writeView.php';
-        $content = ob_get_clean();
-        require 'view/backend/template.php';
+        $viewPage = new ViewPage;
+        $content = $viewPage->getView('backend', 'writeView');
+        require 'view/frontend/template.php';
     }
 
-    public function writeFormAction(string $title, string $description, int $posted, string $tmp_name, string $file)
+    public function writeFormAction(array $post, array $files)
     {
+
         $postManager = new PostManager;
+        $title = $post['title'];
+        $description = $post['description'];
+        $posted = (isset($post['public']) == 'on') ? 1 : 0;
+        $file = $files['image']['name'];
+        $tmp_name = $files['image']['tmp_name'];
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
         $name = 'Jean';
         $errors = [];
 
-        //Test si champs vide
         if (!empty($title) || !empty($description)) {
-            //test champs vide title
             if (!empty($title)) {
-                //test champs vide content
                 if (!empty($description)) {
                     if (!empty($tmp_name)) {
-                        //test extention(s): pour  savoir si l'extention correspon aux extention dans le tableau
                         if (in_array($extention, $extentions)) {
-                            //test champs vide name
                             if (!empty($name)) {
-                                //Insertion du chapitre en bdd
                                 $postManager->chapterWrite($title, $description, $name, $posted, $tmp_name, $extention);
+                                header('Location: index.php?page=adminEdit');
                             } else {
                                 $errors['nameEmpty'] = 'Nom manquant !';
                             }
@@ -215,10 +188,8 @@ class BackendController
     }
 
 /**
- * Renvoie la page login sur le dashboard
- * Ainsi que récupère le mot de passe
+ * Renvoie la page login
  *
- * @return void
  */
     public function loginAction()
     {
@@ -228,20 +199,21 @@ class BackendController
         require 'view/backend/template.php';
     }
 
-    public function connexionAction(int $password)
+    public function connexionAction(array $session)
     {
+
+        var_dump($session);
+        die();
         $dashboardManager = new DashboardManager;
         $passwordBdd = $dashboardManager->getPass();
+        $password = $session['password'];
         $errors = [];
-        //si champs vide
+
         if (!empty($password)) {
             if ($password > 5) {
-                $pass = strval($password);
-                //Vérification du mot de passe envoyé avec celui en bdd
-                if (password_verify($pass, $passwordBdd)) {
-                    //insertion du mot de passe envoyé dans une variable
-                    htmlspecialchars(trim($pass));
-                    return $pass;
+                if (password_verify($password, $passwordBdd)) {
+                    htmlspecialchars(trim($password));
+                    return $password;
                 } else {
                     $errors['Password'] = 'Ce mot de passe n\'est pas bon pas !';
                 }

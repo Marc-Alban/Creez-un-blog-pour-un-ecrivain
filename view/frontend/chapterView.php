@@ -30,7 +30,10 @@
                     <textarea id="message " name="comment" class="form-control" require></textarea>
                     <label for="message">Message</label>
                 </div>
-                <button type="submit" name="submit" class="btn btn-primary">Envoyer</button>
+                <!-- Bug pour avoir l'id ? Comment faire ?  -->
+                <a href="index.php?page=chapter&id=1&action=submit" type="submit" name="submit"
+                    class="btn btn-primary">Envoyer</a>
+
             </form>
             <?php if (!empty($errors)): ?>
             <?php foreach ($errors as $error): ?>

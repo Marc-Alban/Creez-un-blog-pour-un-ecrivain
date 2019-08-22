@@ -8,118 +8,90 @@ require_once 'controller/BackendController.php';
 //Instance de l'objet
 $frontController = new FrontendController;
 $backController = new BackendController;
-
 if (isset($_GET['page'])) {
-
     if ($_GET['page'] == 'home') {
         $frontController->homeAction();
     } else if ($_GET['page'] == 'chapters') {
         $frontController->chaptersAction();
     } else if ($_GET['page'] == 'chapter') {
-
         if (isset($_GET['id']) && $_GET['id'] > 0) {
-            $id = intval($_GET['id']);
             if (isset($_GET['action']) && $_GET['action'] == 'signalComment') {
-                $comment_id = (isset($_GET['comment_id'])) ? intval($_GET['comment_id']) : '';
-                $frontController->signalAction($comment_id);
-                header('Location: index.php?page=chapter&id=' . $id);
+                if (isset($_GET['idComment'])) {
+                    $frontController->signalAction($_GET['idComment'], $_GET['id']);
+                }
             }
-
-            if (isset($_POST['submit'])) {
-                $frontController->sendCommentAction($_POST['name'], $_POST['comment'], $id);
+            if (isset($_GET['action']) && $_GET['action'] == 'submit') {
+                $frontController->sendCommentAction($_POST, $id);
+                var_dump($_POST);
+                die();
             }
-
-            $frontController->chapterAction($id);
+            $frontController->chapterAction($_GET['id']);
         } else {
             throw new Exception('Aucun identifiant envoyé !');
         }
     } else if ($_GET['page'] == 'login') {
         if (!isset($_SESSION['password'])) {
-            if (isset($_POST['connexion'])) {
-                $password = intval($_POST['password']);
-                $backController->connexionAction($password);
-                $_SESSION['password'] = $backController->connexionAction($password);
-                header('Location: index.php?page=admin');
+            if (isset($_GET['action']) && $_GET['action'] == 'connexion') {
+                $backController->connexionAction($_SESSION);
             }
             $backController->loginAction();
         } else {
-            header('Location: index.php?page=admin');
+            $backController->adminAction();
         }
     } else if ($_GET['page'] == 'logout') {
         $backController->logoutAction();
     } else if ($_GET['page'] == 'admin') {
         if (isset($_SESSION['password'])) {
             if (isset($_GET['id']) && $_GET['id'] > 0) {
-                $id = intval($_GET['id']);
                 if (isset($_GET['action'])) {
                     if ($_GET['action'] == 'valide') {
-                        $backController->valideCommentAction($id);
+                        $backController->valideCommentAction($_GET['id']);
                     }
                     if ($_GET['action'] == 'remove') {
-                        $backController->removeCommentAction($id);
+                        $backController->removeCommentAction($_GET['id']);
                     }
                 }
             }
             $backController->adminAction();
         } else {
-            header('Location: index.php?page=login');
+            $backController->loginAction();
         }
     } else if ($_GET['page'] == 'adminChapters') {
         if (isset($_SESSION['password'])) {
             $backController->chaptersAction();
         } else {
-            header('Location: index.php?page=login');
+            $backController->loginAction();
         }
     } else if ($_GET['page'] == 'write') {
         if (isset($_SESSION['password'])) {
-            if (isset($_POST['newChapter'])) {
-                $title = (isset($_POST['title'])) ? $_POST['title'] : '';
-                $description = (isset($_POST['description'])) ? $_POST['description'] : '';
-                $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
-                $tmp_name = $_FILES['image']['tmp_name'];
-                $file = $_FILES['image']['name'];
-                $backController->writeFormAction($title, $description, $posted, $tmp_name, $file);
-                header('Location: index.php?page=adminEdit');
+            if (isset($_GET['action']) && $_GET['action'] == 'newChapter') {
+                $backController->writeFormAction($_POST, $_FILES);
             }
             $backController->writeAction();
         } else {
-            header('Location: index.php?page=login');
+            $backController->loginAction();
         }
     } else if ($_GET['page'] == 'adminEdit') {
         if (isset($_SESSION['password'])) {
-
             if (isset($_GET['id']) && $_GET['id'] > 0) {
-
-                $id = intval($_GET['id']);
-                $title = (isset($_POST['title'])) ? $_POST['title'] : '';
-                $content = (isset($_POST['content'])) ? $_POST['content'] : '';
-                $posted = (isset($_POST['public']) == 'on') ? 1 : 0;
-                if (isset($_POST['modified'])) {
+                if (isset($_GET['action']) && $_GET['action'] == 'modified') {
                     if (isset($_FILES)) {
                         if (!empty($_FILES['image']['name'])) {
-                            $file = $_FILES['image']['name'];
-                            $tmp_name = $_FILES['image']['tmp_name'];
-                            $backController->editImageAction($id, $title, $content, $tmp_name, $posted, $file);
+                            $backController->editImageAction($_GET['id'], $_POST, $_FILES);
                         }
                     }
-
-                    $backController->editAction($id, $title, $content, $posted);
-                    //header('Location: index.php?page=adminEdit');
+                    $backController->editAction($_GET['id'], $_POST);
                 }
-
-                if (isset($_POST['deleted'])) {
-                    $backController->deleteAction($id);
-                    header('Location: index.php?page=adminEdit');
+                if (isset($_GET['action']) && $_GET['action'] == 'deleted') {
+                    $backController->deleteAction($_GET['id']);
                 }
-
-                $backController->updateAction($id);
-
+                $backController->updateAction($_GET['id']);
             } else {
                 $backController->chaptersAction();
             }
 
         } else {
-            header('Location: index.php?page=login');
+            $backController->loginAction();
         }
     }
 
