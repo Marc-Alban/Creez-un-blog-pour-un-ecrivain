@@ -22,8 +22,6 @@ if (isset($_GET['page'])) {
             }
             if (isset($_GET['action']) && $_GET['action'] == 'submit') {
                 $frontController->sendCommentAction($_POST, $id);
-                var_dump($_POST);
-                die();
             }
             $frontController->chapterAction($_GET['id']);
         } else {
@@ -32,6 +30,7 @@ if (isset($_GET['page'])) {
     } else if ($_GET['page'] == 'login') {
         if (!isset($_SESSION['password'])) {
             if (isset($_GET['action']) && $_GET['action'] == 'connexion') {
+
                 $backController->connexionAction($_SESSION);
             }
             $backController->loginAction();

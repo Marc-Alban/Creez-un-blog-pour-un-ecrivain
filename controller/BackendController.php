@@ -201,9 +201,6 @@ class BackendController
 
     public function connexionAction(array $session)
     {
-
-        var_dump($session);
-        die();
         $dashboardManager = new DashboardManager;
         $passwordBdd = $dashboardManager->getPass();
         $password = $session['password'];
