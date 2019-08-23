@@ -3,12 +3,12 @@ declare (strict_types = 1);
 use Openclassroom\Blog\Model\Backend\CommentManager;
 use Openclassroom\Blog\Model\backend\DashboardManager;
 use Openclassroom\Blog\Model\Backend\PostManager;
-use Openclassroom\Blog\Model\ViewPage;
+use Openclassroom\Blog\Model\ViewManager;
 
 require_once 'model/backend/CommentsManager.php';
 require_once 'model/backend/DashboardManager.php';
 require_once 'model/backend/PostManager.php';
-require_once 'model/ViewPage.php';
+require_once 'model/ViewManager.php';
 
 class BackendController
 {
@@ -21,8 +21,8 @@ class BackendController
         $commentManager = new CommentManager;
         $comments = $commentManager->getComments();
 
-        $viewPage = new ViewPage;
-        $content = $viewPage->getView('backend', 'dashboardView');
+        $ViewManager = new ViewManager;
+        $content = $ViewManager->getView('backend', 'dashboardView');
         require 'view/backend/template.php';
     }
 
@@ -51,8 +51,8 @@ class BackendController
         $postManager = new PostManager;
         $chapters = $postManager->getChapters();
 
-        $viewPage = new ViewPage;
-        $content = $viewPage->getView('backend', 'chaptersView');
+        $ViewManager = new ViewManager;
+        $content = $ViewManager->getView('backend', 'chaptersView');
         require 'view/backend/template.php';
     }
 
@@ -65,8 +65,8 @@ class BackendController
         $postManager = new PostManager;
         $chapter = $postManager->getChapter($idInt);
 
-        $viewPage = new ViewPage;
-        $content = $viewPage->getView('backend', 'chapterView');
+        $ViewManager = new ViewManager;
+        $content = $ViewManager->getView('backend', 'chapterView');
         require 'view/backend/template.php';
     }
 
@@ -75,11 +75,11 @@ class BackendController
 
         $idInt = intval($id);
         $postManager = new PostManager;
-        $title = $post['title'];
-        $content = $post['content'];
+        $title = (isset($post['title'])) ? $post['title'] : '';
+        $content = (isset($post['content'])) ? $post['content'] : '';
         $posted = (isset($post['public']) == 'on') ? 1 : 0;
-        $file = $files['image']['name'];
-        $tmp_name = $files['image']['tmp_name'];
+        $file = (isset($files['image']['name'])) ? $files['image']['name'] : '';
+        $tmp_name = (isset($files['image']['tmp_name'])) ? $files['image']['tmp_name'] : '';
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
         $errors = [];
@@ -109,8 +109,8 @@ class BackendController
     {
         $postManager = new PostManager;
         $idInt = intval($id);
-        $title = $post['title'];
-        $content = $post['content'];
+        $title = (isset($post['title'])) ? $post['title'] : '';
+        $content = (isset($post['content'])) ? $post['content'] : '';
         $posted = (isset($post['public']) == 'on') ? 1 : 0;
         $errors = [];
 
@@ -144,26 +144,26 @@ class BackendController
  */
     public function writeAction()
     {
-        $viewPage = new ViewPage;
-        $content = $viewPage->getView('backend', 'writeView');
-        require 'view/frontend/template.php';
+        $ViewManager = new ViewManager;
+        $content = $ViewManager->getView('backend', 'writeView');
+        require 'view/backend/template.php';
     }
 
     public function writeFormAction(array $post, array $files)
     {
-
         $postManager = new PostManager;
-        $title = $post['title'];
-        $description = $post['description'];
+        $title = (isset($post['title'])) ? $post['title'] : '';
+        $description = (isset($post['description'])) ? $post['description'] : '';
         $posted = (isset($post['public']) == 'on') ? 1 : 0;
-        $file = $files['image']['name'];
-        $tmp_name = $files['image']['tmp_name'];
+        $file = (isset($files['image']['name'])) ? $files['image']['name'] : '';
+        $tmp_name = (isset($files['image']['tmp_name'])) ? $files['image']['tmp_name'] : '';
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
         $name = 'Jean';
         $errors = [];
 
         if (!empty($title) || !empty($description)) {
+
             if (!empty($title)) {
                 if (!empty($description)) {
                     if (!empty($tmp_name)) {

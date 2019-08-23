@@ -12,9 +12,6 @@ class PostManager extends Manager
 
 /**
  * Renvoie le chapitre sur la page post en bdd
- *
- * @param integer $id
- * @return void
  */
     public function getChapter(int $id)
     {
@@ -37,8 +34,6 @@ class PostManager extends Manager
 
     /**
      * Affiche la liste des post de la bdd, ainsi que ceux non publié
-     *
-     * @return void
      */
     public function getChapters()
     {

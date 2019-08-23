@@ -3,11 +3,11 @@ declare (strict_types = 1);
 
 use Openclassroom\Blog\Model\Frontend\CommentsManager;
 use Openclassroom\Blog\Model\Frontend\PostManager;
-use Openclassroom\Blog\Model\ViewPage;
+use Openclassroom\Blog\Model\ViewManager;
 
 require 'model/frontend/CommentsManager.php';
 require 'model/frontend/PostManager.php';
-require 'model/ViewPage.php';
+require 'model/ViewManager.php';
 
 class FrontendController
 {
@@ -21,8 +21,8 @@ class FrontendController
         $postManager = new PostManager;
         $chapters = $postManager->getLimitedChapters();
 
-        $viewPage = new ViewPage;
-        $content = $viewPage->getView('frontend', 'homeView');
+        $ViewManager = new ViewManager;
+        $content = $ViewManager->getView('frontend', 'homeView');
         require 'view/frontend/template.php';
     }
 
@@ -35,8 +35,8 @@ class FrontendController
         $postManager = new PostManager;
         $chapters = $postManager->getchapters();
 
-        $viewPage = new ViewPage;
-        $content = $viewPage->getView('frontend', 'chaptersView');
+        $ViewManager = new ViewManager;
+        $content = $ViewManager->getView('frontend', 'chaptersView');
         require 'view/frontend/template.php';
     }
 
@@ -53,8 +53,8 @@ class FrontendController
         $commentManager = new CommentsManager;
         $comments = $commentManager->getComments($idInt);
 
-        $viewPage = new ViewPage;
-        $content = $viewPage->getView('frontend', 'chapterView');
+        $ViewManager = new ViewManager;
+        $content = $ViewManager->getView('frontend', 'chapterView');
         require 'view/frontend/template.php';
     }
 
@@ -104,8 +104,8 @@ class FrontendController
  */
     public function errorAction()
     {
-        $viewPage = new ViewPage;
-        $content = $viewPage->getView('frontend', 'errorView');
+        $ViewManager = new ViewManager;
+        $content = $ViewManager->getView('frontend', 'errorView');
         require 'view/frontend/template.php';
     }
 

@@ -87,7 +87,6 @@ if (isset($_GET['page'])) {
             } else {
                 $backController->chaptersAction();
             }
-
         } else {
             $backController->loginAction($_GET);
         }
