@@ -30,10 +30,9 @@ if (isset($_GET['page'])) {
     } else if ($_GET['page'] == 'login') {
         if (!isset($_SESSION['password'])) {
             if (isset($_GET['action']) && $_GET['action'] == 'connexion') {
-
-                $backController->connexionAction($_SESSION);
+                $backController->connexionAction($_SESSION, $_POST);
             }
-            $backController->loginAction();
+            $backController->loginAction($_GET);
         } else {
             $backController->adminAction();
         }
@@ -53,13 +52,13 @@ if (isset($_GET['page'])) {
             }
             $backController->adminAction();
         } else {
-            $backController->loginAction();
+            $backController->loginAction($_GET);
         }
     } else if ($_GET['page'] == 'adminChapters') {
         if (isset($_SESSION['password'])) {
             $backController->chaptersAction();
         } else {
-            $backController->loginAction();
+            $backController->loginAction($_GET);
         }
     } else if ($_GET['page'] == 'write') {
         if (isset($_SESSION['password'])) {
@@ -68,7 +67,7 @@ if (isset($_GET['page'])) {
             }
             $backController->writeAction();
         } else {
-            $backController->loginAction();
+            $backController->loginAction($_GET);
         }
     } else if ($_GET['page'] == 'adminEdit') {
         if (isset($_SESSION['password'])) {
@@ -90,7 +89,7 @@ if (isset($_GET['page'])) {
             }
 
         } else {
-            $backController->loginAction();
+            $backController->loginAction($_GET);
         }
     }
 

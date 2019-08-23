@@ -22,7 +22,8 @@
                 <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=admin">Back Office</a>
                 <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=logout">Déconexion</a>
                 <?php else: ?>
-                <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=login">Back Office</a>
+                <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=login&action=connexion">Back
+                    Office</a>
                 <?php endif?>
             </nav>
             <div class="nav-controller">

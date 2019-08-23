@@ -3,10 +3,12 @@ declare (strict_types = 1);
 use Openclassroom\Blog\Model\Backend\CommentManager;
 use Openclassroom\Blog\Model\backend\DashboardManager;
 use Openclassroom\Blog\Model\Backend\PostManager;
+use Openclassroom\Blog\Model\ViewPage;
 
-require 'model/backend/CommentsManager.php';
-require 'model/backend/DashboardManager.php';
-require 'model/backend/PostManager.php';
+require_once 'model/backend/CommentsManager.php';
+require_once 'model/backend/DashboardManager.php';
+require_once 'model/backend/PostManager.php';
+require_once 'model/ViewPage.php';
 
 class BackendController
 {
@@ -82,22 +84,24 @@ class BackendController
         $extention = strrchr($file, '.');
         $errors = [];
 
-        if (!empty($title) || !empty($content)) {
-            if (!empty($title)) {
-                if (!empty($content)) {
-                    if (in_array($extention, $extentions) || $extention = ".png") {
-                        $postManager->editImageChapter($idInt, $title, $content, $tmp_name, $extention, $posted);
+        if (isset($post['modified'])) {
+            if (!empty($title) || !empty($content)) {
+                if (!empty($title)) {
+                    if (!empty($content)) {
+                        if (in_array($extention, $extentions) || $extention = ".png") {
+                            $postManager->editImageChapter($idInt, $title, $content, $tmp_name, $extention, $posted);
+                        } else {
+                            $errors['valide'] = 'Image n\'est pas valide! ';
+                        }
                     } else {
-                        $errors['valide'] = 'Image n\'est pas valide! ';
+                        $errors['vide'] = 'Veuillez mettre un contenu !';
                     }
                 } else {
-                    $errors['vide'] = 'Veuillez mettre un contenu !';
+                    $errors['title'] = 'Veuillez mettre un titre !';
                 }
             } else {
-                $errors['title'] = 'Veuillez mettre un titre !';
+                $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
             }
-        } else {
-            $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
         }
     }
 
@@ -191,31 +195,32 @@ class BackendController
  * Renvoie la page login
  *
  */
-    public function loginAction()
+    public function loginAction(array $get)
     {
-        ob_start();
-        require 'view/backend/loginView.php';
-        $content = ob_get_clean();
-        require 'view/backend/template.php';
+        if (isset($get['action']) && $get['action'] == 'connexion') {
+            ob_start();
+            require 'view/backend/loginView.php';
+            $content = ob_get_clean();
+            require 'view/backend/template.php';
+        } else {
+            header('Location: index.php?page=login&action=connexion');
+        }
+
     }
 
-    public function connexionAction(array $session)
+    public function connexionAction(array &$session, array $post)
     {
         $dashboardManager = new DashboardManager;
         $passwordBdd = $dashboardManager->getPass();
-        $password = $session['password'];
+        $password = (isset($post['password'])) ? $post['password'] : '';
         $errors = [];
 
         if (!empty($password)) {
-            if ($password > 5) {
-                if (password_verify($password, $passwordBdd)) {
-                    htmlspecialchars(trim($password));
-                    return $password;
-                } else {
-                    $errors['Password'] = 'Ce mot de passe n\'est pas bon pas !';
-                }
+            if (password_verify($password, $passwordBdd)) {
+                $session['password'] = $password;
+                header("Location: index.php?page=admin");
             } else {
-                $errors['size'] = 'Le mot de passe doit être supérieur à 5 caractères';
+                $errors['Password'] = 'Ce mot de passe n\'est pas bon pas !';
             }
         } else {
             $errors["Champs"] = 'Champs n\'est pas remplis !';

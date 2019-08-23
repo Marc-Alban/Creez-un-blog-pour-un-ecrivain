@@ -1,22 +1,24 @@
 <?php
-
+declare (strict_types = 1);
 namespace Openclassroom\Blog\Model;
 
 class ViewPage
 {
     private function getUrl($statement, $namePage)
     {
-        require_once 'view/' . $statement . '/' . $namePage . '.php';
+        require 'view/' . $statement . '/' . $namePage . '.php';
     }
 
     private function getheader($statement)
     {
-        require_once 'view/' . $statement . '/headerView.php';
+        require 'view/' . $statement . '/headerView.php';
     }
 
     private function getfooter($statement)
     {
-        require_once 'view/' . $statement . '/footerView.php';
+        if (file_exists('footerView.php')) {
+            require 'view/' . $statement . '/footerView.php';
+        }
     }
 
     public function getView($statement, $namePage)

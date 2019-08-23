@@ -10,6 +10,7 @@
     <form class="form-signin " method="post">
         <h1 class="h3 mb-3 font-weight-normal">Mot de passe :</h1>
         <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Mot de passe">
-        <button class="btn btn-lg btn-primary btn-block" name="connexion" type="submit">Connexion</button>
+        <a class="btn btn-lg btn-primary btn-block" href="index.php?page=login&action=connexion" type='submit'
+            name="connexion">Connexion</a>
     </form>
 </div>
