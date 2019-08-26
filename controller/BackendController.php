@@ -159,7 +159,7 @@ class BackendController
         $tmp_name = (isset($files['image']['tmp_name'])) ? $files['image']['tmp_name'] : '';
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
-        $name = 'Jean';
+        $name = 'Jean Forteroche';
         $errors = [];
 
         if (!empty($title) || !empty($description)) {

@@ -7,7 +7,7 @@
             <?php $title = $table->title . ' - Jean Forteroche';?>
             <div class="col-lg-12 col-md-12 col-sm-12 post-title-block"
                 style="background-image:url('public/img/chapter/<?=$table->image_posts?>'); background-repeat: no-repeat;background-size: cover;">
-                <h1 class="text-center"><?=$table->title, $table->id?></h1>
+                <h1 class="text-center"><?=$table->title?></h1>
                 <ul class="list-inline text-center">
                     <li><?=$table->name?> |</li>
                     <li><?=$table->date_posts?></li>
