@@ -1,4 +1,3 @@
-<?php $title = 'Dashboard-Administration'?>
 <div class="container">
     <div class="row">
         <h1>Bienvenue Jean Forteroche</h1>
@@ -12,8 +11,8 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if (isset($comments)): ?>
-                <?php foreach ($comments as $comment): ?>
+                <?php if (!is_null($datas['comments'])): ?>
+                <?php foreach ($datas['comments'] as $comment): ?>
                 <tr id="commentaire_<?=$comment->id?>">
                     <th scope="row"><?=$comment->title?></th>
                     <td><?=substr($comment->comment, 0, 100)?>...</td>
@@ -70,8 +69,8 @@
                     </td>
                 </tr>
                 <?php endforeach?>
+                <?php else:echo '<tr><td><center>Aucun commentaires dans le tableau</center></td></tr>';?>
                 <?php endif?>
-                <?=(isset($comments)) ? '' : '<tr><td><center>Aucun commentaires dans le tableau</center></td></tr>'?>
             </tbody>
         </table>
         <!-- fin table -->

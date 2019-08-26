@@ -20,9 +20,9 @@ class BackendController
     {
         $commentManager = new CommentManager;
         $comments = $commentManager->getComments();
-
+        $title = 'Dashboard-Administration';
         $ViewManager = new ViewManager;
-        $content = $ViewManager->getView('backend', 'dashboardView');
+        $content = $ViewManager->getView('backend', 'dashboardView', ['comments' => $comments]);
         require 'view/backend/template.php';
     }
 
@@ -50,9 +50,9 @@ class BackendController
     {
         $postManager = new PostManager;
         $chapters = $postManager->getChapters();
-
+        $title = 'Liste des chapitres';
         $ViewManager = new ViewManager;
-        $content = $ViewManager->getView('backend', 'chaptersView');
+        $content = $ViewManager->getView('backend', 'chaptersView', ['chapters' => $chapters]);
         require 'view/backend/template.php';
     }
 
@@ -64,26 +64,24 @@ class BackendController
         $idInt = intval($id);
         $postManager = new PostManager;
         $chapter = $postManager->getChapter($idInt);
-
+        $title = 'Mettre à jour un chapitre';
         $ViewManager = new ViewManager;
-        $content = $ViewManager->getView('backend', 'chapterView');
+        $content = $ViewManager->getView('backend', 'chapterView', ['chapter' => $chapter]);
         require 'view/backend/template.php';
     }
 
-    public function editImageAction($id, array &$post, array &$files)
+    public function editImageAction($id, array $post, array $files)
     {
-
         $idInt = intval($id);
         $postManager = new PostManager;
         $title = (isset($post['title'])) ? $post['title'] : '';
         $content = (isset($post['content'])) ? $post['content'] : '';
-        $posted = (isset($post['public']) == 'on') ? 1 : 0;
+        $posted = (isset($post['public']) && $post['public'] == 'on') ? 1 : 0;
         $file = (isset($files['image']['name'])) ? $files['image']['name'] : '';
         $tmp_name = (isset($files['image']['tmp_name'])) ? $files['image']['tmp_name'] : '';
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
         $errors = [];
-
         if (isset($post['modified'])) {
             if (!empty($title) || !empty($content)) {
                 if (!empty($title)) {
@@ -105,28 +103,28 @@ class BackendController
         }
     }
 
-    public function editAction($id, &$post)
+    public function editAction($id, $post)
     {
         $postManager = new PostManager;
         $idInt = intval($id);
         $title = (isset($post['title'])) ? $post['title'] : '';
         $content = (isset($post['content'])) ? $post['content'] : '';
-        $posted = (isset($post['public']) == 'on') ? 1 : 0;
+        $posted = (isset($post['public']) && $post['public'] == 'on') ? 1 : 0;
         $errors = [];
-
-        if (!empty($title) || !empty($content)) {
-
-            if (!empty($title)) {
-                if (!empty($content)) {
-                    $postManager->editChapter($idInt, $title, $content, $posted);
+        if (isset($post['modified'])) {
+            if (!empty($title) || !empty($content)) {
+                if (!empty($title)) {
+                    if (!empty($content)) {
+                        $postManager->editChapter($idInt, $title, $content, $posted);
+                    } else {
+                        $errors['vide'] = 'Veuillez mettre un contenu !';
+                    }
                 } else {
-                    $errors['vide'] = 'Veuillez mettre un contenu !';
+                    $errors['title'] = 'Veuillez mettre un titre !';
                 }
             } else {
-                $errors['title'] = 'Veuillez mettre un titre !';
+                $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
             }
-        } else {
-            $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
         }
 
     }
@@ -135,7 +133,7 @@ class BackendController
     {
         $idInt = intval($id);
         $postManager = new PostManager;
-        $postManager->deleteChapter($$idInt);
+        $postManager->deleteChapter($idInt);
         header('Location: index.php?page=adminEdit');
     }
 
@@ -144,17 +142,19 @@ class BackendController
  */
     public function writeAction()
     {
+        $title = 'Ecrire un chapitre';
         $ViewManager = new ViewManager;
-        $content = $ViewManager->getView('backend', 'writeView');
+        $content = $ViewManager->getView('backend', 'writeView', null);
         require 'view/backend/template.php';
     }
 
     public function writeFormAction(array $post, array $files)
     {
+
         $postManager = new PostManager;
         $title = (isset($post['title'])) ? $post['title'] : '';
         $description = (isset($post['description'])) ? $post['description'] : '';
-        $posted = (isset($post['public']) == 'on') ? 1 : 0;
+        $posted = (isset($post['public']) && $post['public'] == 1) ? 1 : 0;
         $file = (isset($files['image']['name'])) ? $files['image']['name'] : '';
         $tmp_name = (isset($files['image']['tmp_name'])) ? $files['image']['tmp_name'] : '';
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
@@ -198,6 +198,7 @@ class BackendController
     public function loginAction(array $get)
     {
         if (isset($get['action']) && $get['action'] == 'connexion') {
+            $title = 'Page de connexion';
             ob_start();
             require 'view/backend/loginView.php';
             $content = ob_get_clean();

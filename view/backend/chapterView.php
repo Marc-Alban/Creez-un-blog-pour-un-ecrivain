@@ -1,7 +1,7 @@
-<?php $title = 'Mettre à jour un chapitre'?>
 <div class="container">
     <div class="row">
-        <?php foreach ($chapter as $chapters): ?>
+        <?php if (isset($datas['chapter'])): ?>
+        <?php foreach ($datas['chapter'] as $chapters): ?>
         <div class="col-12 col-md-12 d-flex justify-content-center mb-3">
             <img class='img' src='public/img/chapter/<?=$chapters->image_posts?>' alt='<?=$chapters->title?>'>
         </div>
@@ -12,7 +12,8 @@
             <?php endforeach?>
         </div>
         <?php endif?>
-        <form method="POST" class="col-12 col-md-9 postF" enctype="multipart/form-data">
+        <form method="POST" class="col-12 col-md-9 postF"
+            action="index.php?page=adminEdit&action=modified&id=<?=$chapters->id?>" enctype="multipart/form-data">
             <p><label for="image">Changer d'image:
                     <input type="file" name="image">
                 </label>
@@ -27,10 +28,11 @@
                 <label class="form-check-label" for="Check1">Public</label>
             </div>
             <div class="d-flex justify-content-center">
-                <button type="submit" name="modified" class="btn btn-primary">Modifier</button>
-                <button type="submit" name="deleted" class="btn btn-warning">Suprimer</button>
+                <input type="submit" name="modified" class="btn btn-primary" value="Modifier">
             </div>
         </form>
         <?php endforeach?>
+        <?php else:var_dump($datas['chapter']);?>
+        <?php endif?>
     </div>
 </div>

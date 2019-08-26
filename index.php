@@ -21,7 +21,7 @@ if (isset($_GET['page'])) {
                 }
             }
             if (isset($_GET['action']) && $_GET['action'] == 'submit') {
-                $frontController->sendCommentAction($_POST, $id);
+                $frontController->sendCommentAction($_POST, $_GET['id']);
             }
             $frontController->chapterAction($_GET['id']);
         } else {
@@ -73,8 +73,10 @@ if (isset($_GET['page'])) {
         if (isset($_SESSION['password'])) {
             if (isset($_GET['id']) && $_GET['id'] > 0) {
                 if (isset($_GET['action']) && $_GET['action'] == 'modified') {
+
                     if (isset($_FILES)) {
                         if (!empty($_FILES['image']['name'])) {
+
                             $backController->editImageAction($_GET['id'], $_POST, $_FILES);
                         }
                     }

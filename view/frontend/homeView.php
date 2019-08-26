@@ -1,4 +1,3 @@
-<?php $title = "Accueil - Livre Jean Forteroche";?>
 <main role="main" class="container">
     <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
         <div class="col-md-9 px-0">
@@ -17,7 +16,8 @@
             <h3 class="pb-4 mb-4 font-italic border-bottom">
                 chapitres:
             </h3>
-            <?php foreach ($chapters as $chapter): ?>
+            <?php if (isset($datas['chapters'])): ?>
+            <?php foreach ($datas['chapters'] as $chapter): ?>
             <!-- chapter -->
             <div class="col-md-12">
                 <div
@@ -37,6 +37,8 @@
                 </div>
             </div>
             <?php endforeach;?>
+            <?php else:var_dump($datas['chapters'])?>
+            <?php endif?>
         </div>
         <!-- Aside -> Infos -->
         <aside class="col-md-4 blog-sidebar">

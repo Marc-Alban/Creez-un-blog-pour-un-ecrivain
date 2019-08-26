@@ -1,8 +1,8 @@
-<?php $title = 'Chapitres - Jean Forteroche';?>
 <section class="blog-me pt-100 pb-100" id="blog">
     <div class="container">
         <div id="styleBloc">
-            <?php foreach ($chapters as $chapter): ?>
+            <?php if (isset($datas['chapters'])): ?>
+            <?php foreach ($datas['chapters'] as $chapter): ?>
             <div class="col-md-6 col-12 blogShort">
                 <a href="index.php?page=chapter&id=<?=$chapter->id?>" id="lien">
                     <h1><?=$chapter->title?></h1>
@@ -17,6 +17,9 @@
                 </a>
             </div>
             <?php endforeach;?>
+            <?php else:var_dump($datas['chapters']);?>
+            <?php endif?>
+
         </div>
     </div>
 </section>

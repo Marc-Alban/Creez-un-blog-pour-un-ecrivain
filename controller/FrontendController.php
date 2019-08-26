@@ -20,9 +20,9 @@ class FrontendController
     {
         $postManager = new PostManager;
         $chapters = $postManager->getLimitedChapters();
-
+        $title = 'Accueil - Livre Jean Forteroche';
         $ViewManager = new ViewManager;
-        $content = $ViewManager->getView('frontend', 'homeView');
+        $content = $ViewManager->getView('frontend', 'homeView', ['chapters' => $chapters]);
         require 'view/frontend/template.php';
     }
 
@@ -34,9 +34,9 @@ class FrontendController
     {
         $postManager = new PostManager;
         $chapters = $postManager->getchapters();
-
+        $title = 'Chapitres - Jean Forteroche';
         $ViewManager = new ViewManager;
-        $content = $ViewManager->getView('frontend', 'chaptersView');
+        $content = $ViewManager->getView('frontend', 'chaptersView', ['chapters' => $chapters]);
         require 'view/frontend/template.php';
     }
 
@@ -52,9 +52,9 @@ class FrontendController
 
         $commentManager = new CommentsManager;
         $comments = $commentManager->getComments($idInt);
-
+        $title = 'Chapitre - Jean Forteroche';
         $ViewManager = new ViewManager;
-        $content = $ViewManager->getView('frontend', 'chapterView');
+        $content = $ViewManager->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments]);
         require 'view/frontend/template.php';
     }
 
@@ -71,9 +71,8 @@ class FrontendController
 
     public function sendCommentAction(array $post, string $id)
     {
-
-        $name = $post['name'];
-        $comment = $post['content'];
+        $name = (isset($post['name'])) ? $post['name'] : '';
+        $comment = (isset($post['comment'])) ? $post['comment'] : '';
         $idInt = intval($id);
         $errors = [];
         $commentManager = new CommentsManager;
@@ -104,8 +103,9 @@ class FrontendController
  */
     public function errorAction()
     {
+        $title = 'Page - Introuvable';
         $ViewManager = new ViewManager;
-        $content = $ViewManager->getView('frontend', 'errorView');
+        $content = $ViewManager->getView('frontend', 'errorView', null);
         require 'view/frontend/template.php';
     }
 
