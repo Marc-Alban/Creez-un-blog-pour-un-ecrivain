@@ -27,7 +27,6 @@ class Manager extends PDO
         if (!isset(self::$_instance)) {
             self::$_instance = new static;
         }
-        var_dump('test');
         return (self::$_instance);
     }
 
