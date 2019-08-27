@@ -76,7 +76,6 @@ class FrontendController
         $idInt = intval($id);
         $errors = [];
         $commentManager = new CommentsManager;
-
         if (isset($post['submit'])) {
             if (!empty($name) || !empty($comment)) {
                 if (!empty($name)) {

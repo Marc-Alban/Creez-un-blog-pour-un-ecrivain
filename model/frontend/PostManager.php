@@ -7,7 +7,7 @@ use \PDO;
 
 require_once 'model/Manager.php';
 
-class PostManager extends Manager
+class PostManager
 {
 /**
  * Renvoie le chapitre sur la page post
@@ -32,7 +32,8 @@ class PostManager extends Manager
         WHERE   posts.id = :id
         AND     posts.posted = '1'
         ";
-        $query = $this->getPDO()->prepare($sql);
+
+        $query = Manager::getInstance()->prepare($sql);
         $query->execute([':id' => $id]);
         $result = $query->fetchAll(PDO::FETCH_OBJ);
         return $result;
@@ -61,7 +62,8 @@ class PostManager extends Manager
         ORDER BY date_posts DESC
         LIMIT 0,2
         ";
-        $query = $this->getPDO()->query($sql);
+
+        $query = Manager::getInstance()->query($sql);
         $results = $query->fetchAll(PDO::FETCH_OBJ);
         return $results;
     }
@@ -81,7 +83,7 @@ class PostManager extends Manager
         ORDER BY date_posts
         ASC
         ";
-        $query = $this->getPDO()->query($sql);
+        $query = Manager::getInstance()->query($sql);
         $results = $query->fetchAll(PDO::FETCH_OBJ);
         return $results;
     }

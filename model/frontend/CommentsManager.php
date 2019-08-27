@@ -7,7 +7,7 @@ use \PDO;
 
 require_once 'model/Manager.php';
 
-class CommentsManager extends Manager
+class CommentsManager 
 {
 /**
  * Renvoie les commentaires sur la page post
@@ -24,7 +24,7 @@ class CommentsManager extends Manager
         ORDER BY date_comment
         DESC
         ";
-        $query = $this->getPDO()->prepare($sql);
+        $query = Manager::getInstance()->prepare($sql);
         $query->execute(['id' => $id]);
         $results = $query->fetchAll(PDO::FETCH_OBJ);
         return $results;
@@ -49,7 +49,7 @@ class CommentsManager extends Manager
             'comment' => $comment,
             'post_id' => $post_id,
         );
-        $req = $this->getPDO()->prepare($sql);
+        $req = Manager::getInstance()->prepare($sql);
         $req->execute($comment);
     }
 
@@ -67,7 +67,7 @@ class CommentsManager extends Manager
             SET seen = '1' WHERE id = :id
             ";
 
-            $query = $this->getPDO()->prepare($sql);
+            $query = Manager::getInstance()->prepare($sql);
             $query->execute(['id' => $comment_id]);
         }
     }

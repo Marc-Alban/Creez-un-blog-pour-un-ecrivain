@@ -6,7 +6,7 @@ use Openclassroom\Blog\Model\Manager;
 
 require_once 'model/Manager.php';
 
-class DashboardManager extends Manager
+class DashboardManager 
 {
 
 /**
@@ -16,7 +16,7 @@ class DashboardManager extends Manager
  */
     public function getPass()
     {
-        $query = $this->getPDO()->query("SELECT password_admin FROM admins");
+        $query = Manager::getInstance()->query("SELECT password_admin FROM admins");
         $req = $query->fetch();
         $pass = $req[0];
         return $pass;

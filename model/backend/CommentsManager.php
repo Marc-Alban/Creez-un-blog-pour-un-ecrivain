@@ -7,7 +7,7 @@ use \PDO;
 
 require_once 'model/Manager.php';
 
-class CommentManager extends Manager
+class CommentManager 
 {
     /**
      * Affiche les commentaires écrit dans le front sur le dashboard
@@ -17,7 +17,7 @@ class CommentManager extends Manager
     public function getComments()
     {
 
-        $query = $this->getPDO()->query("
+        $query = Manager::getInstance()->query("
     SELECT  comments.id,
             comments.name,
             comments.date_comment,
@@ -42,7 +42,7 @@ class CommentManager extends Manager
  */
     public function deleteComments(int $id)
     {
-        $query = $this->getPDO()->prepare("DELETE FROM comments WHERE id = :id");
+        $query = Manager::getInstance()->prepare("DELETE FROM comments WHERE id = :id");
         $query->execute(["id" => $id]);
     }
 
@@ -54,7 +54,7 @@ class CommentManager extends Manager
      */
     public function validateComments(int $id)
     {
-        $query = $this->getPDO()->prepare("UPDATE comments SET seen = '0' WHERE id = :id");
+        $query = Manager::getInstance()->prepare("UPDATE comments SET seen = '0' WHERE id = :id");
         $query->execute(["id" => $id]);
     }
 }

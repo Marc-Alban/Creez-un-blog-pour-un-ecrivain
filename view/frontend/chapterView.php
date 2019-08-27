@@ -41,6 +41,7 @@
 
             </form>
             <!-- Errors -->
+
             <?php if (!empty($errors)): ?>
             <?php foreach ($errors as $error): ?>
             <div class="alert alert-danger col-12 col-md-6" role="alert">

@@ -4,30 +4,31 @@ namespace Openclassroom\Blog\Model;
 
 use \PDO;
 
-class Manager
+class Manager extends PDO
 {
 
-    private $dbHost;
-    private $dbName;
-    private $dbUser;
-    private $dbPassword;
-    private $pdo;
+    private static $_instance = null;
+    const DSN = 'mysql:host=localhost;dbname=blog';
+    const USER = 'root';
+    const PASSWORD = '';
 
-    public function __construct($dbName = 'blog', $dbHost = 'localhost', $dbUser = 'root', $dbPassword = '')
+    private function __construct()
     {
-        $this->dbHost = $dbHost;
-        $this->dbName = $dbName;
-        $this->dbUser = $dbUser;
-        $this->dbPassword = $dbPassword;
-    }
-
-    public function getPDO()
-    {
-        if (is_null($this->pdo)) {
-            $pdo = new PDO('mysql:host=' . $this->dbHost . ';dbname=' . $this->dbName, $this->dbUser, $this->dbPassword);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->pdo = $pdo;
+        try {
+            $db = parent::__construct(self::DSN, self::USER, self::PASSWORD);
+            return $db;
+        } catch (Exception $e) {
+            die('Erreur:' . $e->getMessage());
         }
-        return $this->pdo;
     }
+
+    public static function getInstance()
+    {
+        if (!isset(self::$_instance)) {
+            self::$_instance = new static;
+        }
+        var_dump('test');
+        return (self::$_instance);
+    }
+
 }
