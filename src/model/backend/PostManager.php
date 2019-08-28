@@ -1,13 +1,11 @@
 <?php
 declare (strict_types = 1);
-namespace Openclassroom\Blog\Model\Backend;
+namespace Blog\Model\Backend;
 
-use Openclassroom\Blog\Model\Manager;
+use Blog\Model\Manager;
 use \PDO;
 
-require_once 'model/Manager.php';
-
-class PostManager 
+class PostManager
 {
 
 /**
@@ -68,7 +66,7 @@ class PostManager
             $id = "post";
             $extention = ".png";
         } else {
-            move_uploaded_file($tmp_name, "public/img/chapter/" . $id . $extention);
+            move_uploaded_file($tmp_name, "img/chapter/" . $id . $extention);
         }
 
         $e = [
@@ -158,7 +156,7 @@ class PostManager
             $id = "post";
             $extention = ".png";
         } else {
-            move_uploaded_file($tmp_name, "public/img/chapter/" . $id . $extention);
+            move_uploaded_file($tmp_name, "img/chapter/" . $id . $extention);
         }
 
         $p = [

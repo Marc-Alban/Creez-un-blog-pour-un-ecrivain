@@ -2,9 +2,12 @@
 declare (strict_types = 1);
 //Démarage session
 session_start();
+//Récupère l'autoload
+require '../vendor/autoload.php';
 // Demande les différents controllers
-require_once 'controller/FrontendController.php';
-require_once 'controller/BackendController.php';
+
+use Blog\Controller\BackendController;
+use Blog\Controller\FrontendController;
 //Instance de l'objet
 $frontController = new FrontendController;
 $backController = new BackendController;

@@ -1,6 +1,6 @@
 <?php
 declare (strict_types = 1);
-namespace Openclassroom\Blog\Model;
+namespace Blog\Model;
 
 use \PDO;
 

@@ -1,0 +1,14 @@
+{
+    "name": "jeanforteroche/projet",
+    "description": "Autoloader pour le projet 4 de Openclassroom",
+    "authors": [{
+        "name": "Marc-Alban",
+        "email": "millet.marcalban@gmail.com"
+    }],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Blog\\": "src"
+        }
+    }
+}

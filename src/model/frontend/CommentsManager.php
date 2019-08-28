@@ -1,13 +1,11 @@
 <?php
 declare (strict_types = 1);
-namespace Openclassroom\Blog\Model\Frontend;
+namespace Blog\Model\Frontend;
 
-use Openclassroom\Blog\Model\Manager;
+use Blog\Model\Manager;
 use \PDO;
 
-require_once 'model/Manager.php';
-
-class CommentsManager 
+class CommentsManager
 {
 /**
  * Renvoie les commentaires sur la page post

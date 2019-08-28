@@ -1,23 +1,23 @@
 <?php
 declare (strict_types = 1);
-namespace Openclassroom\Blog\Model;
+namespace Blog\View;
 
-class ViewManager
+class View
 {
     private function getUrl(string $statement, string $namePage, ?array $datas)
     {
-        require 'view/' . $statement . '/' . $namePage . '.php';
+        require 'templates/' . $statement . '/' . $namePage . '.php';
     }
 
     private function getHeader(string $statement)
     {
-        require 'view/' . $statement . '/headerView.php';
+        require 'templates/' . $statement . '/headerView.php';
     }
 
     private function getFooter(string $statement)
     {
         if (file_exists('footerView.php')) {
-            require 'view/' . $statement . '/footerView.php';
+            require 'templates/' . $statement . '/footerView.php';
         }
     }
 

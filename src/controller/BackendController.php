@@ -1,14 +1,11 @@
 <?php
 declare (strict_types = 1);
-use Openclassroom\Blog\Model\Backend\CommentManager;
-use Openclassroom\Blog\Model\backend\DashboardManager;
-use Openclassroom\Blog\Model\Backend\PostManager;
-use Openclassroom\Blog\Model\ViewManager;
+namespace Blog\Controller;
 
-require_once 'model/backend/CommentsManager.php';
-require_once 'model/backend/DashboardManager.php';
-require_once 'model/backend/PostManager.php';
-require_once 'model/ViewManager.php';
+use Blog\Model\Backend\CommentManager;
+use Blog\Model\Backend\DashboardManager;
+use Blog\Model\Backend\PostManager;
+use Blog\View\View;
 
 class BackendController
 {
@@ -21,9 +18,8 @@ class BackendController
         $commentManager = new CommentManager;
         $comments = $commentManager->getComments();
         $title = 'Dashboard-Administration';
-        $ViewManager = new ViewManager;
-        $content = $ViewManager->getView('backend', 'dashboardView', ['comments' => $comments]);
-        require 'view/backend/template.php';
+        $View = new View;
+        $content = $View->getView('backend', 'dashboardView', ['comments' => $comments]);
     }
 
     //########Action Commentaires Dashboard########//
@@ -51,9 +47,8 @@ class BackendController
         $postManager = new PostManager;
         $chapters = $postManager->getChapters();
         $title = 'Liste des chapitres';
-        $ViewManager = new ViewManager;
-        $content = $ViewManager->getView('backend', 'chaptersView', ['chapters' => $chapters]);
-        require 'view/backend/template.php';
+        $View = new View;
+        $content = $View->getView('backend', 'chaptersView', ['chapters' => $chapters]);
     }
 
 /**
@@ -65,9 +60,8 @@ class BackendController
         $postManager = new PostManager;
         $chapter = $postManager->getChapter($idInt);
         $title = 'Mettre à jour un chapitre';
-        $ViewManager = new ViewManager;
-        $content = $ViewManager->getView('backend', 'chapterView', ['chapter' => $chapter]);
-        require 'view/backend/template.php';
+        $View = new View;
+        $content = $View->getView('backend', 'chapterView', ['chapter' => $chapter]);
     }
 
     public function editImageAction($id, array $post, array $files)
@@ -143,9 +137,8 @@ class BackendController
     public function writeAction()
     {
         $title = 'Ecrire un chapitre';
-        $ViewManager = new ViewManager;
-        $content = $ViewManager->getView('backend', 'writeView', null);
-        require 'view/backend/template.php';
+        $View = new View;
+        $content = $View->getView('backend', 'writeView', null);
     }
 
     public function writeFormAction(array $post, array $files)
@@ -200,9 +193,8 @@ class BackendController
         if (isset($get['action']) && $get['action'] == 'connexion') {
             $title = 'Page de connexion';
             ob_start();
-            require 'view/backend/loginView.php';
+            require '../../templates/backend/loginView.php';
             $content = ob_get_clean();
-            require 'view/backend/template.php';
         } else {
             header('Location: index.php?page=login&action=connexion');
         }

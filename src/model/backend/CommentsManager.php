@@ -1,13 +1,11 @@
 <?php
 declare (strict_types = 1);
-namespace Openclassroom\Blog\Model\Backend;
+namespace Blog\Model\Backend;
 
-use Openclassroom\Blog\Model\Manager;
+use Blog\Model\Manager;
 use \PDO;
 
-require_once 'model/Manager.php';
-
-class CommentManager 
+class CommentManager
 {
     /**
      * Affiche les commentaires écrit dans le front sur le dashboard

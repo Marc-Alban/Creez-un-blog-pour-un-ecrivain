@@ -1,12 +1,10 @@
 <?php
 declare (strict_types = 1);
-namespace Openclassroom\Blog\Model\Backend;
+namespace Blog\Model\Backend;
 
-use Openclassroom\Blog\Model\Manager;
+use Blog\Model\Manager;
 
-require_once 'model/Manager.php';
-
-class DashboardManager 
+class DashboardManager
 {
 
 /**
