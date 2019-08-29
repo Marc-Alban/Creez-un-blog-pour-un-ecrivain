@@ -6,18 +6,18 @@ class View
 {
     private function getUrl(string $statement, string $namePage, ?array $datas)
     {
-        require 'templates/' . $statement . '/' . $namePage . '.php';
+        require_once '../templates/' . $statement . '/' . $namePage . '.php';
     }
 
     private function getHeader(string $statement)
     {
-        require 'templates/' . $statement . '/headerView.php';
+        require_once '../templates/' . $statement . '/headerView.php';
     }
 
     private function getFooter(string $statement)
     {
         if (file_exists('footerView.php')) {
-            require 'templates/' . $statement . '/footerView.php';
+            require_once '../templates/' . $statement . '/footerView.php';
         }
     }
 
@@ -25,9 +25,9 @@ class View
     {
         ob_start();
         $this->getHeader($statement);
-        $content = $this->getUrl($statement, $namePage, $datas);
+        $this->getUrl($statement, $namePage, $datas);
         $this->getFooter($statement);
-
-        return ob_get_clean();
+        $content = ob_get_clean();
+        require_once '../templates/' . $statement . '/template.php';
     }
 }

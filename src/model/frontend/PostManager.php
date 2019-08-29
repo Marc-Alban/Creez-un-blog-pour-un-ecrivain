@@ -2,10 +2,10 @@
 declare (strict_types = 1);
 namespace Blog\Model\Frontend;
 
-use Blog\Model\Manager;
+use Blog\Model\Database;
 use \PDO;
 
-class PostManager
+class PostDatabase
 {
 /**
  * Renvoie le chapitre sur la page post
@@ -15,7 +15,7 @@ class PostManager
  * @param integer $id
  * @return object
  */
-    public function getChapter(int $id)
+    public function getChapter(int $id): array
     {
         $sql = "
         SELECT  posts.id,
@@ -31,7 +31,7 @@ class PostManager
         AND     posts.posted = '1'
         ";
 
-        $query = Manager::getInstance()->prepare($sql);
+        $query = Database::getDb()->prepare($sql);
         $query->execute([':id' => $id]);
         $result = $query->fetchAll(PDO::FETCH_OBJ);
         return $result;
@@ -44,7 +44,7 @@ class PostManager
  *
  * @return object
  */
-    public function getLimitedChapters()
+    public function getLimitedChapters(): array
     {
         $sql = "
         SELECT  posts.id,
@@ -61,7 +61,7 @@ class PostManager
         LIMIT 0,2
         ";
 
-        $query = Manager::getInstance()->query($sql);
+        $query = Database::getDb()->query($sql);
         $results = $query->fetchAll(PDO::FETCH_OBJ);
         return $results;
     }
@@ -72,7 +72,7 @@ class PostManager
      *
      * @return object
      */
-    public function getChapters()
+    public function getChapters(): array
     {
         $sql = "
         SELECT *
@@ -81,7 +81,7 @@ class PostManager
         ORDER BY date_posts
         ASC
         ";
-        $query = Manager::getInstance()->query($sql);
+        $query = Database::getDb()->query($sql);
         $results = $query->fetchAll(PDO::FETCH_OBJ);
         return $results;
     }

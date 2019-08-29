@@ -2,10 +2,10 @@
 declare (strict_types = 1);
 namespace Blog\Model\Backend;
 
-use Blog\Model\Manager;
+use Blog\Model\Database;
 use \PDO;
 
-class PostManager
+class PostDatabase
 {
 
 /**
@@ -24,7 +24,7 @@ class PostManager
         WHERE   id = :id
         ";
 
-        $query = Manager::getInstance()->prepare($sql);
+        $query = Database::getDb()->prepare($sql);
         $query->execute([":id" => $id]);
         $req = $query->fetchAll(PDO::FETCH_OBJ);
         return $req;
@@ -33,7 +33,7 @@ class PostManager
     /**
      * Affiche la liste des post de la bdd, ainsi que ceux non publié
      */
-    public function getChapters()
+    public function getChapters(): array
     {
         $sql = "
         SELECT *
@@ -41,7 +41,7 @@ class PostManager
         ORDER BY date_posts
         DESC
         ";
-        $query = Manager::getInstance()->query($sql);
+        $query = Database::getDb()->query($sql);
         $req = $query->fetchAll(PDO::FETCH_OBJ);
         return $req;
     }
@@ -57,7 +57,7 @@ class PostManager
         WHERE id = :id
         ";
 
-        $req = Manager::getInstance()->prepare($sql_id);
+        $req = Database::getDb()->prepare($sql_id);
         $req->execute([':id' => $id]);
         $response = $req->fetch(PDO::FETCH_ASSOC);
         $id = $response['id'];
@@ -86,7 +86,7 @@ class PostManager
             posted = :posted
         WHERE id = :id ";
 
-        $query = Manager::getInstance()->prepare($sql);
+        $query = Database::getDb()->prepare($sql);
         $query->execute($e);
     }
 
@@ -107,7 +107,7 @@ class PostManager
             posted = :posted
         WHERE id = :id ";
 
-        $query = Manager::getInstance()->prepare($sql);
+        $query = Database::getDb()->prepare($sql);
         $query->execute($e);
     }
 
@@ -124,7 +124,7 @@ class PostManager
         WHERE id = :id
         ";
 
-        $query = Manager::getInstance()->prepare($sql);
+        $query = Database::getDb()->prepare($sql);
         $query->execute(['id' => $id]);
     }
 
@@ -148,7 +148,7 @@ class PostManager
         DESC
         ";
 
-        $req = Manager::getInstance()->query($sql_id);
+        $req = Database::getDb()->query($sql_id);
         $response = $req->fetch();
         $id = $response[0];
 
@@ -172,7 +172,7 @@ class PostManager
     VALUES(:title, :content, :name_post, :image_posts, NOW(), :posted)
     ";
 
-        $query = Manager::getInstance()->prepare($sql);
+        $query = Database::getDb()->prepare($sql);
         $query->execute($p);
     }
 

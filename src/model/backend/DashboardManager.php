@@ -2,9 +2,9 @@
 declare (strict_types = 1);
 namespace Blog\Model\Backend;
 
-use Blog\Model\Manager;
+use Blog\Model\Database;
 
-class DashboardManager
+class DashboardDatabase
 {
 
 /**
@@ -12,9 +12,9 @@ class DashboardManager
  *
  * @return string
  */
-    public function getPass()
+    public function getPass(): string
     {
-        $query = Manager::getInstance()->query("SELECT password_admin FROM admins");
+        $query = Database::getDb()->query("SELECT password_admin FROM admins");
         $req = $query->fetch();
         $pass = $req[0];
         return $pass;

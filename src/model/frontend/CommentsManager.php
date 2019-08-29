@@ -2,10 +2,10 @@
 declare (strict_types = 1);
 namespace Blog\Model\Frontend;
 
-use Blog\Model\Manager;
+use Blog\Model\Database;
 use \PDO;
 
-class CommentsManager
+class CommentsDatabase
 {
 /**
  * Renvoie les commentaires sur la page post
@@ -22,7 +22,7 @@ class CommentsManager
         ORDER BY date_comment
         DESC
         ";
-        $query = Manager::getInstance()->prepare($sql);
+        $query = Database::getDb()->prepare($sql);
         $query->execute(['id' => $id]);
         $results = $query->fetchAll(PDO::FETCH_OBJ);
         return $results;
@@ -47,7 +47,7 @@ class CommentsManager
             'comment' => $comment,
             'post_id' => $post_id,
         );
-        $req = Manager::getInstance()->prepare($sql);
+        $req = Database::getDb()->prepare($sql);
         $req->execute($comment);
     }
 
@@ -59,15 +59,13 @@ class CommentsManager
  */
     public function signalComment(int $comment_id)
     {
-        if (isset($comment_id)) {
-            $sql = "
+        $sql = "
             UPDATE comments
             SET seen = '1' WHERE id = :id
             ";
 
-            $query = Manager::getInstance()->prepare($sql);
-            $query->execute(['id' => $comment_id]);
-        }
+        $query = Database::getDb()->prepare($sql);
+        $query->execute(['id' => $comment_id]);
     }
 
 }

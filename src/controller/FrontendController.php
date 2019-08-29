@@ -17,9 +17,8 @@ class FrontendController
     {
         $postManager = new PostManager;
         $chapters = $postManager->getLimitedChapters();
-        $title = 'Accueil - Livre Jean Forteroche';
         $View = new View;
-        $content = $View->getView('frontend', 'homeView', ['chapters' => $chapters]);
+        $View->getView('frontend', 'homeView', ['chapters' => $chapters]);
     }
 
 /**
@@ -30,44 +29,36 @@ class FrontendController
     {
         $postManager = new PostManager;
         $chapters = $postManager->getchapters();
-        $title = 'Chapitres - Jean Forteroche';
         $View = new View;
-        $content = $View->getView('frontend', 'chaptersView', ['chapters' => $chapters]);
+        $View->getView('frontend', 'chaptersView', ['chapters' => $chapters]);
     }
 
 /**
  * Renvoie les commentaires  et le chapitre sur la page
  */
-    public function chapterAction(string $id)
+    public function chapterAction(int $id)
     {
-        $idInt = intval($id);
-
         $postManager = new PostManager;
-        $chapter = $postManager->getChapter($idInt);
+        $chapter = $postManager->getChapter($id);
 
         $commentManager = new CommentsManager;
-        $comments = $commentManager->getComments($idInt);
-        $title = 'Chapitre - Jean Forteroche';
+        $comments = $commentManager->getComments($id);
         $View = new View;
-        $content = $View->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments]);
+        $View->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments]);
     }
 
-    public function signalAction(string $idComment, string $id)
+    public function signalAction(int $idComment, int $id)
     {
-        $idInt = intval($id);
-        $commentID = intval($idComment);
-
         $commentManager = new CommentsManager;
-        $commentManager->signalComment($commentID);
+        $commentManager->signalComment($idComment);
 
-        header('Location: index.php?page=chapter&id=' . $idInt);
+        header('Location: index.php?page=chapter&id=' . $id);
     }
 
-    public function sendCommentAction(array $post, string $id)
+    public function sendCommentAction(array $post, int $id)
     {
         $name = (isset($post['name'])) ? $post['name'] : '';
         $comment = (isset($post['comment'])) ? $post['comment'] : '';
-        $idInt = intval($id);
         $errors = [];
         $commentManager = new CommentsManager;
         if (isset($post['submit'])) {
@@ -77,7 +68,7 @@ class FrontendController
                         htmlspecialchars(trim($name));
                         htmlspecialchars(trim($comment));
                         if (empty($errors)) {
-                            $commentManager->setComment($name, $comment, $idInt);
+                            $commentManager->setComment($name, $comment, $id);
                         }
                     } else {
                         $errors['content'] = 'le champs message est vide';
@@ -96,9 +87,8 @@ class FrontendController
  */
     public function errorAction()
     {
-        $title = 'Page - Introuvable';
         $View = new View;
-        $content = $View->getView('frontend', 'errorView', null);
+        $View->getView('frontend', 'errorView', null);
     }
 
 }

@@ -2,20 +2,19 @@
 declare (strict_types = 1);
 namespace Blog\Model\Backend;
 
-use Blog\Model\Manager;
+use Blog\Model\Database;
 use \PDO;
 
-class CommentManager
+class CommentDatabase
 {
     /**
      * Affiche les commentaires écrit dans le front sur le dashboard
      *
-     * @return void
      */
-    public function getComments()
+    public function getComments(): array
     {
 
-        $query = Manager::getInstance()->query("
+        $query = Database::getDb()->query("
     SELECT  comments.id,
             comments.name,
             comments.date_comment,
@@ -40,7 +39,7 @@ class CommentManager
  */
     public function deleteComments(int $id)
     {
-        $query = Manager::getInstance()->prepare("DELETE FROM comments WHERE id = :id");
+        $query = Database::getDb()->prepare("DELETE FROM comments WHERE id = :id");
         $query->execute(["id" => $id]);
     }
 
@@ -52,7 +51,7 @@ class CommentManager
      */
     public function validateComments(int $id)
     {
-        $query = Manager::getInstance()->prepare("UPDATE comments SET seen = '0' WHERE id = :id");
+        $query = Database::getDb()->prepare("UPDATE comments SET seen = '0' WHERE id = :id");
         $query->execute(["id" => $id]);
     }
 }
