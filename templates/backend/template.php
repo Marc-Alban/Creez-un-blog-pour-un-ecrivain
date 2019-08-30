@@ -11,10 +11,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- <link rel="stylesheet" href="fontawesome/css/all.css"> -->
-    <link rel="stylesheet" href="../../public/vendor/fontawesome/css/all.css">
-    <link rel="stylesheet" href="../../public/css/backend.css">
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.css">
+    <link rel="stylesheet" href="css/backend.css">
 
-    <script src='../../public/js/tinymce/tinymce.min.js' referrerpolicy="origin"></script>
+    <script src='js/tinymce/tinymce.min.js' referrerpolicy="origin"></script>
     <script>
     tinymce.init({
         selector: '#mytextarea',

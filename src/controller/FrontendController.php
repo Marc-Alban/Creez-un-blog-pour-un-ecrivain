@@ -12,29 +12,34 @@ class FrontendController
 /**
  * Renvoie les chapitres sur la page Accueil
  *
+ * @return void
  */
     public function homeAction()
     {
         $postManager = new PostManager;
         $chapters = $postManager->getLimitedChapters();
-        $View = new View;
-        $View->getView('frontend', 'homeView', ['chapters' => $chapters]);
+        $view = new View;
+        $view->getView('frontend', 'homeView', ['chapters' => $chapters]);
     }
 
 /**
  * Renvoie les chapitres sur la page chapitres
  *
+ * @return void
  */
     public function chaptersAction()
     {
         $postManager = new PostManager;
         $chapters = $postManager->getchapters();
-        $View = new View;
-        $View->getView('frontend', 'chaptersView', ['chapters' => $chapters]);
+        $view = new View;
+        $view->getView('frontend', 'chaptersView', ['chapters' => $chapters]);
     }
 
 /**
- * Renvoie les commentaires  et le chapitre sur la page
+ * Renvoie les commentaires et le chapitre
+ *
+ * @param integer $id
+ * @return void
  */
     public function chapterAction(int $id)
     {
@@ -43,10 +48,17 @@ class FrontendController
 
         $commentManager = new CommentsManager;
         $comments = $commentManager->getComments($id);
-        $View = new View;
-        $View->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments]);
+        $view = new View;
+        $view->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments]);
     }
 
+    /**
+     * Permet de signaler un commentaire
+     *
+     * @param integer $idComment
+     * @param integer $id
+     * @return void
+     */
     public function signalAction(int $idComment, int $id)
     {
         $commentManager = new CommentsManager;
@@ -55,6 +67,13 @@ class FrontendController
         header('Location: index.php?page=chapter&id=' . $id);
     }
 
+    /**
+     * Permet d'envoyer un commentaire
+     *
+     * @param array $post
+     * @param integer $id
+     * @return void
+     */
     public function sendCommentAction(array $post, int $id)
     {
         $name = (isset($post['name'])) ? $post['name'] : '';
@@ -84,11 +103,13 @@ class FrontendController
 
 /**
  * Renvoie la page erreur
+ *
+ * @return void
  */
     public function errorAction()
     {
-        $View = new View;
-        $View->getView('frontend', 'errorView', null);
+        $view = new View;
+        $view->getView('frontend', 'errorView', null);
     }
 
 }

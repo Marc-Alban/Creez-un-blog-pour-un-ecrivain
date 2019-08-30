@@ -11,6 +11,11 @@ class Database
     const PASSWORD = '';
     private static $db = null;
 
+    /**
+     * Connexion à la bdd si ce n'est pas déjà fait
+     *
+     * @return PDO
+     */
     public static function getDb(): PDO
     {
         if (self::$db == null) {

@@ -4,7 +4,6 @@
             <!-- View chapter -->
             <?php if (isset($datas['chapter'])): ?>
             <?php foreach ($datas['chapter'] as $table): ?>
-            <?php $title = $table->title . ' - Jean Forteroche';?>
             <div class="col-lg-12 col-md-12 col-sm-12 post-title-block"
                 style="background-image:url('public/img/chapter/<?=$table->image_posts?>'); background-repeat: no-repeat;background-size: cover;">
                 <h1 class="text-center"><?=$table->title?></h1>

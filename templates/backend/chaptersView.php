@@ -1,6 +1,5 @@
 <div class="container">
     <div class="row">
-        <?php $title = 'Liste des chapitres'?>
         <h2>Listes des Chapitres: </h2>
         <hr>
         <section class="blog-me pt-100 pb-100" id="blog">

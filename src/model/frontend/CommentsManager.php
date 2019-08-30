@@ -11,9 +11,9 @@ class CommentsDatabase
  * Renvoie les commentaires sur la page post
  *
  * @param integer $id
- * @return void
+ * @return object
  */
-    public function getComments(int $id)
+    public function getComments(int $id): array
     {
         $sql = "
         SELECT *
@@ -36,16 +36,16 @@ class CommentsDatabase
      * @param integer $post_id
      * @return void
      */
-    public function setComment(string $name, string $comment, int $post_id)
+    public function setComment(string $name, string $comment, int $postId)
     {
         $sql = "
         INSERT INTO comments(name, comment, post_id, date_comment)
-        VALUES(:name, :comment, :post_id, NOW())
+        VALUES(:name, :comment, :postId, NOW())
         ";
         $comment = array(
             'name' => $name,
             'comment' => $comment,
-            'post_id' => $post_id,
+            'post_id' => $postId,
         );
         $req = Database::getDb()->prepare($sql);
         $req->execute($comment);
@@ -57,7 +57,7 @@ class CommentsDatabase
  * @param integer $commentid
  * @return void
  */
-    public function signalComment(int $comment_id)
+    public function signalComment(int $commentId)
     {
         $sql = "
             UPDATE comments
@@ -65,7 +65,7 @@ class CommentsDatabase
             ";
 
         $query = Database::getDb()->prepare($sql);
-        $query->execute(['id' => $comment_id]);
+        $query->execute(['id' => $commentId]);
     }
 
 }

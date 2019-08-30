@@ -1,4 +1,3 @@
-<?php $title = 'Ecrire un chapitre'?>
 <div class="container">
     <div class="row">
         <?php if (!empty($errors)): ?>

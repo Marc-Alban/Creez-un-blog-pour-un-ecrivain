@@ -10,6 +10,9 @@ class PostDatabase
 
 /**
  * Renvoie le chapitre sur la page post en bdd
+ *
+ * @param integer $id
+ * @return void
  */
     public function getChapter(int $id)
     {
@@ -30,9 +33,11 @@ class PostDatabase
         return $req;
     }
 
-    /**
-     * Affiche la liste des post de la bdd, ainsi que ceux non publié
-     */
+/**
+ * Affiche la liste des post de la bdd, ainsi que ceux non publié
+ *
+ * @return array
+ */
     public function getChapters(): array
     {
         $sql = "
@@ -48,8 +53,16 @@ class PostDatabase
 
     /**
      * Met à jour le chapitre modifié en BDD
+     *
+     * @param integer $id
+     * @param string $title
+     * @param string $content
+     * @param string $tmpName
+     * @param string $extention
+     * @param integer $posted
+     * @return void
      */
-    public function editImageChapter(int $id, string $title, string $content, string $tmp_name, string $extention, int $posted)
+    public function editImageChapter(int $id, string $title, string $content, string $tmpName, string $extention, int $posted)
     {
         $sql_id = "
         SELECT id
@@ -62,11 +75,11 @@ class PostDatabase
         $response = $req->fetch(PDO::FETCH_ASSOC);
         $id = $response['id'];
 
-        if (!$tmp_name) {
+        if (!$tmpName) {
             $id = "post";
             $extention = ".png";
         } else {
-            move_uploaded_file($tmp_name, "img/chapter/" . $id . $extention);
+            move_uploaded_file($tmpName, "img/chapter/" . $id . $extention);
         }
 
         $e = [
@@ -90,6 +103,15 @@ class PostDatabase
         $query->execute($e);
     }
 
+    /**
+     * Permet d'éditer un chapitre en back office
+     *
+     * @param integer $id
+     * @param string $title
+     * @param string $content
+     * @param integer $posted
+     * @return void
+     */
     public function editChapter(int $id, string $title, string $content, int $posted)
     {
         $e = [
@@ -135,11 +157,11 @@ class PostDatabase
  * @param string $content
  * @param string $name
  * @param integer $posted
- * @param string $tmp_name
+ * @param string $tmpName
  * @param string $extention
  * @return void
  */
-    public function chapterWrite(string $title, string $description, string $name, int $posted, string $tmp_name, string $extention)
+    public function chapterWrite(string $title, string $description, string $name, int $posted, string $tmpName, string $extention)
     {
         $sql_id = "
         SELECT MAX(id)
@@ -152,11 +174,11 @@ class PostDatabase
         $response = $req->fetch();
         $id = $response[0];
 
-        if (!$tmp_name) {
+        if (!$tmpName) {
             $id = "post";
             $extention = ".png";
         } else {
-            move_uploaded_file($tmp_name, "img/chapter/" . $id . $extention);
+            move_uploaded_file($tmpName, "img/chapter/" . $id . $extention);
         }
 
         $p = [

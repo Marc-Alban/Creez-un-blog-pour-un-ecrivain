@@ -7,10 +7,11 @@ use \PDO;
 
 class CommentDatabase
 {
-    /**
-     * Affiche les commentaires écrit dans le front sur le dashboard
-     *
-     */
+/**
+ * Affiche les commentaires écrit dans le front sur le dashboard
+ *
+ * @return array
+ */
     public function getComments(): array
     {
 
@@ -43,12 +44,12 @@ class CommentDatabase
         $query->execute(["id" => $id]);
     }
 
-    /**
-     * Permet de valider le commentaire et de le remettre à la valeur 0 dans la table seen
-     *
-     * @param integer $id
-     * @return void
-     */
+/**
+ * Permet de valider le commentaire et de le remettre à la valeur 0 dans la table seen
+ *
+ * @param integer $id
+ * @return void
+ */
     public function validateComments(int $id)
     {
         $query = Database::getDb()->prepare("UPDATE comments SET seen = '0' WHERE id = :id");
