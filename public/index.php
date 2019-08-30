@@ -14,6 +14,8 @@ $backController = new BackendController;
 
 if (isset($_GET['page']) || !empty($_GET['page'])) {
     if ($_GET['page'] == 'home') {
+        var_dump($bdd);
+        die();
         $frontController->homeAction();
     } else if ($_GET['page'] == 'chapters') {
         $frontController->chaptersAction();

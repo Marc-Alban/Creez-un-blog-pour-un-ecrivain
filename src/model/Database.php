@@ -19,8 +19,9 @@ class Database
     public static function getDb(): PDO
     {
         if (self::$db == null) {
-            $db = new PDO(self::DSN, self::USER, self::PASSWORD);
-            return $db;
+            $bdd = new PDO(self::DSN, self::USER, self::PASSWORD);
+            self::$db = $bdd;
+            return $bdd;
         } else {
             self::$db;
         }
