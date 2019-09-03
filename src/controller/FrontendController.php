@@ -9,12 +9,13 @@ use Blog\View\View;
 class FrontendController
 {
 
+    
 /**
  * Renvoie les chapitres sur la page Accueil
  *
  * @return void
  */
-    public function homeAction()
+    public static function homeAction()
     {
         $postManager = new PostManager;
         $chapters = $postManager->getLimitedChapters();
@@ -27,7 +28,7 @@ class FrontendController
  *
  * @return void
  */
-    public function chaptersAction()
+    public static function chaptersAction()
     {
         $postManager = new PostManager;
         $chapters = $postManager->getchapters();
@@ -41,7 +42,7 @@ class FrontendController
  * @param integer $id
  * @return void
  */
-    public function chapterAction(int $id)
+    public static function chapterAction(int $id)
     {
         $postManager = new PostManager;
         $chapter = $postManager->getChapter($id);
@@ -59,7 +60,7 @@ class FrontendController
      * @param integer $id
      * @return void
      */
-    public function signalAction(int $idComment, int $id)
+    public static function signalAction(int $idComment, int $id)
     {
         $commentManager = new CommentsManager;
         $commentManager->signalComment($idComment);
@@ -74,7 +75,7 @@ class FrontendController
      * @param integer $id
      * @return void
      */
-    public function sendCommentAction(array $post, int $id)
+    public static function sendCommentAction(array $post, int $id)
     {
         $name = (isset($post['name'])) ? $post['name'] : '';
         $comment = (isset($post['comment'])) ? $post['comment'] : '';
@@ -106,7 +107,7 @@ class FrontendController
  *
  * @return void
  */
-    public function errorAction()
+    public static function errorAction()
     {
         $view = new View;
         $view->getView('frontend', 'errorView', null);

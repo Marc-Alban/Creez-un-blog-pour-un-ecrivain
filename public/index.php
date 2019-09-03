@@ -4,72 +4,67 @@ declare (strict_types = 1);
 session_start();
 //Récupère l'autoload
 require '../vendor/autoload.php';
-// Demande les différents controllers
-use Blog\Controller\BackendController;
-use Blog\Controller\FrontendController;
 
-//Instance de l'objet
-$frontController = new FrontendController;
-$backController = new BackendController;
+// Demande les différents controllers
+use Blog\Controller\FrontendController;
+use Blog\Controller\BackendController;
 
 if (isset($_GET['page']) || !empty($_GET['page'])) {
     if ($_GET['page'] == 'home') {
-        var_dump($bdd);
-        die();
-        $frontController->homeAction();
+        FrontendController::homeAction();
     } else if ($_GET['page'] == 'chapters') {
         $frontController->chaptersAction();
     } else if ($_GET['page'] == 'chapter') {
         if (isset($_GET['id']) && $_GET['id'] > 0) {
             if (isset($_GET['action']) && $_GET['action'] == 'signalComment') {
-                $frontController->signalAction((int) $_GET['idComment'], (int) $_GET['id']);
+                FrontendController::signalAction((int) $_GET['idComment'], (int) $_GET['id']);
             }
             if (isset($_GET['action']) && $_GET['action'] == 'submit') {
-                $frontController->sendCommentAction($_POST, (int) $_GET['id']);
+                FrontendController::sendCommentAction($_POST, (int) $_GET['id']);
             }
-            $frontController->chapterAction((int) $_GET['id']);
+            FrontendController::chapterAction((int) $_GET['id']);
         }
     } else if ($_GET['page'] == 'login') {
         if (isset($_GET['action']) && $_GET['action'] == 'connexion') {
-            $backController->connexionAction($_SESSION, $_POST);
+            BackendController::connexionAction($_SESSION, $_POST);
         }
-        $backController->loginAction($_GET);
+        BackendController::loginAction($_GET);
     } else if ($_GET['page'] == 'logout') {
-        $backController->logoutAction();
+        BackendController::logoutAction();
     } else if ($_GET['page'] == 'admin') {
         if (isset($_GET['id']) && $_GET['id'] > 0) {
             if (isset($_GET['action'])) {
                 if ($_GET['action'] == 'valide') {
-                    $backController->valideCommentAction((int) $_GET['id']);
+                    BackendController::valideCommentAction((int) $_GET['id']);
                 }
                 if ($_GET['action'] == 'remove') {
-                    $backController->removeCommentAction((int) $_GET['id']);
+                    BackendController::removeCommentAction((int) $_GET['id']);
                 }
             }
         }
-        $backController->adminAction();
+        BackendController::adminAction();
     } else if ($_GET['page'] == 'adminChapters') {
-        $backController->chaptersAction();
+        BackendController::chaptersAction();
     } else if ($_GET['page'] == 'write') {
         if (isset($_GET['action']) && $_GET['action'] == 'newChapter') {
-            $backController->writeFormAction($_POST, $_FILES);
+            BackendController::writeFormAction($_POST, $_FILES);
         }
-        $backController->writeAction();
+        BackendController::writeAction();
     } else if ($_GET['page'] == 'adminEdit') {
         if (isset($_GET['id']) && $_GET['id'] > 0) {
             if (isset($_GET['action']) && $_GET['action'] == 'modified') {
-                $backController->editAction((int) $_GET['id'], $_POST, $_FILES);
+                BackendController::editAction((int) $_GET['id'], $_POST, $_FILES);
             }
             if (isset($_GET['action']) && $_GET['action'] == 'deleted') {
-                $backController->deleteAction((int) $_GET['id']);
+                BackendController::deleteAction((int) $_GET['id']);
             }
-            $backController->updateAction((int) $_GET['id']);
+            BackendController::updateAction((int) $_GET['id']);
         } else {
-            $backController->chaptersAction();
+            BackendController::chaptersAction();
         }
     } else if ($_GET['page'] == 'error') {
-        $frontController->errorAction();
+        FrontendController::errorAction();
     }
 } else {
-    $frontController->homeAction();
+    FrontendController::homeAction();
 }
