@@ -15,12 +15,12 @@ class BackendController
  *
  * @return void
  */
-    public static function adminAction()
+    public  function adminAction(): void
     {
         $commentManager = new CommentManager;
         $comments = $commentManager->getComments();
         $view = new View;
-        $view->getView('backend', 'dashboardView', ['comments' => $comments]);
+        $view->getView('backend', 'dashboardView', ['comments' => $comments, 'title' => $title]);
     }
 
     /**
@@ -29,7 +29,7 @@ class BackendController
      * @param integer $id
      * @return void
      */
-    public static function valideCommentAction(int $id)
+    public function valideCommentAction(int $id): void
     {
         $commentManager = new CommentManager;
         $commentManager->validateComments($id);
@@ -42,7 +42,7 @@ class BackendController
      * @param integer $id
      * @return void
      */
-    public static function removeCommentAction(int $id)
+    public function removeCommentAction(int $id): void
     {
         $commentManager = new CommentManager;
         $commentManager->deleteComments($id);
@@ -54,7 +54,7 @@ class BackendController
  *
  * @return void
  */
-    public static function chaptersAction()
+    public function chaptersAction(): void
     {
         $postManager = new PostManager;
         $chapters = $postManager->getChapters();
@@ -68,10 +68,11 @@ class BackendController
  * @param integer $id
  * @return void
  */
-    public static function updateAction(int $id)
+    public  function updateAction(int $id): void
     {
         $postManager = new PostManager;
         $chapter = $postManager->getChapter($id);
+        
         $view = new View;
         $view->getView('backend', 'chapterView', ['chapter' => $chapter]);
     }
@@ -84,7 +85,7 @@ class BackendController
      * @param array $files
      * @return void
      */
-    public static function editAction(int $id, array $post, array $files)
+    public  function editAction(int $id, array $post, array $files): void
     {
         $postManager = new PostManager;
         $title = (isset($post['title'])) ? $post['title'] : '';
@@ -127,7 +128,7 @@ class BackendController
      * @param integer $id
      * @return void
      */
-    public static function deleteAction(int $id)
+    public  function deleteAction(int $id): void
     {
         $postManager = new PostManager;
         $postManager->deleteChapter($id);
@@ -139,7 +140,7 @@ class BackendController
  *
  * @return void
  */
-    public static function writeAction()
+    public  function writeAction(): void
     {
         $view = new View;
         $view->getView('backend', 'writeView', null);
@@ -152,7 +153,7 @@ class BackendController
      * @param array $files
      * @return void
      */
-    public static function writeFormAction(array $post, array $files)
+    public  function writeFormAction(array $post, array $files): void
     {
 
         $postManager = new PostManager;
@@ -196,7 +197,7 @@ class BackendController
  * @param array $get
  * @return void
  */
-    public static function loginAction(array $get)
+    public  function loginAction(array $get): void
     {
         if (isset($get['action']) && $get['action'] == 'connexion') {
             $view = new View;
@@ -213,7 +214,7 @@ class BackendController
      * @param array $post
      * @return void
      */
-    public static function connexionAction(array &$session, array $post)
+    public  function connexionAction(array &$session, array $post): void
     {
         $dashboardManager = new DashboardManager;
         $passwordBdd = $dashboardManager->getPass();
@@ -237,7 +238,7 @@ class BackendController
      *
      * @return void
      */
-    public static function logoutAction()
+    public  function logoutAction(): void
     {
         $dashboardManager = new DashboardManager;
         $dashboardManager->logoutUser();

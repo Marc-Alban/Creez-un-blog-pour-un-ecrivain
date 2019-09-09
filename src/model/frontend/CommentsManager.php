@@ -36,7 +36,7 @@ class CommentsDatabase
      * @param integer $post_id
      * @return void
      */
-    public function setComment(string $name, string $comment, int $postId)
+    public function setComment(string $name, string $comment, int $postId): void
     {
         $sql = "
         INSERT INTO comments(name, comment, post_id, date_comment)
@@ -57,7 +57,7 @@ class CommentsDatabase
  * @param integer $commentid
  * @return void
  */
-    public function signalComment(int $commentId)
+    public function signalComment(int $commentId): void
     {
         $sql = "
             UPDATE comments

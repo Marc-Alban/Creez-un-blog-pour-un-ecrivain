@@ -13,7 +13,7 @@ class PostDatabase
  * pour connaitre l'auteur
  *
  * @param integer $id
- * @return object
+ * @return array
  */
     public function getChapter(int $id): array
     {
@@ -42,7 +42,7 @@ class PostDatabase
  * avec une jointure sur la table admin
  * pour connaitre l'auteur
  *
- * @return object
+ * @return array
  */
     public function getLimitedChapters(): array
     {
@@ -70,7 +70,7 @@ class PostDatabase
      * Renvoie les différents chapitres sur la page Chapitre
      * quand le champs posted en bdd est à 1
      *
-     * @return object
+     * @return array
      */
     public function getChapters(): array
     {

@@ -38,7 +38,7 @@ class CommentDatabase
  * @param integer $id
  * @return void
  */
-    public function deleteComments(int $id)
+    public function deleteComments(int $id): void
     {
         $query = Database::getDb()->prepare("DELETE FROM comments WHERE id = :id");
         $query->execute(["id" => $id]);
@@ -50,7 +50,7 @@ class CommentDatabase
  * @param integer $id
  * @return void
  */
-    public function validateComments(int $id)
+    public function validateComments(int $id): void
     {
         $query = Database::getDb()->prepare("UPDATE comments SET seen = '0' WHERE id = :id");
         $query->execute(["id" => $id]);

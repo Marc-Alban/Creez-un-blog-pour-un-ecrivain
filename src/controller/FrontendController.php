@@ -3,7 +3,7 @@ declare (strict_types = 1);
 namespace Blog\Controller;
 
 use Blog\Model\Frontend\CommentsManager;
-use Blog\Model\Frontend\PostManager;
+ use Blog\Model\Frontend\PostManager;
 use Blog\View\View;
 
 class FrontendController
@@ -15,9 +15,11 @@ class FrontendController
  *
  * @return void
  */
-    public static function homeAction()
+    public function homeAction(): void
     {
-        $postManager = new PostManager;
+        // var_dump('toto');
+        // die();
+        $postManager = new \Blog\Model\Frontend\PostManager();
         $chapters = $postManager->getLimitedChapters();
         $view = new View;
         $view->getView('frontend', 'homeView', ['chapters' => $chapters]);
@@ -28,7 +30,7 @@ class FrontendController
  *
  * @return void
  */
-    public static function chaptersAction()
+    public function chaptersAction(): void
     {
         $postManager = new PostManager;
         $chapters = $postManager->getchapters();
@@ -42,7 +44,7 @@ class FrontendController
  * @param integer $id
  * @return void
  */
-    public static function chapterAction(int $id)
+    public function chapterAction(int $id): void
     {
         $postManager = new PostManager;
         $chapter = $postManager->getChapter($id);
@@ -60,7 +62,7 @@ class FrontendController
      * @param integer $id
      * @return void
      */
-    public static function signalAction(int $idComment, int $id)
+    public function signalAction(int $idComment, int $id): void
     {
         $commentManager = new CommentsManager;
         $commentManager->signalComment($idComment);
@@ -75,7 +77,7 @@ class FrontendController
      * @param integer $id
      * @return void
      */
-    public static function sendCommentAction(array $post, int $id)
+    public function sendCommentAction(array $post, int $id): void
     {
         $name = (isset($post['name'])) ? $post['name'] : '';
         $comment = (isset($post['comment'])) ? $post['comment'] : '';
@@ -107,7 +109,7 @@ class FrontendController
  *
  * @return void
  */
-    public static function errorAction()
+    public function errorAction(): void
     {
         $view = new View;
         $view->getView('frontend', 'errorView', null);

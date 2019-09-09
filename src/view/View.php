@@ -4,6 +4,7 @@ namespace Blog\View;
 
 class View
 {
+
     private function getUrl(string $statement, string $namePage, ?array $datas)
     {
         require_once '../templates/' . $statement . '/' . $namePage . '.php';

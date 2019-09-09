@@ -14,7 +14,7 @@ class PostDatabase
  * @param integer $id
  * @return void
  */
-    public function getChapter(int $id)
+    public function getChapter(int $id): void
     {
         $sql = "
         SELECT  id,
@@ -62,7 +62,7 @@ class PostDatabase
      * @param integer $posted
      * @return void
      */
-    public function editImageChapter(int $id, string $title, string $content, string $tmpName, string $extention, int $posted)
+    public function editImageChapter(int $id, string $title, string $content, string $tmpName, string $extention, int $posted): void
     {
         $sql_id = "
         SELECT id
@@ -112,7 +112,7 @@ class PostDatabase
      * @param integer $posted
      * @return void
      */
-    public function editChapter(int $id, string $title, string $content, int $posted)
+    public function editChapter(int $id, string $title, string $content, int $posted): void
     {
         $e = [
             ':id' => $id,
@@ -139,7 +139,7 @@ class PostDatabase
      * @param integer $id
      * @return void
      */
-    public function deleteChapter(int $id)
+    public function deleteChapter(int $id): void
     {
         $sql = "
         DELETE FROM posts
@@ -161,7 +161,7 @@ class PostDatabase
  * @param string $extention
  * @return void
  */
-    public function chapterWrite(string $title, string $description, string $name, int $posted, string $tmpName, string $extention)
+    public function chapterWrite(string $title, string $description, string $name, int $posted, string $tmpName, string $extention): void
     {
         $sql_id = "
         SELECT MAX(id)

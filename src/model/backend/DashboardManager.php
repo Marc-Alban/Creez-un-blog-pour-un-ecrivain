@@ -26,7 +26,7 @@ class DashboardDatabase
  *
  * @return void
  */
-    public function logoutUser()
+    public function logoutUser(): void
     {
         session_destroy();
     }
