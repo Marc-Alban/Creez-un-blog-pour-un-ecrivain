@@ -5,16 +5,13 @@ session_start();
 //Récupère l'autoload
 require '../vendor/autoload.php';
 
-// Demande les différents controllers
-use Blog\Controller\FrontendController;
-use Blog\Controller\BackendController;
-
 $id = $_GET['id'] ?? null;
-$page = $_GET['page'] ?? 'home';
 $action = $_GET['action'] ?? null;
+$page = $_GET['page'] ?? 'home';
 $pageFront = ['home','chapters','chapter','error'];
 $pageBack = ['login','logout','admin','adminChapters','write','adminEdit'];
 $actionTab = ['signalComment','submit','connexion','valide','remove','newChapter','modified','deleted'];
+
 
 
 
@@ -29,9 +26,15 @@ if(in_array($page, $pageFront)){
     // $method = $page.'Action';
     // $backController->$method();
 }
+
 $controller = new $controllerName();
 $methode = $page.'Action';
-$controller->$methode();
+$controller->$methode((int) $id);
+if(in_array($action, $actionTab)){
+        $methodeAction = $action.'Action';
+        $controller->$methodeAction((int) $id);
+    }
+
 
 
 

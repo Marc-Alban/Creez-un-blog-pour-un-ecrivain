@@ -3,7 +3,7 @@ declare (strict_types = 1);
 namespace Blog\Controller;
 
 use Blog\Model\Frontend\CommentsManager;
- use Blog\Model\Frontend\PostManager;
+use Blog\Model\Frontend\PostManager;
 use Blog\View\View;
 
 class FrontendController
@@ -17,9 +17,7 @@ class FrontendController
  */
     public function homeAction(): void
     {
-        // var_dump('toto');
-        // die();
-        $postManager = new \Blog\Model\Frontend\PostManager();
+        $postManager = new PostManager();
         $chapters = $postManager->getLimitedChapters();
         $view = new View;
         $view->getView('frontend', 'homeView', ['chapters' => $chapters]);

@@ -15,7 +15,7 @@ class BackendController
  *
  * @return void
  */
-    public  function adminAction(): void
+    public  function dashboardAction(): void
     {
         $commentManager = new CommentManager;
         $comments = $commentManager->getComments();
@@ -68,7 +68,7 @@ class BackendController
  * @param integer $id
  * @return void
  */
-    public  function updateAction(int $id): void
+    public  function chapterAction(int $id): void
     {
         $postManager = new PostManager;
         $chapter = $postManager->getChapter($id);
