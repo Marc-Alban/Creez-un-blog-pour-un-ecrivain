@@ -9,7 +9,6 @@ use Blog\View\View;
 class FrontendController
 {
 
-    
 /**
  * Renvoie les chapitres sur la page Accueil
  *
@@ -30,7 +29,7 @@ class FrontendController
  */
     public function chaptersAction(): void
     {
-        $postManager = new PostManager;
+        $postManager = new PostManager();
         $chapters = $postManager->getchapters();
         $view = new View;
         $view->getView('frontend', 'chaptersView', ['chapters' => $chapters]);
@@ -44,10 +43,10 @@ class FrontendController
  */
     public function chapterAction(int $id): void
     {
-        $postManager = new PostManager;
+        $postManager = new PostManager();
         $chapter = $postManager->getChapter($id);
 
-        $commentManager = new CommentsManager;
+        $commentManager = new CommentsManager();
         $comments = $commentManager->getComments($id);
         $view = new View;
         $view->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments]);
@@ -62,7 +61,7 @@ class FrontendController
      */
     public function signalAction(int $idComment, int $id): void
     {
-        $commentManager = new CommentsManager;
+        $commentManager = new CommentsManager();
         $commentManager->signalComment($idComment);
 
         header('Location: index.php?page=chapter&id=' . $id);
@@ -77,28 +76,18 @@ class FrontendController
      */
     public function sendCommentAction(array $post, int $id): void
     {
-        $name = (isset($post['name'])) ? $post['name'] : '';
-        $comment = (isset($post['comment'])) ? $post['comment'] : '';
+        $name = (isset($post['name'])) ? $post['name'] : null;
+        $comment = (isset($post['comment'])) ? $post['comment'] : null;
         $errors = [];
-        $commentManager = new CommentsManager;
-        if (isset($post['submit'])) {
-            if (!empty($name) || !empty($comment)) {
-                if (!empty($name)) {
-                    if (!empty($comment)) {
-                        htmlspecialchars(trim($name));
-                        htmlspecialchars(trim($comment));
-                        if (empty($errors)) {
-                            $commentManager->setComment($name, $comment, $id);
-                        }
-                    } else {
-                        $errors['content'] = 'le champs message est vide';
-                    }
-                } else {
-                    $errors['name'] = 'le champs pseudo est vide';
-                }
-            } else {
-                $errors['Champs'] = 'Tous les champs sont vides';
+        $commentManager = new CommentsManager();
+        if (!empty($name) || !empty($comment)) {
+            htmlspecialchars(trim($name));
+            htmlspecialchars(trim($comment));
+            if (empty($errors)) {
+                $commentManager->setComment($name, $comment, $id);
             }
+        } else {
+            $errors['Champs'] = 'Tous les champs sont vides';
         }
     }
 
@@ -109,7 +98,7 @@ class FrontendController
  */
     public function errorAction(): void
     {
-        $view = new View;
+        $view = new View();
         $view->getView('frontend', 'errorView', null);
     }
 
