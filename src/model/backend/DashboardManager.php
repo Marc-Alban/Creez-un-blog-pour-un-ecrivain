@@ -4,7 +4,7 @@ namespace Blog\Model\Backend;
 
 use Blog\Model\Database;
 
-class DashboardDatabase
+class DashboardManager
 {
 
 /**

@@ -5,7 +5,7 @@ namespace Blog\Model\Frontend;
 use Blog\Model\Database;
 use \PDO;
 
-class CommentsDatabase
+class CommentsManager
 {
 /**
  * Renvoie les commentaires sur la page post

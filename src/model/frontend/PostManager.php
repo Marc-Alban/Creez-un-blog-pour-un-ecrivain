@@ -5,7 +5,7 @@ namespace Blog\Model\Frontend;
 use Blog\Model\Database;
 use \PDO;
 
-class PostDatabase
+class PostManager
 {
 /**
  * Renvoie le chapitre sur la page post

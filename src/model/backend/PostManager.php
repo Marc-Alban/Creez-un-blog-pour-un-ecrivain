@@ -5,7 +5,7 @@ namespace Blog\Model\Backend;
 use Blog\Model\Database;
 use \PDO;
 
-class PostDatabase
+class PostManager
 {
 
 /**
@@ -14,7 +14,7 @@ class PostDatabase
  * @param integer $id
  * @return void
  */
-    public function getChapter(int $id): void
+    public function getChapter(int $id): array
     {
         $sql = "
         SELECT  id,

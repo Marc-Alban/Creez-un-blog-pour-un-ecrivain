@@ -26,8 +26,10 @@ if (in_array($page, $pageFront)) {
 
 $controller = new $controllerName();
 $methode = $page . 'Action';
-$controller->$methode((int) $id);
-if (in_array($action, $actionTab)) {
-    $methodeAction = $action . 'Action';
-    $controller->$methodeAction((int) $id);
+if ($id >= 0) {
+    $controller->$methode((int) $id);
+} else if (in_array($action, $actionTab) && $id >= 0) {
+
+} else {
+    $controller->$methode();
 }

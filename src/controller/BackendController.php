@@ -181,7 +181,7 @@ class BackendController
  */
     public function loginAction(array $get): void
     {
-        if (isset($get['action']) && $get['action'] == 'connexion') {
+        if (isset($get['action']) && $get['action'] === 'connexion') {
             $view = new View();
             $view->getView('backend', 'loginView', null);
         } else {

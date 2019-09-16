@@ -5,7 +5,7 @@ namespace Blog\Model\Backend;
 use Blog\Model\Database;
 use \PDO;
 
-class CommentDatabase
+class CommentsManager
 {
 /**
  * Affiche les commentaires écrit dans le front sur le dashboard
