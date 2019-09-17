@@ -18,8 +18,9 @@ class FrontendController
     {
         $postManager = new PostManager();
         $chapters = $postManager->getLimitedChapters();
+        $oldChapter = $postManager->oldLimitedChapter();
         $view = new View;
-        $view->getView('frontend', 'homeView', ['chapters' => $chapters, 'title' => 'Accueil']);
+        $view->getView('frontend', 'homeView', ['chapters' => $chapters, 'oldChapter' => $oldChapter, 'title' => 'Accueil']);
     }
 
 /**

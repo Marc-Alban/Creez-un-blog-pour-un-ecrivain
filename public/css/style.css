@@ -128,10 +128,14 @@ nav>ul>li>a {
 }
 
 nav>ul>li>a:hover {
-    font-size: 1.1em;
     font-weight: 700;
     color: rgb(51, 51, 51);
     text-decoration: none;
+}
+
+.btn-group-sm>.btn,
+.btn-sm {
+    font-size: initial;
 }
 
 

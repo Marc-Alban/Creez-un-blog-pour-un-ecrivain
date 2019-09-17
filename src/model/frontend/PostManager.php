@@ -38,9 +38,7 @@ class PostManager
     }
 
 /**
- * Renvoie les différents chapitres (limit - 2) sur la page Accueil
- * avec une jointure sur la table admin
- * pour connaitre l'auteur
+ * Renvoie le dernier chapitre sur la page Accueil
  *
  * @return array
  */
@@ -58,7 +56,34 @@ class PostManager
         ON posts.name_post=admins.name
         WHERE posted='1'
         ORDER BY date_posts DESC
-        LIMIT 0,2
+        LIMIT 0,1
+        ";
+
+        $query = Database::getDb()->query($sql);
+        $results = $query->fetchAll(PDO::FETCH_OBJ);
+        return $results;
+    }
+
+    /**
+     * Retourne le premier chapitre sur la page d'accueil
+     *
+     * @return array
+     */
+    public function oldLimitedChapter(): array
+    {
+        $sql = "
+        SELECT  posts.id,
+                posts.title,
+                posts.image_posts,
+                posts.date_posts,
+                posts.content,
+                admins.name
+        FROM posts
+        JOIN admins
+        ON posts.name_post=admins.name
+        WHERE posted='1'
+        ORDER BY date_posts ASC
+        LIMIT 0,1
         ";
 
         $query = Database::getDb()->query($sql);
