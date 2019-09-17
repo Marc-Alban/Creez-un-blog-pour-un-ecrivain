@@ -20,7 +20,7 @@ class BackendController
         $commentManager = new CommentManager();
         $comments = $commentManager->getComments();
         $view = new View();
-        $view->getView('backend', 'dashboardView', ['comments' => $comments]);
+        $view->getView('backend', 'dashboardView', ['comments' => $comments, 'title' => 'Dashboard']);
     }
 
     /**
@@ -59,7 +59,7 @@ class BackendController
         $postManager = new PostManager();
         $chapters = $postManager->getChapters();
         $view = new View();
-        $view->getView('backend', 'chaptersView', ['chapters' => $chapters]);
+        $view->getView('backend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres']);
     }
 
 /**
@@ -74,7 +74,7 @@ class BackendController
         $chapter = $postManager->getChapter($id);
 
         $view = new View();
-        $view->getView('backend', 'chapterView', ['chapter' => $chapter]);
+        $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre']);
     }
 
     /**
@@ -133,7 +133,7 @@ class BackendController
     public function writeAction(): void
     {
         $view = new View();
-        $view->getView('backend', 'writeView', null);
+        $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre']);
     }
 
     /**
@@ -183,7 +183,7 @@ class BackendController
     {
         if (isset($get['action']) && $get['action'] === 'connexion') {
             $view = new View();
-            $view->getView('backend', 'loginView', null);
+            $view->getView('backend', 'loginView', ['title' => 'Connexion']);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }

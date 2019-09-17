@@ -19,7 +19,7 @@ class FrontendController
         $postManager = new PostManager();
         $chapters = $postManager->getLimitedChapters();
         $view = new View;
-        $view->getView('frontend', 'homeView', ['chapters' => $chapters]);
+        $view->getView('frontend', 'homeView', ['chapters' => $chapters, 'title' => 'Accueil']);
     }
 
 /**
@@ -32,7 +32,7 @@ class FrontendController
         $postManager = new PostManager();
         $chapters = $postManager->getchapters();
         $view = new View;
-        $view->getView('frontend', 'chaptersView', ['chapters' => $chapters]);
+        $view->getView('frontend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes des chapitres']);
     }
 
 /**
@@ -49,7 +49,7 @@ class FrontendController
         $commentManager = new CommentsManager();
         $comments = $commentManager->getComments($id);
         $view = new View;
-        $view->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments]);
+        $view->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments, 'title' => 'Chapitre']);
     }
 
     /**

@@ -10,7 +10,8 @@ $action = $_GET['action'] ?? null;
 $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter', 'error'];
 $pageBack = ['login', 'logout', 'admin', 'adminChapters', 'write', 'adminEdit'];
-$actionTab = ['signalComment', 'submit', 'connexion', 'valide', 'remove', 'newChapter', 'modified', 'deleted'];
+$actionPost = ['submit', 'connexion', 'newChapter', 'modified', 'deleted'];
+$actionGet = ['signalComment', 'valide', 'remove'];
 
 if (in_array($page, $pageFront)) {
     $controllerName = 'Blog\Controller\FrontendController';
@@ -26,10 +27,16 @@ if (in_array($page, $pageFront)) {
 
 $controller = new $controllerName();
 $methode = $page . 'Action';
+
 if ($id >= 0) {
     $controller->$methode((int) $id);
-} else if (in_array($action, $actionTab) && $id >= 0) {
-
+    if ($action) {
+        if (in_array($action, $actionPost)) {
+            $controller->$methode((int) $id, $_POST);
+        } else if (in_array($action, $actionGet)) {
+            $controller->$methode((int) $id, $_GET);
+        }
+    }
 } else {
     $controller->$methode();
 }
