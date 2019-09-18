@@ -6,7 +6,7 @@
             <div class="col-md-6 col-12 blogShort">
                 <a href="index.php?page=chapter&id=<?=$chapter->id?>" id="lien">
                     <h1><?=$chapter->title?></h1>
-                    <img src="public/img/chapter/<?=$chapter->image_posts?>" alt="<?=$chapter->title?>"
+                    <img src="img/chapter/<?=$chapter->image_posts?>" alt="<?=$chapter->title?>"
                         class="pull-left img-responsive thumb margin10 img-thumbnail">
                     <p>
                         <?=date("d/m/Y à H:i", strtotime($chapter->date_posts))?>

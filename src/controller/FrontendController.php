@@ -39,56 +39,51 @@ class FrontendController
 /**
  * Renvoie les commentaires et le chapitre
  *
- * @param integer $id
+ * @param array $getData
  * @return void
  */
-    public function chapterAction(int $id): void
+    public function chapterAction(array $getData): void
     {
         $postManager = new PostManager();
-        $chapter = $postManager->getChapter($id);
+        $chapter = $postManager->getChapter((int) $getData['id']);
 
         $commentManager = new CommentsManager();
-        $comments = $commentManager->getComments($id);
+        $comments = $commentManager->getComments((int) $getData['id']);
+
         $view = new View;
         $view->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments, 'title' => 'Chapitre']);
     }
 
-    /**
-     * Permet de signaler un commentaire
-     *
-     * @param integer $idComment
-     * @param integer $id
-     * @return void
-     */
-    public function signalAction(int $idComment, int $id): void
+/**
+ * Permet de signaler un commentaire
+ *
+ * @param array $getData
+ * @return void
+ */
+    public function signalCommentAction(array $getData): void
     {
+        // var_dump($getData);
+        // die();
         $commentManager = new CommentsManager();
-        $commentManager->signalComment($idComment);
-
-        header('Location: index.php?page=chapter&id=' . $id);
+        $commentManager->signalComment((int) $getData['get']['idComment']);
     }
 
-    /**
-     * Permet d'envoyer un commentaire
-     *
-     * @param array $post
-     * @param integer $id
-     * @return void
-     */
-    public function sendCommentAction(array $post, int $id): void
+/**
+ * Permet d'envoyer un commentaire
+ *
+ * @param array $getData
+ * @return void
+ */
+    public function submitCommentAction(array $getData): void
     {
-        $name = (isset($post['name'])) ? $post['name'] : null;
-        $comment = (isset($post['comment'])) ? $post['comment'] : null;
-        $errors = [];
+        $name = $getData['post']['name'];
+        $comment = $getData['post']['comment'];
+        $id = (int) $getData['get']['id'];
         $commentManager = new CommentsManager();
         if (!empty($name) || !empty($comment)) {
             htmlspecialchars(trim($name));
             htmlspecialchars(trim($comment));
-            if (empty($errors)) {
-                $commentManager->setComment($name, $comment, $id);
-            }
-        } else {
-            $errors['Champs'] = 'Tous les champs sont vides';
+            $commentManager->setComment($name, $comment, $id);
         }
     }
 

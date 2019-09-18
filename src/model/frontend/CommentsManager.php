@@ -42,13 +42,13 @@ class CommentsManager
         INSERT INTO comments(name, comment, post_id, date_comment)
         VALUES(:name, :comment, :postId, NOW())
         ";
-        $comment = array(
-            'name' => $name,
-            'comment' => $comment,
-            'post_id' => $postId,
+        $commentArray = array(
+            ':name' => $name,
+            ':comment' => $comment,
+            ':postId' => $postId,
         );
         $req = Database::getDb()->prepare($sql);
-        $req->execute($comment);
+        $req->execute($commentArray);
     }
 
 /**

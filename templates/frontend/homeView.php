@@ -29,7 +29,7 @@
                             lire</a>
                     </div>
                     <div class="col-auto d-none d-lg-block">
-                        <img src="public/img/chapter/<?=$oldChapter->image_posts?>" width='250px' class="pt-4"
+                        <img src="img/chapter/<?=$oldChapter->image_posts?>" width='250px' class="pt-4"
                             alt="<?=$oldChapter->title?>">
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                             lire</a>
                     </div>
                     <div class="col-auto d-none d-lg-block">
-                        <img src="public/img/chapter/<?=$chapter->image_posts?>" width='250px' class="pt-4"
+                        <img src="img/chapter/<?=$chapter->image_posts?>" width='250px' class="pt-4"
                             alt="<?=$chapter->title?>">
                     </div>
                 </div>

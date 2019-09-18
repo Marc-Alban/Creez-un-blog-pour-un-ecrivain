@@ -10,8 +10,7 @@ $action = $_GET['action'] ?? null;
 $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter', 'error'];
 $pageBack = ['login', 'logout', 'admin', 'adminChapters', 'write', 'adminEdit'];
-$actionPost = ['submit', 'connexion', 'newChapter', 'modified', 'deleted'];
-$actionGet = ['signalComment', 'valide', 'remove'];
+$actionTab = ['submitComment', 'connexion', 'newChapter', 'modified', 'deleted', 'signalComment', 'valideComment', 'removeComment'];
 
 if (in_array($page, $pageFront)) {
     $controllerName = 'Blog\Controller\FrontendController';
@@ -27,16 +26,18 @@ if (in_array($page, $pageFront)) {
 
 $controller = new $controllerName();
 $methode = $page . 'Action';
+$actionMethode = $action . 'Action';
 
-if ($id >= 0) {
-    $controller->$methode((int) $id);
-    if ($action) {
-        if (in_array($action, $actionPost)) {
-            $controller->$methode((int) $id, $_POST);
-        } else if (in_array($action, $actionGet)) {
-            $controller->$methode((int) $id, $_GET);
-        }
-    }
-} else {
+if ($action === null && $id === null) {
     $controller->$methode();
+} else if ($action !== null && $id !== null) {
+    if (in_array($action, $actionTab)) {
+        $controller->$actionMethode(['post' => $_POST, 'get' => $_GET, 'files' => $_FILES]);
+        $controller->$methode($_GET);
+    }
+} else if ($action !== null || $id === null) {
+    $controller->$actionMethode($_POST);
+    $controller->$methode();
+} else if ($action === null || $id !== null) {
+    $controller->$methode($_GET);
 }

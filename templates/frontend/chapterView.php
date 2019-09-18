@@ -5,7 +5,7 @@
             <?php if (isset($datas['chapter'])): ?>
             <?php foreach ($datas['chapter'] as $table): ?>
             <div class="col-lg-12 col-md-12 col-sm-12 post-title-block"
-                style="background-image:url('public/img/chapter/<?=$table->image_posts?>'); background-repeat: no-repeat;background-size: cover;">
+                style="background-image:url('img/chapter/<?=$table->image_posts?>'); background-repeat: no-repeat;background-size: cover;">
                 <h1 class="text-center"><?=$table->title?></h1>
                 <ul class="list-inline text-center">
                     <li><?=$table->name?> |</li>
@@ -25,7 +25,7 @@
             <h4>Commentaires:</h4>
             <br><br>
             <form class="col-md-8 col-12" method="POST"
-                action="index.php?page=chapter&id=<?php foreach ($datas['chapter'] as $table): echo $table->id;endforeach?>&action=submit">
+                action="index.php?page=chapter&id=<?php foreach ($datas['chapter'] as $table): echo $table->id;endforeach?>&action=submitComment">
                 <h4>Laisser un commentaires:</h4>
                 <div class="form-group">
                     <input id="name" name="name" type="text" class="form-control" require>
@@ -35,8 +35,7 @@
                     <textarea id="message " name="comment" class="form-control" require></textarea>
                     <label for="message">Message</label>
                 </div>
-                <!-- Bug pour avoir l'id ? Comment faire ?  -->
-                <input type="submit" name="submit" class="btn btn-primary" placeholder="Envoyer">
+                <input type="submit" name="submitComment" class="btn btn-primary" placeholder="Envoyer">
 
             </form>
             <!-- Errors -->

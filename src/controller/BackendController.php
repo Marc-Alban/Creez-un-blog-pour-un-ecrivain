@@ -29,10 +29,10 @@ class BackendController
      * @param integer $id
      * @return void
      */
-    public function valideCommentAction(int $id): void
+    public function valideCommentAction(array $getData): void
     {
         $commentManager = new CommentManager();
-        $commentManager->validateComments($id);
+        $commentManager->validateComments($getData['id']);
         header('Location: index.php?page=admin');
     }
 
@@ -42,10 +42,10 @@ class BackendController
      * @param integer $id
      * @return void
      */
-    public function removeCommentAction(int $id): void
+    public function removeCommentAction(array $getData): void
     {
         $commentManager = new CommentManager();
-        $commentManager->deleteComments($id);
+        $commentManager->deleteComments($getData['id']);
         header('Location: index.php?page=admin');
     }
 
@@ -68,10 +68,10 @@ class BackendController
  * @param integer $id
  * @return void
  */
-    public function chapterAction(int $id): void
+    public function chapterAction(array $getData): void
     {
         $postManager = new PostManager();
-        $chapter = $postManager->getChapter($id);
+        $chapter = $postManager->getChapter($getData['id']);
 
         $view = new View();
         $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre']);
@@ -85,23 +85,23 @@ class BackendController
      * @param array $files
      * @return void
      */
-    public function editAction(int $id, array $post, array $files): void
+    public function editAction(array $getData): void
     {
         $postManager = new PostManager();
-        $title = (isset($post['title'])) ? $post['title'] : null;
-        $content = (isset($post['content'])) ? $post['content'] : null;
-        $posted = (isset($post['public']) && $post['public'] == 'on') ? 1 : 0;
-        $file = (isset($files['image']['name'])) ? $files['image']['name'] : null;
-        $tmpName = (isset($files['image']['tmp_name'])) ? $files['image']['tmp_name'] : null;
+        $title = (isset($getData['post']['title'])) ? $getData['post']['title'] : null;
+        $content = (isset($getData['post']['content'])) ? $getData['post']['content'] : null;
+        $posted = (isset($getData['post']['public']) && $getData['post']['public'] == 'on') ? 1 : 0;
+        $file = (isset($getData['files']['image']['name'])) ? $getData['files']['image']['name'] : null;
+        $tmpName = (isset($getData['files']['image']['tmp_name'])) ? $getData['files']['image']['tmp_name'] : null;
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
         $errors = [];
 
         if (!empty($title) || !empty($content)) {
-            $postManager->editChapter($id, $title, $content, $posted);
+            $postManager->editChapter($getData['get']['id'], $title, $content, $posted);
             if (isset($file) && !empty($file)) {
                 if (in_array($extention, $extentions) || $extention = ".png") {
-                    $postManager->editImageChapter($id, $title, $content, $tmpName, $extention, $posted);
+                    $postManager->editImageChapter($getData['get']['id'], $title, $content, $tmpName, $extention, $posted);
                 } else {
                     $errors['valide'] = 'Image n\'est pas valide! ';
                 }
@@ -118,10 +118,10 @@ class BackendController
      * @param integer $id
      * @return void
      */
-    public function deleteAction(int $id): void
+    public function deleteAction(array $getData): void
     {
         $postManager = new PostManager();
-        $postManager->deleteChapter($id);
+        $postManager->deleteChapter($getData['id']);
         header('Location: index.php?page=adminEdit');
     }
 
@@ -143,15 +143,15 @@ class BackendController
      * @param array $files
      * @return void
      */
-    public function writeFormAction(array $post, array $files): void
+    public function writeFormAction(array $getData): void
     {
 
         $postManager = new PostManager();
-        $title = (isset($post['title'])) ? $post['title'] : null;
-        $description = (isset($post['description'])) ? $post['description'] : null;
-        $posted = (isset($post['public']) && $post['public'] == 1) ? 1 : 0;
-        $file = (isset($files['image']['name'])) ? $files['image']['name'] : null;
-        $tmpName = (isset($files['image']['tmp_name'])) ? $files['image']['tmp_name'] : null;
+        $title = (isset($getData['post']['title'])) ? $getData['post']['title'] : null;
+        $description = (isset($getData['post']['description'])) ? $getData['post']['description'] : null;
+        $posted = (isset($getData['post']['public']) && $getData['post']['public'] == 1) ? 1 : 0;
+        $file = (isset($getData['files']['image']['name'])) ? $getData['files']['image']['name'] : null;
+        $tmpName = (isset($getData['files']['image']['tmp_name'])) ? $getData['files']['image']['tmp_name'] : null;
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
         $name = 'Jean Forteroche'; // Aller chercher nom en bdd ?
@@ -179,9 +179,9 @@ class BackendController
  * @param array $get
  * @return void
  */
-    public function loginAction(array $get): void
+    public function loginAction(array $getData): void
     {
-        if (isset($get['action']) && $get['action'] === 'connexion') {
+        if (isset($getData['action']) && $getData['action'] === 'connexion') {
             $view = new View();
             $view->getView('backend', 'loginView', ['title' => 'Connexion']);
         } else {
@@ -196,16 +196,16 @@ class BackendController
      * @param array $post
      * @return void
      */
-    public function connexionAction(array &$session, array $post): void
+    public function connexionAction(array $getData): void
     {
         $dashboardManager = new DashboardManager();
         $passwordBdd = $dashboardManager->getPass();
-        $password = (isset($post['password'])) ? $post['password'] : null;
+        $password = (isset($getData['post']['password'])) ? $getData['post']['password'] : null;
         $errors = [];
 
         if (!empty($password)) {
             if (password_verify($password, $passwordBdd)) {
-                $session['password'] = $password;
+                $getData['session']['password'] = $password;
                 header("Location: index.php?page=admin");
             } else {
                 $errors['Password'] = 'Ce mot de passe n\'est pas bon pas !';
