@@ -15,7 +15,7 @@ class BackendController
  *
  * @return void
  */
-    public function dashboardAction(): void
+    public function adminAction(): void
     {
         $commentManager = new CommentManager();
         $comments = $commentManager->getComments();
@@ -85,8 +85,10 @@ class BackendController
      * @param array $files
      * @return void
      */
-    public function editAction(array $getData): void
+    public function adminEditAction(array $getData): void
     {
+        var_dump($getData);
+        die();
         $postManager = new PostManager();
         $title = (isset($getData['post']['title'])) ? $getData['post']['title'] : null;
         $content = (isset($getData['post']['content'])) ? $getData['post']['content'] : null;
@@ -179,14 +181,10 @@ class BackendController
  * @param array $get
  * @return void
  */
-    public function loginAction(array $getData): void
+    public function loginAction(): void
     {
-        if (isset($getData['action']) && $getData['action'] === 'connexion') {
-            $view = new View();
-            $view->getView('backend', 'loginView', ['title' => 'Connexion']);
-        } else {
-            header('Location: index.php?page=login&action=connexion');
-        }
+        $view = new View();
+        $view->getView('backend', 'loginView', ['title' => 'Connexion']);
     }
 
     /**

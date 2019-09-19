@@ -1,3 +1,4 @@
+<?php if ($_SESSION): ?>
 <!-- -------- Navigation côté-------------- -->
 <nav class=" nav navbar-nav side-nav">
     <ul>
@@ -7,3 +8,4 @@
         <li><a class="btn btn-sm nav-link m-2" href="index.php?page=adminEdit">Liste des Chapitres</a></li>
     </ul>
 </nav>
+<?php endif?>

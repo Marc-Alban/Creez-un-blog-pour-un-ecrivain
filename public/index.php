@@ -29,15 +29,17 @@ $methode = $page . 'Action';
 $actionMethode = $action . 'Action';
 
 if ($action === null && $id === null) {
-    $controller->$methode();
+    $controller->$methode(['session' => $_SESSION]);
 } else if ($action !== null && $id !== null) {
     if (in_array($action, $actionTab)) {
-        $controller->$actionMethode(['post' => $_POST, 'get' => $_GET, 'files' => $_FILES]);
+        $controller->$actionMethode(['post' => $_POST, 'get' => $_GET, 'files' => $_FILES, 'session' => $_SESSION]);
         $controller->$methode($_GET);
     }
 } else if ($action !== null || $id === null) {
-    $controller->$actionMethode($_POST);
-    $controller->$methode();
+    if (in_array($action, $actionTab)) {
+        $controller->$actionMethode($_POST);
+        $controller->$methode(['session' => $_SESSION]);
+    }
 } else if ($action === null || $id !== null) {
-    $controller->$methode($_GET);
+    $controller->$methode($_GET, ['session' => $_SESSION]);
 }
