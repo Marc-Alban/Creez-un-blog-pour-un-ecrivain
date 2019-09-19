@@ -3,7 +3,7 @@
         <?php if (isset($datas['chapter'])): ?>
         <?php foreach ($datas['chapter'] as $chapters): ?>
         <div class="col-12 col-md-12 d-flex justify-content-center mb-3">
-            <img class='img' src='public/img/chapter/<?=$chapters->image_posts?>' alt='<?=$chapters->title?>'>
+            <img class='img' src='img/chapter/<?=$chapters->image_posts?>' alt='<?=$chapters->title?>'>
         </div>
         <?php if (!empty($errors)): ?>
         <div class="alert alert-danger col-12 col-md-12" role="alert">
@@ -13,7 +13,7 @@
         </div>
         <?php endif?>
         <form method="POST" class="col-12 col-md-9 postF"
-            action="index.php?page=adminEdit&action=modified&id=<?=$chapters->id?>" enctype="multipart/form-data">
+            action="index.php?page=adminChapter&action=adminEdit&id=<?=$chapters->id?>" enctype="multipart/form-data">
             <p><label for="image">Changer d'image:
                     <input type="file" name="image">
                 </label>

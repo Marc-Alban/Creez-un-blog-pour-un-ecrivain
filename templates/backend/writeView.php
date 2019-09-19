@@ -8,7 +8,7 @@
         </div>
         <?php endif?>
 
-        <form class="formT col-12" action="index.php?page=write&action=newChapter" method="POST"
+        <form class="formT col-12" action="index.php?page=adminChapter&action=newChapter" method="POST"
             enctype="multipart/form-data">
             <div class="form-group">
                 <label class="col-md-4 control-label" for="chapitre_title">Titre</label>

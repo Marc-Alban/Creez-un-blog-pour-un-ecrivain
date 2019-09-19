@@ -9,8 +9,8 @@ $id = $_GET['id'] ?? null;
 $action = $_GET['action'] ?? null;
 $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
-$pageBack = ['login', 'logout', 'admin', 'adminChapters', 'write', 'adminEdit'];
-$actionTab = ['submitComment', 'connexion', 'newChapter', 'modified', 'deleted', 'signalComment', 'valideComment', 'removeComment'];
+$pageBack = ['admin', 'adminChapters', 'adminChapter', 'adminWrite', 'login'];
+$actionTab = ['submitComment', 'connexion', 'newChapter', 'adminEdit', 'modified', 'delete', 'signalComment', 'valideComment', 'removeComment'];
 
 if (in_array($page, $pageFront)) {
     $controllerName = 'Blog\Controller\FrontendController';
@@ -34,8 +34,8 @@ if (in_array($page, $pageFront) || in_array($page, $pageBack)) {
         }
     } else if ($action !== null || $id === null) {
         if (in_array($action, $actionTab)) {
-            $controller->$actionMethode($_POST);
-            $controller->$methode(['session' => $_SESSION]);
+            $controller->$actionMethode(['post' => $_POST, 'files' => $_FILES, 'session' => $_SESSION]);
+            $controller->$methode();
         }
     } else if ($action === null || $id !== null) {
         $controller->$methode($_GET, ['session' => $_SESSION]);

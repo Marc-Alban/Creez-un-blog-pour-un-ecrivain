@@ -24,9 +24,9 @@
                                 <td><?=$chapter->title?></td>
                                 <td><?=substr(nl2br($chapter->content), 0, 250)?></td>
                                 <td><?=date("d/m/Y à H:i", strtotime($chapter->date_posts))?></td>
-                                <td><a href="index.php?page=adminEdit&id=<?=$chapter->id?>" id="lien"><i
+                                <td><a href="index.php?page=adminChapter&id=<?=$chapter->id?>" id="lien"><i
                                             class="far fa-edit"></i></a></td>
-                                <td><a href="index.php?page=adminEdit&action=deleted&id=<?=$chapter->id?>"><i
+                                <td><a href="index.php?page=adminChapter&action=delete&id=<?=$chapter->id?>"><i
                                             class="fas fa-trash"></i></a>
                                 </td>
                                 <td><?php echo ($chapter->posted == '0') ? '<span class="fas fa-lock"></span>' : '<i class="fas fa-eye"></i>' ?>
