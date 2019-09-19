@@ -15,9 +15,8 @@ class BackendController
  *
  * @return void
  */
-    public function adminAction(array $getData): void
+    public function adminAction(array $session): void
     {
-
         $commentManager = new CommentManager();
         $comments = $commentManager->getComments();
         // if (isset($getData['session'])) {
@@ -57,12 +56,13 @@ class BackendController
  *
  * @return void
  */
-    public function adminChaptersAction(): void
+    public function adminChaptersAction(array $session): void
     {
 
         $postManager = new PostManager();
         $chapters = $postManager->getChapters();
-
+        // var_dump($getData);
+        // die();
         // if (!empty($getData['session'])) {
         $view = new View();
         $view->getView('backend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres']);
@@ -81,6 +81,8 @@ class BackendController
     {
         $postManager = new PostManager();
         $chapter = $postManager->getChapter((int) $getData['id']);
+        // var_dump($getData);
+        // die();
         // if (!empty($getData['session'])) {
         $view = new View();
         $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre']);
@@ -141,8 +143,10 @@ class BackendController
  *
  * @return void
  */
-    public function adminWriteAction(): void
+    public function adminWriteAction(array $session): void
     {
+        // var_dump($session);
+        // die();
         // if (!empty($getData['session'])) {
         $view = new View();
         $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre']);
@@ -196,7 +200,7 @@ class BackendController
  * @param array $get
  * @return void
  */
-    public function loginAction(): void
+    public function loginAction(array $session): void
     {
         $view = new View();
         $view->getView('backend', 'loginView', ['title' => 'Connexion']);
@@ -210,7 +214,7 @@ class BackendController
      * @param array $post
      * @return void
      */
-    public function connexionAction(array $getData): void
+    public function connexionAction(array $getData, $session): void
     {
         $dashboardManager = new DashboardManager();
         $passwordBdd = $dashboardManager->getPass();
@@ -219,7 +223,7 @@ class BackendController
 
         if (!empty($password)) {
             if (password_verify($password, $passwordBdd)) {
-                $getData['session']['user'] = $password;
+                $session['user'] = $password;
                 header("Location: index.php?page=admin");
             } else {
                 $errors['Password'] = 'Ce mot de passe n\'est pas bon pas !';

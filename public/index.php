@@ -26,19 +26,19 @@ $actionMethode = $action . 'Action';
 
 if (in_array($page, $pageFront) || in_array($page, $pageBack)) {
     if ($action === null && $id === null) {
-        $controller->$methode(['session' => $_SESSION]);
+        $controller->$methode($_SESSION);
     } else if ($action !== null && $id !== null) {
         if (in_array($action, $actionTab)) {
-            $controller->$actionMethode(['post' => $_POST, 'get' => $_GET, 'files' => $_FILES, 'session' => $_SESSION]);
-            $controller->$methode($_GET);
+            $controller->$actionMethode(['post' => $_POST, 'get' => $_GET, 'files' => $_FILES]);
+            $controller->$methode($_GET, $_SESSION);
         }
     } else if ($action !== null || $id === null) {
         if (in_array($action, $actionTab)) {
-            $controller->$actionMethode(['post' => $_POST, 'files' => $_FILES, 'session' => $_SESSION]);
-            $controller->$methode();
+            $controller->$actionMethode(['post' => $_POST, 'files' => $_FILES], $_SESSION);
+            $controller->$methode($_SESSION);
         }
     } else if ($action === null || $id !== null) {
-        $controller->$methode($_GET, ['session' => $_SESSION]);
+        $controller->$methode($_GET, $_SESSION);
     }
 } else {
     $controller->errorAction();
