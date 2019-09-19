@@ -15,12 +15,16 @@ class BackendController
  *
  * @return void
  */
-    public function adminAction(): void
+    public function adminAction(array $getData): void
     {
         $commentManager = new CommentManager();
         $comments = $commentManager->getComments();
-        $view = new View();
-        $view->getView('backend', 'dashboardView', ['comments' => $comments, 'title' => 'Dashboard']);
+        if (!empty($getData['session'])) {
+            $view = new View();
+            $view->getView('backend', 'dashboardView', ['comments' => $comments, 'title' => 'Dashboard']);
+        } else {
+            header('Location: index.php?page=login&action=connexion');
+        }
     }
 
     /**
@@ -54,12 +58,18 @@ class BackendController
  *
  * @return void
  */
-    public function chaptersAction(): void
+    public function chaptersAction(array $getData): void
     {
+
         $postManager = new PostManager();
         $chapters = $postManager->getChapters();
-        $view = new View();
-        $view->getView('backend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres']);
+
+        if (!empty($getData['session'])) {
+            $view = new View();
+            $view->getView('backend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres']);
+        } else {
+            header('Location: index.php?page=login&action=connexion');
+        }
     }
 
 /**
@@ -72,9 +82,12 @@ class BackendController
     {
         $postManager = new PostManager();
         $chapter = $postManager->getChapter($getData['id']);
-
-        $view = new View();
-        $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre']);
+        if (!empty($getData['session'])) {
+            $view = new View();
+            $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre']);
+        } else {
+            header('Location: index.php?page=login&action=connexion');
+        }
     }
 
     /**
@@ -87,8 +100,6 @@ class BackendController
      */
     public function adminEditAction(array $getData): void
     {
-        var_dump($getData);
-        die();
         $postManager = new PostManager();
         $title = (isset($getData['post']['title'])) ? $getData['post']['title'] : null;
         $content = (isset($getData['post']['content'])) ? $getData['post']['content'] : null;
@@ -132,10 +143,14 @@ class BackendController
  *
  * @return void
  */
-    public function writeAction(): void
+    public function writeAction(array $getData): void
     {
-        $view = new View();
-        $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre']);
+        if (!empty($getData['session'])) {
+            $view = new View();
+            $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre']);
+        } else {
+            header('Location: index.php?page=login&action=connexion');
+        }
     }
 
     /**
