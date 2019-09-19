@@ -99,7 +99,6 @@ class BackendController
      */
     public function adminEditAction(array $getData): void
     {
-
         $postManager = new PostManager();
         $title = (isset($getData['post']['title'])) ? $getData['post']['title'] : null;
         $content = (isset($getData['post']['content'])) ? $getData['post']['content'] : null;
@@ -108,7 +107,6 @@ class BackendController
         $tmpName = (isset($getData['files']['image']['tmp_name'])) ? $getData['files']['image']['tmp_name'] : null;
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
-        $errors = [];
 
         if (!empty($title) || !empty($content)) {
             $postManager->editChapter((int) $getData['get']['id'], $title, $content, $posted);

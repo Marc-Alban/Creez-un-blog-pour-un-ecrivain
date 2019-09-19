@@ -81,9 +81,7 @@ class PostManager
         FROM posts
         JOIN admins
         ON posts.name_post=admins.name
-        WHERE posted='1'
-        ORDER BY date_posts ASC
-        LIMIT 0,1
+        WHERE posts.id=1
         ";
 
         $query = Database::getDb()->query($sql);
