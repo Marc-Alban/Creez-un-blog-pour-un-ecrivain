@@ -18,14 +18,15 @@ a:hover {
 }
 
 /* nav bar */
-.navbar-top {
+.pos-f-t {
     background: #212529;
     width: 100%;
     z-index: 1;
+    margin-bottom: 2em;
 }
 
 .navbar a {
-    color: white;
+    color: #000;
 }
 
 /* Drop menu */
@@ -37,56 +38,36 @@ a:hover {
     color: #212529;
 }
 
-/* Navigation côté */
-.side-nav {
-    background: #212529;
-    width: 100%;
-    height: 70vh;
-}
-
-.side-nav ul {
-    padding: 0;
-    margin: 0;
-}
-
-.side-nav li:hover a {
-    color: white;
-}
-
-.side-nav li {
-    margin: 2em 0;
-}
-
-.side-nav a {
-    color: white;
-    font-size: 1.2em;
-}
-
-/* Contenu */
-
-.contenu {
-    margin-top: 4em;
-}
-
-/* page dashboard */
-.listeCom {
+.pos-f-t li {
+    list-style: none;
     text-align: center;
 }
 
-.blue {
-    background: #0b53a6 !important;
-    color: white !important;
+.pos-f-t a {
+    color: rgb(248, 248, 248);
+    font-size: 1.2em;
 }
 
-.green {
-    background: #0c7a4c !important;
-    color: white !important;
+.blog-me {
+    overflow: auto;
 }
 
-.orange {
-    background: #bd5908 !important;
-    color: white !important;
+.navbar-toggler {
+    margin: auto;
+    width: 80px;
 }
+
+.navbar-dark .navbar-toggler {
+    color: rgb(255, 255, 255);
+    border-color: #fff;
+}
+
+.navbar-toggler p {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0.5em 0;
+}
+
 
 /* Form page */
 .formT {
@@ -135,18 +116,8 @@ a:hover {
     }
 
     /* nav bar */
-    .navbar-top {
-        background: #212529;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1;
-    }
-
-    /* Contenu */
-    .contenu {
-        width: 100%;
+    .navbar-toggler {
+        margin: inherit;
     }
 
 

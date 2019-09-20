@@ -1,11 +1,18 @@
 <?php if (isset($_SESSION['user'])): ?>
-<!-- -------- Navigation côté-------------- -->
-<nav class=" nav navbar-nav side-nav">
-    <ul>
-        <li><a class="btn btn-sm nav-link m-2" href="index.php?page=home">Retour Site</a></li>
-        <li><a class="btn btn-sm nav-link m-2" href="index.php?page=admin">Dashboard</a></li>
-        <li><a class="btn btn-sm nav-link m-2" href="index.php?page=adminWrite">Ecrire un chapitre</a></li>
-        <li><a class="btn btn-sm nav-link m-2" href="index.php?page=adminChapters">Liste des Chapitres</a></li>
-    </ul>
-</nav>
+<div class="pos-f-t">
+    <nav class="navbar navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent">
+            <p>Menu</p>
+        </button>
+    </nav>
+    <div class="collapse" id="navbarToggleExternalContent">
+        <div class="bg-dark">
+            <li class="p-2"><a href="index.php?page=home">Retour Site</a></li>
+            <li class="p-2"><a href="index.php?page=admin">Dashboard</a></li>
+            <li class="p-2"><a href="index.php?page=adminWrite">Ecrire un chapitre</a></li>
+            <li class="p-2"><a href="index.php?page=adminChapters">Liste des Chapitres</a></li>
+        </div>
+    </div>
+</div>
+
 <?php endif?>
