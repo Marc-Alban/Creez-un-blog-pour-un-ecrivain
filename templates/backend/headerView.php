@@ -1,4 +1,4 @@
-<?php if (isset($_SESSION)): ?>
+<?php if (isset($_SESSION['user'])): ?>
 <!-- -------- Navigation côté-------------- -->
 <nav class=" nav navbar-nav side-nav">
     <ul>

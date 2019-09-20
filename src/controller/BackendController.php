@@ -15,16 +15,16 @@ class BackendController
  *
  * @return void
  */
-    public function adminAction(array $session): void
+    public function adminAction(array &$session): void
     {
         $commentManager = new CommentManager();
         $comments = $commentManager->getComments();
-        // if (isset($getData['session'])) {
-        $view = new View();
-        $view->getView('backend', 'dashboardView', ['comments' => $comments, 'title' => 'Dashboard']);
-        // } else {
-        //     header('Location: index.php?page=login&action=connexion');
-        // }
+        if (isset($session['user'])) {
+            $view = new View();
+            $view->getView('backend', 'dashboardView', ['comments' => $comments, 'title' => 'Dashboard']);
+        } else {
+            header('Location: index.php?page=login&action=connexion');
+        }
     }
 
     /**
@@ -56,19 +56,17 @@ class BackendController
  *
  * @return void
  */
-    public function adminChaptersAction(array $session): void
+    public function adminChaptersAction(array &$session): void
     {
 
         $postManager = new PostManager();
         $chapters = $postManager->getChapters();
-        // var_dump($getData);
-        // die();
-        // if (!empty($getData['session'])) {
-        $view = new View();
-        $view->getView('backend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres']);
-        // } else {
-        //     header('Location: index.php?page=login&action=connexion');
-        // }
+        if (isset($session['user'])) {
+            $view = new View();
+            $view->getView('backend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres']);
+        } else {
+            header('Location: index.php?page=login&action=connexion');
+        }
     }
 
 /**
@@ -77,18 +75,16 @@ class BackendController
  * @param integer $id
  * @return void
  */
-    public function adminChapterAction(array $getData): void
+    public function adminChapterAction(array $getData, array &$session): void
     {
         $postManager = new PostManager();
         $chapter = $postManager->getChapter((int) $getData['id']);
-        // var_dump($getData);
-        // die();
-        // if (!empty($getData['session'])) {
-        $view = new View();
-        $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre']);
-        // } else {
-        //     header('Location: index.php?page=login&action=connexion');
-        // }
+        if (isset($session['user'])) {
+            $view = new View();
+            $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre']);
+        } else {
+            header('Location: index.php?page=login&action=connexion');
+        }
     }
 
     /**
@@ -143,16 +139,14 @@ class BackendController
  *
  * @return void
  */
-    public function adminWriteAction(array $session): void
+    public function adminWriteAction(array &$session): void
     {
-        // var_dump($session);
-        // die();
-        // if (!empty($getData['session'])) {
-        $view = new View();
-        $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre']);
-        // } else {
-        //     header('Location: index.php?page=login&action=connexion');
-        // }
+        if (isset($session['user'])) {
+            $view = new View();
+            $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre']);
+        } else {
+            header('Location: index.php?page=login&action=connexion');
+        }
     }
 
     /**
@@ -164,7 +158,6 @@ class BackendController
      */
     public function newChapterAction(array $getData): void
     {
-        //var_dump($getData);
         $postManager = new PostManager();
         $title = (isset($getData['post']['title'])) ? $getData['post']['title'] : null;
         $description = (isset($getData['post']['description'])) ? $getData['post']['description'] : null;
@@ -173,9 +166,7 @@ class BackendController
         $tmpName = (isset($getData['files']['image']['tmp_name'])) ? $getData['files']['image']['tmp_name'] : null;
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
-        //var_dump($extention);
-        $name = 'Jean Forteroche'; // Aller chercher nom en bdd ?
-        //die();
+        $name = 'Jean Forteroche';
         $errors = [];
 
         if (!empty($title) && !empty($description)) {
@@ -200,11 +191,14 @@ class BackendController
  * @param array $get
  * @return void
  */
-    public function loginAction(array $session): void
+    public function loginAction(&$session): void
     {
-        $view = new View();
-        $view->getView('backend', 'loginView', ['title' => 'Connexion']);
-
+        if (!isset($session['user'])) {
+            $view = new View();
+            $view->getView('backend', 'loginView', ['title' => 'Connexion']);
+        } else {
+            header('Location: index.php?page=admin');
+        }
     }
 
     /**
@@ -214,7 +208,7 @@ class BackendController
      * @param array $post
      * @return void
      */
-    public function connexionAction(array $getData, $session): void
+    public function connexionAction(array $getData, &$session): void
     {
         $dashboardManager = new DashboardManager();
         $passwordBdd = $dashboardManager->getPass();
@@ -242,6 +236,6 @@ class BackendController
     {
         $dashboardManager = new DashboardManager();
         $dashboardManager->logoutUser();
-        header("Location: index.php?page=home");
+        header('Location:index.php?page=home');
     }
 }

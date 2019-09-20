@@ -10,7 +10,7 @@ $action = $_GET['action'] ?? null;
 $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
 $pageBack = ['admin', 'adminChapters', 'adminChapter', 'adminWrite', 'login'];
-$actionTab = ['submitComment', 'connexion', 'newChapter', 'adminEdit', 'modified', 'delete', 'signalComment', 'valideComment', 'removeComment'];
+$actionTab = ['submitComment', 'connexion', 'newChapter', 'adminEdit', 'modified', 'delete', 'signalComment', 'valideComment', 'removeComment', 'logout'];
 
 if (in_array($page, $pageFront)) {
     $controllerName = 'Blog\Controller\FrontendController';

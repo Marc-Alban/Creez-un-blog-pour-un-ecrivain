@@ -97,5 +97,4 @@ class FrontendController
         $view = new View();
         $view->getView('frontend', 'errorView', null);
     }
-
 }

@@ -17,9 +17,9 @@
                     </li>
                 </ul>
                 <hr>
-                <?php if (isset($_SESSION['password'])): ?>
+                <?php if (isset($_SESSION['user'])): ?>
                 <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=admin">Administration</a>
-                <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=logout">Déconexion</a>
+                <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=admin&action=logout">Déconexion</a>
                 <?php else: ?>
                 <a class="btn btn-sm btn-outline-secondary m-2"
                     href="index.php?page=login&action=connexion">Administration</a>
