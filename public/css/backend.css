@@ -75,6 +75,10 @@ a:hover {
     overflow-x: hidden;
 }
 
+input[type="file"]::-webkit-file-upload-button {
+    display: block !important;
+}
+
 .postF input,
 .postF textarea {
     margin: 10px 20px;
