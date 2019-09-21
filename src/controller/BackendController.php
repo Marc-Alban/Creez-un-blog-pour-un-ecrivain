@@ -74,8 +74,9 @@ class BackendController
         $postManager = new PostManager();
         $chapter = $postManager->getChapter((int) $getData['id']);
         if (isset($session['user'])) {
+            $errors = $session['errors'];
             $view = new View();
-            $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre']);
+            $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre', 'errors' => $errors]);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }
@@ -104,11 +105,11 @@ class BackendController
                 if (in_array($extention, $extentions) || $extention = ".png") {
                     $postManager->editImageChapter((int) $getData['get']['id'], $title, $content, $tmpName, $extention, $posted);
                 } else {
-                    $errors['valide'] = 'Image n\'est pas valide! ';
+                    $session['errors']['valide'] = 'Image n\'est pas valide! ';
                 }
             }
         } else {
-            $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
+            $session['errors']['ChampsVide'] = 'Veuillez remplir tous les champs !';
         }
     }
     /**
@@ -131,8 +132,10 @@ class BackendController
     public function adminWriteAction(array &$session): void
     {
         if (isset($session['user'])) {
+            var_dump($session);
+            $errors = $session['errors'];
             $view = new View();
-            $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre']);
+            $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre', 'errors' => $errors]);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }
@@ -155,7 +158,6 @@ class BackendController
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
         $name = 'Jean Forteroche';
-        $errors = $session['errors'];
         if (!empty($title) && !empty($description)) {
             if (!empty($tmpName)) {
                 if (in_array($extention, $extentions)) {
@@ -181,7 +183,8 @@ class BackendController
     {
         if (!isset($session['user'])) {
             $view = new View();
-            $view->getView('backend', 'loginView', ['title' => 'Connexion']);
+            $errors = $session['errors'];
+            $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors]);
         } else {
             header('Location: index.php?page=admin');
         }
@@ -198,16 +201,15 @@ class BackendController
         $dashboardManager = new DashboardManager();
         $passwordBdd = $dashboardManager->getPass();
         $password = $getData["post"]['password'] ?? null;
-        $errors = [];
         if (!empty($password)) {
             if (password_verify($password, $passwordBdd)) {
                 $session['user'] = $password;
                 header("Location: index.php?page=admin");
             } else {
-                $errors['Password'] = 'Ce mot de passe n\'est pas bon pas !';
+                $session['errors']['Password'] = 'Ce mot de passe n\'est pas bon pas !';
             }
         } else {
-            $errors["Champs"] = 'Champs n\'est pas remplis !';
+            $session['errors']["Champs"] = 'Champs n\'est pas remplis !';
         }
     }
     /**
