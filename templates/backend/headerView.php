@@ -11,6 +11,7 @@
             <li class="p-2"><a href="index.php?page=admin">Dashboard</a></li>
             <li class="p-2"><a href="index.php?page=adminWrite">Ecrire un chapitre</a></li>
             <li class="p-2"><a href="index.php?page=adminChapters">Liste des Chapitres</a></li>
+            <li class="p-2"><a href="index.php?page=admin&action=logout">Déconnexion</a></li>
         </div>
     </div>
 </div>

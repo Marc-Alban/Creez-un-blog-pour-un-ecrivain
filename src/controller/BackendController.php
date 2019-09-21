@@ -74,7 +74,8 @@ class BackendController
         $postManager = new PostManager();
         $chapter = $postManager->getChapter((int) $getData['id']);
         if (isset($session['user'])) {
-            $errors = $session['errors'];
+            $errors = (isset($session['errors'])) ? $session['errors'] : null;
+            unset($session['errors']);
             $view = new View();
             $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre', 'errors' => $errors]);
         } else {
@@ -132,7 +133,8 @@ class BackendController
     public function adminWriteAction(array &$session): void
     {
         if (isset($session['user'])) {
-            $errors = $session['errors'];
+            $errors = (isset($session['errors'])) ? $session['errors'] : null;
+            unset($session['errors']);
             $view = new View();
             $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre', 'errors' => $errors]);
         } else {
@@ -181,8 +183,9 @@ class BackendController
     public function loginAction(&$session): void
     {
         if (!isset($session['user'])) {
+            $errors = (isset($session['errors'])) ? $session['errors'] : null;
+            unset($session['errors']);
             $view = new View();
-            $errors = $session['errors'];
             $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors]);
         } else {
             header('Location: index.php?page=admin');
@@ -200,15 +203,17 @@ class BackendController
         $dashboardManager = new DashboardManager();
         $passwordBdd = $dashboardManager->getPass();
         $password = $getData["post"]['password'] ?? null;
-        if (!empty($password)) {
-            if (password_verify($password, $passwordBdd)) {
-                $session['user'] = $password;
-                header("Location: index.php?page=admin");
+        if (isset($getData['post']['connexion'])) {
+            if (!empty($password)) {
+                if (password_verify($password, $passwordBdd)) {
+                    $session['user'] = $password;
+                    header("Location: index.php?page=admin");
+                } else {
+                    $session['errors']['Password'] = 'Ce mot de passe n\'est pas bon pas !';
+                }
             } else {
-                $session['errors']['Password'] = 'Ce mot de passe n\'est pas bon pas !';
+                $session['errors']["Champs"] = 'Champs vide !';
             }
-        } else {
-            $session['errors']["Champs"] = 'Champs n\'est pas remplis !';
         }
     }
     /**
