@@ -132,7 +132,6 @@ class BackendController
     public function adminWriteAction(array &$session): void
     {
         if (isset($session['user'])) {
-            var_dump($session);
             $errors = $session['errors'];
             $view = new View();
             $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre', 'errors' => $errors]);

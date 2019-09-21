@@ -5,9 +5,9 @@
         <div class="col-12 col-md-12 d-flex justify-content-center mb-3">
             <img class='img' src='img/chapter/<?=$chapters->image_posts?>' alt='<?=$chapters->title?>'>
         </div>
-        <?php if (!empty($errors)): ?>
+        <?php if (!empty($datas['errors'])): ?>
         <div class="alert alert-danger col-12 col-md-12" role="alert">
-            <?php foreach ($errors as $error): ?>
+            <?php foreach ($datas['errors'] as $error): ?>
             <p><?=$error?></p>
             <?php endforeach?>
         </div>
