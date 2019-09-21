@@ -1,6 +1,8 @@
 <div class="container">
     <div class="row">
-        <?php if (!empty($errors)): ?>
+        <?php
+var_dump($errors);
+if (!empty($errors)): ?>
         <div class="alert alert-danger col-12 col-md-12" role="alert">
             <?php foreach ($errors as $error): ?>
             <p><?=$error?></p>
@@ -8,14 +10,9 @@
         </div>
         <?php endif?>
 
-        <form class="formT col-12" action="index.php?page=adminChapter&action=newChapter" method="POST"
+        <form class="formT col-12" action="index.php?page=adminWrite&action=newChapter" method="POST"
             enctype="multipart/form-data">
-            <div class="form-group">
-                <label class=" col-md-4 control-label" for="source_image">Image</label>
-                <div class="  col-md-4">
-                    <input id="source_image" name="image" class="input-file" type="file">
-                </div>
-            </div>
+
             <div class="form-group">
                 <label class="col-md-4 control-label" for="chapitre_title">Titre</label>
                 <div class="col-md-4">
@@ -31,6 +28,14 @@
                     <textarea class="form-control" id="mytextarea" name="description"></textarea>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class=" col-md-4 control-label" for="source_image">Image</label>
+                <div class="  col-md-4">
+                    <input id="source_image" name="image" class="input-file" type="file">
+                </div>
+            </div>
+
             <div class="form-group">
                 <label class="col-md-4 control-label" for="chapitre_categories">Public</label>
                 <div class="col-md-4">

@@ -9,7 +9,6 @@ use Blog\View\View;
 
 class BackendController
 {
-
 /**
  * Retourne la page home du dashboard
  *
@@ -26,7 +25,6 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
     }
-
     /**
      * Valide un commentaire
      *
@@ -38,7 +36,6 @@ class BackendController
         $commentManager = new CommentManager();
         $commentManager->validateComments((int) $getData['get']['id']);
     }
-
     /**
      * Supprime un commentaire
      *
@@ -50,7 +47,6 @@ class BackendController
         $commentManager = new CommentManager();
         $commentManager->deleteComments((int) $getData['get']['id']);
     }
-
 /**
  * Récupère la liste des chapitres sur le dashboard
  *
@@ -58,7 +54,6 @@ class BackendController
  */
     public function adminChaptersAction(array &$session): void
     {
-
         $postManager = new PostManager();
         $chapters = $postManager->getChapters();
         if (isset($session['user'])) {
@@ -68,7 +63,6 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
     }
-
 /**
  * Permet de récupérer un chapitre
  *
@@ -86,7 +80,6 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
     }
-
     /**
      * Modifie un chapitre
      *
@@ -105,7 +98,6 @@ class BackendController
         $tmpName = (isset($getData['files']['image']['tmp_name'])) ? $getData['files']['image']['tmp_name'] : null;
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
-
         if (!empty($title) || !empty($content)) {
             $postManager->editChapter((int) $getData['get']['id'], $title, $content, $posted);
             if (isset($file) && !empty($file)) {
@@ -118,9 +110,7 @@ class BackendController
         } else {
             $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
         }
-
     }
-
     /**
      * Suprime un chapitre
      *
@@ -133,7 +123,6 @@ class BackendController
         $postManager->deleteChapter((int) $getData['get']['id']);
         header('Location: index.php?page=adminChapters');
     }
-
 /**
  * Récupère la page pour écrire un post
  *
@@ -148,7 +137,6 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
     }
-
     /**
      * Permet d'écrire un nouveau chapitre
      *
@@ -156,7 +144,7 @@ class BackendController
      * @param array $files
      * @return void
      */
-    public function newChapterAction(array $getData): void
+    public function newChapterAction(array $getData, array &$session): void
     {
         $postManager = new PostManager();
         $title = (isset($getData['post']['title'])) ? $getData['post']['title'] : null;
@@ -167,24 +155,22 @@ class BackendController
         $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
         $extention = strrchr($file, '.');
         $name = 'Jean Forteroche';
-        $errors = [];
-
+        $errors = $session['errors'];
         if (!empty($title) && !empty($description)) {
             if (!empty($tmpName)) {
                 if (in_array($extention, $extentions)) {
                     $postManager->chapterWrite($title, $description, $name, $posted, $tmpName, $extention);
                     header('Location: index.php?page=adminChapters');
                 } else {
-                    $errors['image'] = 'Image n\'est pas valide! ';
+                    $session['errors']['image'] = 'Image n\'est pas valide! ';
                 }
             } else {
-                $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';
+                $session['errors']['imageVide'] = 'Image obligatoire pour un chapitre ! ';
             }
         } else {
-            $errors['contenu'] = 'Veuillez renseigner un contenu !';
+            $session['errors']['contenu'] = 'Veuillez renseigner un contenu !';
         }
     }
-
 /**
  * Renvoie la page login
  *
@@ -200,7 +186,6 @@ class BackendController
             header('Location: index.php?page=admin');
         }
     }
-
     /**
      * Permet de se connecter
      *
@@ -214,7 +199,6 @@ class BackendController
         $passwordBdd = $dashboardManager->getPass();
         $password = $getData["post"]['password'] ?? null;
         $errors = [];
-
         if (!empty($password)) {
             if (password_verify($password, $passwordBdd)) {
                 $session['user'] = $password;
@@ -226,7 +210,6 @@ class BackendController
             $errors["Champs"] = 'Champs n\'est pas remplis !';
         }
     }
-
     /**
      * Permet de se déconnecter
      *

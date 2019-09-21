@@ -4,8 +4,7 @@
             <h1 class="display-4 font-italic">A Propos de l'auteur</h1>
             <p class="lead my-2">Je m'appelle Jean Forteroche, je suis auteur de Roman ce qui est ma passion.</p>
             <p class="lead my-2">Vous trouverez sur ce site :</p>
-            <p class="lead my-2">- Mon Blog avec les chapitres de mon nouveau roman.</p>
-            <p class="lead my-2">- Ma bibliographie</p>
+            <p class="lead my-2">Mon Blog avec les chapitres de mon nouveau roman.</p>
             <p class="lead my-2 float-right">Bonne lecture !!</p>
         </div>
     </div>

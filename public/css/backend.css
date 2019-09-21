@@ -19,10 +19,11 @@ a:hover {
 
 /* nav bar */
 .pos-f-t {
-    background: #212529;
+    background: #343a40;
     width: 100%;
     z-index: 1;
     margin-bottom: 2em;
+    padding: 1em;
 }
 
 .navbar a {

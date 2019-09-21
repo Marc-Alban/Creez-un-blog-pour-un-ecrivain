@@ -4,14 +4,12 @@ declare (strict_types = 1);
 session_start();
 //Récupère l'autoload
 require '../vendor/autoload.php';
-
 $id = $_GET['id'] ?? null;
 $action = $_GET['action'] ?? null;
 $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
 $pageBack = ['admin', 'adminChapters', 'adminChapter', 'adminWrite', 'login'];
 $actionTab = ['submitComment', 'connexion', 'newChapter', 'adminEdit', 'modified', 'delete', 'signalComment', 'valideComment', 'removeComment', 'logout'];
-
 if (in_array($page, $pageFront)) {
     $controllerName = 'Blog\Controller\FrontendController';
 } else if (in_array($page, $pageBack)) {
@@ -19,11 +17,9 @@ if (in_array($page, $pageFront)) {
 } else {
     $controllerName = 'Blog\Controller\FrontendController';
 }
-
 $controller = new $controllerName();
 $methode = $page . 'Action';
 $actionMethode = $action . 'Action';
-
 if (in_array($page, $pageFront) || in_array($page, $pageBack)) {
     if ($action === null && $id === null) {
         $controller->$methode($_SESSION);
