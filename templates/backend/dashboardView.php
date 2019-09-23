@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <h1>Bienvenue Jean Forteroche</h1>
+        <h1>Commentaires signalés:</h1>
         <!-- Table - Listes commentaires -->
         <table class="table">
             <thead class="thead-dark">
@@ -11,7 +11,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if (!is_null($datas['comments'])): ?>
+                <?php if (!empty($datas['comments'])): ?>
                 <?php foreach ($datas['comments'] as $comment): ?>
                 <tr id="commentaire_<?=$comment->id?>">
                     <th scope="row"><?=$comment->title?></th>
