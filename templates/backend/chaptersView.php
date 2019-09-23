@@ -27,7 +27,12 @@
                                 <td><?=$chapter->title?></td>
                                 <td><?=substr(nl2br($chapter->content), 0, 250)?></td>
                                 <td><?=date("d/m/Y à H:i", strtotime($chapter->date_posts))?></td>
-                                <td><?=$datas["nbComments"]['seen'];?></td>
+                                <td>
+                                    <?php var_dump($datas['nbComments']);die();foreach ($datas['nbComments'] as $comments): ?>
+                                    <?=($chapter->id === $comments['post_id']) ? $comments['seen'] : 0?>
+                                    <?php endforeach?>
+
+                                </td>
                                 <td><a href="index.php?page=adminChapter&id=<?=$chapter->id?>" id="lien"><i
                                             class="far fa-edit"></i></a></td>
                                 <td><a href="index.php?page=adminChapter&action=delete&id=<?=$chapter->id?>"><i
