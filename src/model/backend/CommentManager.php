@@ -58,8 +58,8 @@ class CommentManager
 
     public function nbComments()
     {
-        $query = Database::getDb()->query("SELECT DISTINCT post_id, COUNT(seen) FROM comments WHERE seen = '1' GROUP BY post_id");
-        $result = $query->fetch(PDO::FETCH_OBJ);
+        $query = Database::getDb()->query("SELECT DISTINCT post_id, COUNT(seen) as seen FROM comments WHERE seen = '1' GROUP BY post_id");
+        $result = $query->fetch();
         return $result;
     }
 }

@@ -22,13 +22,12 @@
                         </thead>
                         <?php if (isset($datas['chapters'])): ?>
                         <?php foreach ($datas['chapters'] as $chapter): ?>
-                        <?php foreach ($datas["nbComments"] as $comment): ?>
                         <tbody>
                             <tr>
                                 <td><?=$chapter->title?></td>
                                 <td><?=substr(nl2br($chapter->content), 0, 250)?></td>
                                 <td><?=date("d/m/Y à H:i", strtotime($chapter->date_posts))?></td>
-                                <td><?=$comment?></td>
+                                <td><?=$datas["nbComments"]['seen'];?></td>
                                 <td><a href="index.php?page=adminChapter&id=<?=$chapter->id?>" id="lien"><i
                                             class="far fa-edit"></i></a></td>
                                 <td><a href="index.php?page=adminChapter&action=delete&id=<?=$chapter->id?>"><i
@@ -38,7 +37,6 @@
                                 </td>
                             </tr>
                         </tbody>
-                        <?php endforeach?>
                         <?php endforeach?>
                         <?php else:var_dump($datas['chapters']);?>
                         <?php endif;?>
