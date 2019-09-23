@@ -8,7 +8,7 @@ $id = $_GET['id'] ?? null;
 $action = $_GET['action'] ?? null;
 $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
-$pageBack = ['admin', 'adminChapters', 'adminChapter', 'adminWrite', 'login'];
+$pageBack = ['adminComments', 'adminChapters', 'adminChapter', 'adminWrite', 'login'];
 $actionTab = ['submitComment', 'connexion', 'newChapter', 'adminEdit', 'modified', 'delete', 'signalComment', 'valideComment', 'removeComment', 'logout'];
 if (in_array($page, $pageFront)) {
     $controllerName = 'Blog\Controller\FrontendController';
@@ -36,6 +36,5 @@ if (in_array($page, $pageFront) || in_array($page, $pageBack)) {
     } else if ($action === null || $id !== null) {
         $controller->$methode($_GET, $_SESSION);
     }
-} else {
-    $controller->errorAction();
 }
+$controller->errorAction();

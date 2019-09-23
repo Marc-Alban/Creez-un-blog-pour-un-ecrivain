@@ -15,13 +15,13 @@ class BackendController
  * @param array $session
  * @return void
  */
-    public function adminAction(array &$session): void
+    public function adminCommentsAction(array &$session): void
     {
         $commentManager = new CommentManager();
         $comments = $commentManager->getComments();
         if (isset($session['user'])) {
             $view = new View();
-            $view->getView('backend', 'dashboardView', ['comments' => $comments, 'title' => 'Dashboard', 'session' => $session]);
+            $view->getView('backend', 'adminCommentsView', ['comments' => $comments, 'title' => 'Dashboard', 'session' => $session]);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }
@@ -58,9 +58,11 @@ class BackendController
     {
         $postManager = new PostManager();
         $chapters = $postManager->getChapters();
+        $commentManager = new CommentManager();
+        $nbComments = $commentManager->nbComments();
         if (isset($session['user'])) {
             $view = new View();
-            $view->getView('backend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres', 'session' => $session]);
+            $view->getView('backend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres', 'session' => $session, 'nbComments' => $nbComments]);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }

@@ -94,9 +94,9 @@ class FrontendController
  * @param [type] $session
  * @return void
  */
-    public function errorAction(&$session): void
+    public function errorAction(): void
     {
         $view = new View();
-        $view->getView('frontend', 'errorView', ['session' => $session]);
+        $view->getView('frontend', 'errorView', null);
     }
 }

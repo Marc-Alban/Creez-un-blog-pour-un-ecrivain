@@ -1,6 +1,9 @@
 <div class="container">
     <div class="row">
-        <h2>Listes des Chapitres: </h2>
+        <div class="headerTab col-12 col-md-12 col-lg-12">
+            <h2>Listes des Chapitres: </h2>
+            <a href="index.php?page=adminWrite" class="btn btn-primary">Ajouter article +</a>
+        </div>
         <hr>
         <section class="blog-me pt-100 pb-100" id="blog">
             <div class="container">
@@ -11,6 +14,7 @@
                                 <th scope="col">Titre</th>
                                 <th scope="col">Description</th>
                                 <th scope="col">Date</th>
+                                <th scope="col">Commentaire signaler</th>
                                 <th scope="col">Modifier</th>
                                 <th scope="col">Supprimer</th>
                                 <th scope="col">Visible</th>
@@ -18,12 +22,13 @@
                         </thead>
                         <?php if (isset($datas['chapters'])): ?>
                         <?php foreach ($datas['chapters'] as $chapter): ?>
+                        <?php foreach ($datas["nbComments"] as $comment): ?>
                         <tbody>
-
                             <tr>
                                 <td><?=$chapter->title?></td>
                                 <td><?=substr(nl2br($chapter->content), 0, 250)?></td>
                                 <td><?=date("d/m/Y à H:i", strtotime($chapter->date_posts))?></td>
+                                <td><?=$comment?></td>
                                 <td><a href="index.php?page=adminChapter&id=<?=$chapter->id?>" id="lien"><i
                                             class="far fa-edit"></i></a></td>
                                 <td><a href="index.php?page=adminChapter&action=delete&id=<?=$chapter->id?>"><i
@@ -33,6 +38,7 @@
                                 </td>
                             </tr>
                         </tbody>
+                        <?php endforeach?>
                         <?php endforeach?>
                         <?php else:var_dump($datas['chapters']);?>
                         <?php endif;?>
