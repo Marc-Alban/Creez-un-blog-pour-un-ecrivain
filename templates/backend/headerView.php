@@ -12,7 +12,7 @@ if (!empty($datas['session'])): ?>
             <li class="p-2"><a href="index.php?page=adminComments">Liste des commentaires signalés</a></li>
             <li class="p-2"><a href="index.php?page=adminWrite">Ecrire un chapitre</a></li>
             <li class="p-2"><a href="index.php?page=adminChapters">Liste des Chapitres</a></li>
-            <li class="p-2"><a href="index.php?page=admin&action=logout">Déconnexion</a></li>
+            <li class="p-2"><a href="index.php?page=adminChapters&action=logout">Déconnexion</a></li>
         </div>
     </div>
 </div>

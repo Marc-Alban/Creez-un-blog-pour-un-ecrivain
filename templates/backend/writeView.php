@@ -13,7 +13,14 @@ if (!empty($datas['errors'])): ?>
             enctype="multipart/form-data">
 
             <div class="form-group">
-                <label class="col-md-4 control-label" for="chapitre_title">Titre</label>
+                <label class=" col-md-4 control-label" for="source_image">Changer d'image:</label>
+                <div class="  col-md-4">
+                    <input id="source_image" name="image" class="input-file" type="file">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="chapitre_title">Titre du chapitre</label>
                 <div class="col-md-4">
                     <input id="chapitre_title" name="title" type="text" placeholder="titre"
                         class="form-control input-md">
@@ -22,16 +29,9 @@ if (!empty($datas['errors'])): ?>
             </div>
 
             <div class="form-group">
-                <label class=" col-12 col-md-12 control-label" for="source_description">Description</label>
+                <label class=" col-12 col-md-12 control-label" for="source_description">Text du chapitre</label>
                 <div class=" col-12 col-md-12">
                     <textarea class="form-control" id="mytextarea" name="description"></textarea>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class=" col-md-4 control-label" for="source_image">Image</label>
-                <div class="  col-md-4">
-                    <input id="source_image" name="image" class="input-file" type="file">
                 </div>
             </div>
 

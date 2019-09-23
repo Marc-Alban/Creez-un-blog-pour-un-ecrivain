@@ -20,10 +20,11 @@
 
                 <?php if (!empty($datas['session'])): ?>
                 <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=adminChapters">Administration</a>
-                <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=admin&action=logout">Déconexion</a>
+                <a class="btn btn-sm btn-outline-secondary m-2"
+                    href="index.php?page=adminChapters&action=logout">Déconexion</a>
                 <?php else: ?>
                 <a class="btn btn-sm btn-outline-secondary m-2"
-                    href="index.php?page=login&action=connexion">Administration</a>
+                    href="index.php?page=adminChapters&action=connexion">Administration</a>
                 <?php endif?>
             </nav>
             <div class="nav-controller">

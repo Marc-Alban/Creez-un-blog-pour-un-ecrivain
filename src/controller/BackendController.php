@@ -192,7 +192,7 @@ class BackendController
             $view = new View();
             $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors, 'session' => $session]);
         } else {
-            header('Location: index.php?page=admin');
+            header('Location: index.php?page=adminChapters');
         }
     }
 /**
@@ -211,7 +211,6 @@ class BackendController
             if (!empty($password)) {
                 if (password_verify($password, $passwordBdd)) {
                     $session['user'] = $password;
-                    header("Location: index.php?page=admin");
                 } else {
                     $session['errors']['Password'] = 'Ce mot de passe n\'est pas bon pas !';
                 }
@@ -231,4 +230,17 @@ class BackendController
         $dashboardManager->logoutUser();
         header('Location:index.php?page=home');
     }
+
+    /**
+     * Renvoie la page erreur
+     *
+     * @param [type] $session
+     * @return void
+     */
+    public function errorAction(): void
+    {
+        $view = new View();
+        $view->getView('backend', 'errorView', null);
+    }
+
 }

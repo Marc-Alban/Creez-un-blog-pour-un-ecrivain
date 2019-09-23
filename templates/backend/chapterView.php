@@ -14,7 +14,8 @@
         <?php endif?>
         <form method="POST" class="col-12 col-md-9 postF"
             action="index.php?page=adminChapter&action=adminEdit&id=<?=$chapters->id?>" enctype="multipart/form-data">
-            <p><label for="image">Changer d'image:
+            <p>
+                <label for="image">Changer d'image:
                     <input type="file" name="image">
                 </label>
             </p>
