@@ -10,7 +10,7 @@ class View
         require_once '../templates/' . $statement . '/' . $namePage . '.php';
     }
 
-    private function getHeader(string $statement)
+    private function getHeader(string $statement, ?array $datas)
     {
         require_once '../templates/' . $statement . '/headerView.php';
     }
@@ -25,7 +25,7 @@ class View
     public function getView(string $statement, string $namePage, ?array $datas)
     {
         ob_start();
-        $this->getHeader($statement);
+        $this->getHeader($statement, $datas);
         $this->getUrl($statement, $namePage, $datas);
         $this->getFooter($statement);
         $content = ob_get_clean();

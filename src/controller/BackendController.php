@@ -12,6 +12,7 @@ class BackendController
 /**
  * Retourne la page home du dashboard
  *
+ * @param array $session
  * @return void
  */
     public function adminAction(array &$session): void
@@ -20,28 +21,28 @@ class BackendController
         $comments = $commentManager->getComments();
         if (isset($session['user'])) {
             $view = new View();
-            $view->getView('backend', 'dashboardView', ['comments' => $comments, 'title' => 'Dashboard']);
+            $view->getView('backend', 'dashboardView', ['comments' => $comments, 'title' => 'Dashboard', 'session' => $session]);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }
     }
-    /**
-     * Valide un commentaire
-     *
-     * @param integer $id
-     * @return void
-     */
+/**
+ * Valide un commentaire
+ *
+ * @param array $getData
+ * @return void
+ */
     public function valideCommentAction(array $getData): void
     {
         $commentManager = new CommentManager();
         $commentManager->validateComments((int) $getData['get']['id']);
     }
-    /**
-     * Supprime un commentaire
-     *
-     * @param integer $id
-     * @return void
-     */
+/**
+ * Supprime un commentaire
+ *
+ * @param array $getData
+ * @return void
+ */
     public function removeCommentAction(array $getData): void
     {
         $commentManager = new CommentManager();
@@ -50,6 +51,7 @@ class BackendController
 /**
  * Récupère la liste des chapitres sur le dashboard
  *
+ * @param array $session
  * @return void
  */
     public function adminChaptersAction(array &$session): void
@@ -58,7 +60,7 @@ class BackendController
         $chapters = $postManager->getChapters();
         if (isset($session['user'])) {
             $view = new View();
-            $view->getView('backend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres']);
+            $view->getView('backend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres', 'session' => $session]);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }
@@ -66,7 +68,8 @@ class BackendController
 /**
  * Permet de récupérer un chapitre
  *
- * @param integer $id
+ * @param array $getData
+ * @param array $session
  * @return void
  */
     public function adminChapterAction(array $getData, array &$session): void
@@ -77,19 +80,17 @@ class BackendController
             $errors = (isset($session['errors'])) ? $session['errors'] : null;
             unset($session['errors']);
             $view = new View();
-            $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre', 'errors' => $errors]);
+            $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre', 'errors' => $errors, 'session' => $session]);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }
     }
-    /**
-     * Modifie un chapitre
-     *
-     * @param integer $id
-     * @param array $post
-     * @param array $files
-     * @return void
-     */
+/**
+ * Modifie un chapitre
+ *
+ * @param array $getData
+ * @return void
+ */
     public function adminEditAction(array $getData): void
     {
         $postManager = new PostManager();
@@ -113,12 +114,12 @@ class BackendController
             $session['errors']['ChampsVide'] = 'Veuillez remplir tous les champs !';
         }
     }
-    /**
-     * Suprime un chapitre
-     *
-     * @param integer $id
-     * @return void
-     */
+/**
+ * Suprime un chapitre
+ *
+ * @param array $getData
+ * @return void
+ */
     public function deleteAction(array $getData): void
     {
         $postManager = new PostManager();
@@ -128,6 +129,7 @@ class BackendController
 /**
  * Récupère la page pour écrire un post
  *
+ * @param array $session
  * @return void
  */
     public function adminWriteAction(array &$session): void
@@ -136,18 +138,18 @@ class BackendController
             $errors = (isset($session['errors'])) ? $session['errors'] : null;
             unset($session['errors']);
             $view = new View();
-            $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre', 'errors' => $errors]);
+            $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre', 'errors' => $errors, 'session' => $session]);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }
     }
-    /**
-     * Permet d'écrire un nouveau chapitre
-     *
-     * @param array $post
-     * @param array $files
-     * @return void
-     */
+/**
+ * Permet d'écrire un nouveau chapitre
+ *
+ * @param array $getData
+ * @param array $session
+ * @return void
+ */
     public function newChapterAction(array $getData, array &$session): void
     {
         $postManager = new PostManager();
@@ -177,7 +179,7 @@ class BackendController
 /**
  * Renvoie la page login
  *
- * @param array $get
+ * @param [type] $session
  * @return void
  */
     public function loginAction(&$session): void
@@ -186,18 +188,18 @@ class BackendController
             $errors = (isset($session['errors'])) ? $session['errors'] : null;
             unset($session['errors']);
             $view = new View();
-            $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors]);
+            $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors, 'session' => $session]);
         } else {
             header('Location: index.php?page=admin');
         }
     }
-    /**
-     * Permet de se connecter
-     *
-     * @param array $session
-     * @param array $post
-     * @return void
-     */
+/**
+ * Permet de se connecter
+ *
+ * @param array $getData
+ * @param [type] $session
+ * @return void
+ */
     public function connexionAction(array $getData, &$session): void
     {
         $dashboardManager = new DashboardManager();
@@ -216,11 +218,11 @@ class BackendController
             }
         }
     }
-    /**
-     * Permet de se déconnecter
-     *
-     * @return void
-     */
+/**
+ * Permet de se déconnecter
+ *
+ * @return void
+ */
     public function logoutAction(): void
     {
         $dashboardManager = new DashboardManager();
