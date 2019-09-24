@@ -47,7 +47,7 @@ class FrontendController
  * @param [type] $session
  * @return void
  */
-    public function chapterAction(array $getData, &$session): void
+    public function chapterAction(&$session, array $getData): void
     {
         $id = (int) $getData['get']['id'];
         $name = $getData['post']['name'] ?? null;
@@ -57,9 +57,7 @@ class FrontendController
         unset($session['errors']);
         $postManager = new PostManager();
         $chapter = $postManager->getChapter($id);
-
         $commentManager = new CommentsManager();
-        $comments = $commentManager->getComments($id);
 
         if ($action === 'signalComment') {
             $commentManager->signalComment((int) $getData['get']['idComment']);
@@ -82,6 +80,8 @@ class FrontendController
                 $errors["Champs"] = "Veuillez remplir les champs";
             }
         }
+
+        $comments = $commentManager->getComments($id);
 
         $view = new View;
         $view->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments, 'title' => 'Chapitre', 'session' => $session, 'errors' => $errors]);

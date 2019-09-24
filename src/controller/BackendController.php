@@ -10,7 +10,7 @@ use Blog\View\View;
 class BackendController
 {
 /**
- * Retourne la page home du dashboard
+ * Retourne la page commentaire
  *
  * @param array $session
  * @return void
@@ -19,18 +19,17 @@ class BackendController
     {
         if (isset($session['user'])) {
 
-            $action = $getData['get']['action'];
-            $id = (int) $getData['get']['id'];
-
             $commentManager = new CommentManager();
-            $comments = $commentManager->getComments();
-
-            if ($action === 'valideComment') {
-                $commentManager->validateComments($id);
-            } else if ($action === 'removeComment') {
-                $commentManager->deleteComments($id);
+            $action = $getData['get']['action'] ?? null;
+            if (isset($action)) {
+                $id = (int) $getData['get']['id'];
+                if ($action === 'valideComment') {
+                    $commentManager->validateComments($id);
+                } else if ($action === 'removeComment') {
+                    $commentManager->deleteComments($id);
+                }
             }
-
+            $comments = $commentManager->getComments();
             $view = new View();
             $view->getView('backend', 'adminCommentsView', ['comments' => $comments, 'title' => 'Dashboard', 'session' => $session]);
 
@@ -41,16 +40,20 @@ class BackendController
     }
 
 /**
- * Récupère la liste des chapitres sur le dashboard
+ * Récupère la liste des chapitres sur le backend
  *
  * @param array $session
  * @return void
  */
-    public function adminChaptersAction(array &$session): void
+    public function adminChaptersAction(array &$session, array $getData): void
     {
         if (isset($session['user'])) {
+            $action = $getData['get']['action'] ?? null;
             $postManager = new PostManager();
             $chapters = $postManager->getChapters();
+            if ($action === 'delete') {
+                $postManager->deleteChapter((int) $getData['get']['id']);
+            }
             $commentManager = new CommentManager();
             $nbComments = $commentManager->nbComments();
             $view = new View();
@@ -59,168 +62,155 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
     }
+
 /**
  * Permet de récupérer un chapitre
- *
+ * Modifie un chapitre
  * @param array $getData
  * @param array $session
  * @return void
  */
-    public function adminChapterAction(array $getData, array &$session): void
+    public function adminChapterAction(array &$session, array $getData): void
     {
         if (isset($session['user'])) {
+
             $postManager = new PostManager();
-            $chapter = $postManager->getChapter((int) $getData['id']);
-            $errors = (isset($session['errors'])) ? $session['errors'] : null;
+
+            $id = (int) $getData['get']['id'];
+            $action = $getData['get']['action'] ?? null;
+            $errors = $session['errors'] ?? null;
             unset($session['errors']);
+
+            if ($action === "adminEdit") {
+                $title = $getData['post']['title'] ?? null;
+                $content = $getData['post']['content'] ?? null;
+                $file = $getData['files']['image']['name'] ?? null;
+                $tmpName = $getData['files']['image']['tmp_name'] ?? null;
+                $posted = (isset($getData['post']['public']) && $getData['post']['public'] == 'on') ? 1 : 0;
+                $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
+                $extention = strrchr($file, '.');
+                if (!empty($title) || !empty($content)) {
+                    if (!empty($title)) {
+                        if (!empty($content)) {
+                            $postManager->editChapter($id, $title, $content, $posted);
+                            if (isset($file) && !empty($file)) {
+                                if (in_array($extention, $extentions) || $extention = ".png") {
+                                    $postManager->editImageChapter($id, $title, $content, $tmpName, $extention, $posted);
+                                } else {
+                                    $errors['valide'] = 'Image n\'est pas valide! ';
+                                }
+                            }
+                        } else {
+                            $errors['emptyContent'] = 'Mettre un contenu ';
+                        }
+                    } else {
+                        $errors['emptyTitle'] = 'Mettre un Titre ';
+                    }
+                } else {
+                    $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
+                }
+            }
+            $chapter = $postManager->getChapter($id);
             $view = new View();
             $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => 'Chapitre', 'errors' => $errors, 'session' => $session]);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }
     }
-/**
- * Modifie un chapitre
- *
- * @param array $getData
- * @return void
- */
-    public function adminEditAction(array $getData): void
-    {
-        $postManager = new PostManager();
-        $title = (isset($getData['post']['title'])) ? $getData['post']['title'] : null;
-        $content = (isset($getData['post']['content'])) ? $getData['post']['content'] : null;
-        $posted = (isset($getData['post']['public']) && $getData['post']['public'] == 'on') ? 1 : 0;
-        $file = (isset($getData['files']['image']['name'])) ? $getData['files']['image']['name'] : null;
-        $tmpName = (isset($getData['files']['image']['tmp_name'])) ? $getData['files']['image']['tmp_name'] : null;
-        $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
-        $extention = strrchr($file, '.');
-        if (!empty($title) || !empty($content)) {
-            $postManager->editChapter((int) $getData['get']['id'], $title, $content, $posted);
-            if (isset($file) && !empty($file)) {
-                if (in_array($extention, $extentions) || $extention = ".png") {
-                    $postManager->editImageChapter((int) $getData['get']['id'], $title, $content, $tmpName, $extention, $posted);
-                } else {
-                    $session['errors']['valide'] = 'Image n\'est pas valide! ';
-                }
-            }
-        } else {
-            $session['errors']['ChampsVide'] = 'Veuillez remplir tous les champs !';
-        }
-    }
-/**
- * Suprime un chapitre
- *
- * @param array $getData
- * @return void
- */
-    public function deleteAction(array $getData): void
-    {
-        $postManager = new PostManager();
-        $postManager->deleteChapter((int) $getData['get']['id']);
-        header('Location: index.php?page=adminChapters');
-    }
+
 /**
  * Récupère la page pour écrire un post
  *
  * @param array $session
  * @return void
  */
-    public function adminWriteAction(array &$session): void
+    public function adminWriteAction(array &$session, array $getData): void
     {
         if (isset($session['user'])) {
+
+            $postManager = new PostManager();
+            $action = $getData['get']['action'] ?? null;
             $errors = (isset($session['errors'])) ? $session['errors'] : null;
             unset($session['errors']);
+
+            if ($action === 'newChapter') {
+
+                $title = $getData['post']['title'] ?? null;
+                $description = $getData['post']['description'] ?? null;
+                $posted = (isset($getData['post']['public']) && $getData['post']['public'] == 1) ? 1 : 0;
+                $file = $getData['files']['image']['name'] ?? null;
+                $tmpName = $getData['files']['image']['tmp_name'] ?? null;
+                $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
+                $name = $postManager->getName();
+                $extention = strrchr($file, '.');
+
+                if (!empty($title) && !empty($description)) {
+                    if (!empty($title)) {
+                        if (!empty($description)) {
+                            if (!empty($tmpName)) {
+                                if (in_array($extention, $extentions)) {
+                                    $postManager->chapterWrite($title, $description, $name["name_post"], $posted, $tmpName, $extention);
+                                    header('Location: index.php?page=adminChapters');
+                                } else {
+                                    $errors['image'] = 'Image n\'est pas valide! ';
+                                }
+                            } else {
+                                $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';
+                            }
+                        } else {
+                            $errors['emptyDesc'] = "Veuillez mettre un paragraphe";
+                        }
+                    } else {
+                        $errors['emptyTitle'] = "Veuillez mettre un titre";
+                    }
+                } else {
+                    $errors['contenu'] = 'Veuillez renseigner un contenu !';
+                }
+            }
             $view = new View();
             $view->getView('backend', 'writeView', ['title' => 'Ecrire un chapitre', 'errors' => $errors, 'session' => $session]);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }
     }
-/**
- * Permet d'écrire un nouveau chapitre
- *
- * @param array $getData
- * @param array $session
- * @return void
- */
-    public function newChapterAction(array $getData, array &$session): void
-    {
-        $postManager = new PostManager();
-        $title = (isset($getData['post']['title'])) ? $getData['post']['title'] : null;
-        $description = (isset($getData['post']['description'])) ? $getData['post']['description'] : null;
-        $posted = (isset($getData['post']['public']) && $getData['post']['public'] == 1) ? 1 : 0;
-        $file = (isset($getData['files']['image']['name'])) ? $getData['files']['image']['name'] : null;
-        $tmpName = (isset($getData['files']['image']['tmp_name'])) ? $getData['files']['image']['tmp_name'] : null;
-        $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
-        $extention = strrchr($file, '.');
-        $name = 'Jean Forteroche';
-        if (!empty($title) && !empty($description)) {
-            if (!empty($tmpName)) {
-                if (in_array($extention, $extentions)) {
-                    $postManager->chapterWrite($title, $description, $name, $posted, $tmpName, $extention);
-                    header('Location: index.php?page=adminChapters');
-                } else {
-                    $session['errors']['image'] = 'Image n\'est pas valide! ';
-                }
-            } else {
-                $session['errors']['imageVide'] = 'Image obligatoire pour un chapitre ! ';
-            }
-        } else {
-            $session['errors']['contenu'] = 'Veuillez renseigner un contenu !';
-        }
-    }
+
 /**
  * Renvoie la page login
  *
  * @param [type] $session
  * @return void
  */
-    public function loginAction(&$session): void
+    public function loginAction(&$session, array $getData): void
     {
         if (!isset($session['user'])) {
+            $dashboardManager = new DashboardManager();
+            $action = $getData['get']['action'] ?? null;
             $errors = (isset($session['errors'])) ? $session['errors'] : null;
             unset($session['errors']);
+            if ($action === "connexion") {
+                $passwordBdd = $dashboardManager->getPass();
+                $password = $getData["post"]['password'] ?? null;
+                if (isset($getData['post']['connexion'])) {
+                    if (!empty($password)) {
+                        if (password_verify($password, $passwordBdd)) {
+                            $session['user'] = $password;
+                        } else {
+                            $errors['Password'] = 'Ce mot de passe n\'est pas bon pas !';
+                        }
+                    } else {
+                        $errors["Champs"] = 'Champs vide !';
+                    }
+                }
+            } else if ($action === "logout") {
+                $dashboardManager->logoutUser();
+                header('Location:index.php?page=home');
+            }
+
             $view = new View();
             $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors, 'session' => $session]);
         } else {
             header('Location: index.php?page=adminChapters');
         }
-    }
-/**
- * Permet de se connecter
- *
- * @param array $getData
- * @param [type] $session
- * @return void
- */
-    public function connexionAction(array $getData, &$session): void
-    {
-        $dashboardManager = new DashboardManager();
-        $passwordBdd = $dashboardManager->getPass();
-        $password = $getData["post"]['password'] ?? null;
-        if (isset($getData['post']['connexion'])) {
-            if (!empty($password)) {
-                if (password_verify($password, $passwordBdd)) {
-                    $session['user'] = $password;
-                } else {
-                    $session['errors']['Password'] = 'Ce mot de passe n\'est pas bon pas !';
-                }
-            } else {
-                $session['errors']["Champs"] = 'Champs vide !';
-            }
-        }
-    }
-/**
- * Permet de se déconnecter
- *
- * @return void
- */
-    public function logoutAction(): void
-    {
-        $dashboardManager = new DashboardManager();
-        $dashboardManager->logoutUser();
-        header('Location:index.php?page=home');
     }
 
     /**

@@ -51,6 +51,19 @@ class PostManager
         return $req;
     }
 
+/**
+ * Retourne le nom de l'auteur
+ *
+ * @return array
+ */
+    public function getName(): array
+    {
+        $sql = "SELECT name_post FROM posts ";
+        $query = Database::getDb()->query($sql);
+        $req = $query->fetch();
+        return $req;
+    }
+
     /**
      * Met à jour le chapitre modifié en BDD
      *
