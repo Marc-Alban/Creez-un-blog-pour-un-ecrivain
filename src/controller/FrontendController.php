@@ -49,13 +49,11 @@ class FrontendController
  */
     public function chapterAction(array $getData, &$session): void
     {
-        var_dump($getData);
-        die();
         $id = (int) $getData['get']['id'];
         $name = $getData['post']['name'] ?? null;
         $comment = $getData['post']['comment'] ?? null;
         $action = $getData['get']['action'] ?? null;
-        $errors = (!empty($session['errors'])) ? $session['errors'] : null;
+        $errors = $session['errors'] ?? null;
         unset($session['errors']);
         $postManager = new PostManager();
         $chapter = $postManager->getChapter($id);

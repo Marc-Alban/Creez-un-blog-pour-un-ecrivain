@@ -24,7 +24,7 @@ if (in_array($page, $pageFront) || in_array($page, $pageBack)) {
         $controller->$methode($_SESSION);
     } else if ($action !== null && $id !== null) {
         $controller->$methode(['post' => $_POST, 'get' => $_GET, 'files' => $_FILES], $_SESSION);
-    } else if ($action !== null || $id === null) {
+    } else if ($action !== null && $id === null) {
         $controller->$methode(['post' => $_POST, 'files' => $_FILES], $_SESSION);
     } else if ($action === null || $id !== null) {
         $controller->$methode(['get' => $_GET, 'post' => $_POST], $_SESSION);

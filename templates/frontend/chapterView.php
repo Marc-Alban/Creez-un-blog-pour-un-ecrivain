@@ -42,13 +42,13 @@
                     <textarea id="message " name="comment" class="form-control" require></textarea>
                     <label for="message">Message</label>
                 </div>
-                <input type="submit" name="submitComment" class="btn btn-primary" placeholder="Envoyer">
+                <input type="submit" class="btn btn-primary" placeholder="Envoyer">
 
             </form>
 
-            <div class="col-12 com">
+            <div class="col-12 ">
                 <?php foreach ($datas['comments'] as $comment): ?>
-                <div class="blockquote col-12">
+                <div class="blockquote col-12 com">
                     <?=$comment->name?> le <?=date("d/m/Y", strtotime($comment->date_comment))?> :
                     <?=nl2br($comment->comment)?>
                     <?php if (isset($datas['chapter'])): ?>
