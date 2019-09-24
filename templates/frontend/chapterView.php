@@ -24,6 +24,13 @@
         <div class="row">
             <h4>Commentaires:</h4>
             <br><br>
+            <?php if (!empty($datas['errors'])): ?>
+            <div class="alert alert-danger col-12 col-md-12" role="alert">
+                <?php foreach ($datas['errors'] as $error): ?>
+                <p><?=$error?></p>
+                <?php endforeach?>
+            </div>
+            <?php endif?>
             <form class="col-md-8 col-12" method="POST"
                 action="index.php?page=chapter&id=<?php foreach ($datas['chapter'] as $table): echo $table->id;endforeach?>&action=submitComment">
                 <h4>Laisser un commentaires:</h4>
@@ -38,18 +45,9 @@
                 <input type="submit" name="submitComment" class="btn btn-primary" placeholder="Envoyer">
 
             </form>
-            <!-- Errors -->
 
-            <?php if (!empty($errors)): ?>
-            <?php foreach ($errors as $error): ?>
-            <div class="alert alert-danger col-12 col-md-6" role="alert">
-                <p><?=$error?></p>
-            </div>
-            <?php endforeach?>
-            <?php endif?>
-            <!-- End Errors -->
-            <?php foreach ($datas['comments'] as $comment): ?>
             <div class="col-12 com">
+                <?php foreach ($datas['comments'] as $comment): ?>
                 <div class="blockquote col-12">
                     <?=$comment->name?> le <?=date("d/m/Y", strtotime($comment->date_comment))?> :
                     <?=nl2br($comment->comment)?>

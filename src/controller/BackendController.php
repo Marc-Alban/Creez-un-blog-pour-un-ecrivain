@@ -15,39 +15,31 @@ class BackendController
  * @param array $session
  * @return void
  */
-    public function adminCommentsAction(array &$session): void
+    public function adminCommentsAction(array &$session, array $getData): void
     {
-        $commentManager = new CommentManager();
-        $comments = $commentManager->getComments();
         if (isset($session['user'])) {
+
+            $action = $getData['get']['action'];
+            $id = (int) $getData['get']['id'];
+
+            $commentManager = new CommentManager();
+            $comments = $commentManager->getComments();
+
+            if ($action === 'valideComment') {
+                $commentManager->validateComments($id);
+            } else if ($action === 'removeComment') {
+                $commentManager->deleteComments($id);
+            }
+
             $view = new View();
             $view->getView('backend', 'adminCommentsView', ['comments' => $comments, 'title' => 'Dashboard', 'session' => $session]);
+
         } else {
             header('Location: index.php?page=login&action=connexion');
         }
+
     }
-/**
- * Valide un commentaire
- *
- * @param array $getData
- * @return void
- */
-    public function valideCommentAction(array $getData): void
-    {
-        $commentManager = new CommentManager();
-        $commentManager->validateComments((int) $getData['get']['id']);
-    }
-/**
- * Supprime un commentaire
- *
- * @param array $getData
- * @return void
- */
-    public function removeCommentAction(array $getData): void
-    {
-        $commentManager = new CommentManager();
-        $commentManager->deleteComments((int) $getData['get']['id']);
-    }
+
 /**
  * Récupère la liste des chapitres sur le dashboard
  *
@@ -56,11 +48,11 @@ class BackendController
  */
     public function adminChaptersAction(array &$session): void
     {
-        $postManager = new PostManager();
-        $chapters = $postManager->getChapters();
-        $commentManager = new CommentManager();
-        $nbComments = $commentManager->nbComments();
         if (isset($session['user'])) {
+            $postManager = new PostManager();
+            $chapters = $postManager->getChapters();
+            $commentManager = new CommentManager();
+            $nbComments = $commentManager->nbComments();
             $view = new View();
             $view->getView('backend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres', 'session' => $session, 'nbComments' => $nbComments]);
         } else {
@@ -76,9 +68,9 @@ class BackendController
  */
     public function adminChapterAction(array $getData, array &$session): void
     {
-        $postManager = new PostManager();
-        $chapter = $postManager->getChapter((int) $getData['id']);
         if (isset($session['user'])) {
+            $postManager = new PostManager();
+            $chapter = $postManager->getChapter((int) $getData['id']);
             $errors = (isset($session['errors'])) ? $session['errors'] : null;
             unset($session['errors']);
             $view = new View();

@@ -20,6 +20,7 @@ class FrontendController
         $postManager = new PostManager();
         $chapters = $postManager->getLimitedChapters();
         $oldChapter = $postManager->oldLimitedChapter();
+
         $view = new View;
         $view->getView('frontend', 'homeView', ['chapters' => $chapters, 'oldChapter' => $oldChapter, 'title' => 'Accueil', 'session' => $session]);
     }
@@ -40,6 +41,7 @@ class FrontendController
 
 /**
  * Renvoie les commentaires et le chapitre
+ * et signale les commentaires
  *
  * @param array $getData
  * @param [type] $session
@@ -47,45 +49,44 @@ class FrontendController
  */
     public function chapterAction(array $getData, &$session): void
     {
+        var_dump($getData);
+        die();
+        $id = (int) $getData['get']['id'];
+        $name = $getData['post']['name'] ?? null;
+        $comment = $getData['post']['comment'] ?? null;
+        $action = $getData['get']['action'] ?? null;
+        $errors = (!empty($session['errors'])) ? $session['errors'] : null;
+        unset($session['errors']);
         $postManager = new PostManager();
-        $chapter = $postManager->getChapter((int) $getData['id']);
+        $chapter = $postManager->getChapter($id);
 
         $commentManager = new CommentsManager();
-        $comments = $commentManager->getComments((int) $getData['id']);
+        $comments = $commentManager->getComments($id);
+
+        if ($action === 'signalComment') {
+            $commentManager->signalComment((int) $getData['get']['idComment']);
+        }
+
+        if ($action === 'submitComment') {
+            if (!empty($name) || !empty($comment)) {
+                if (!empty($name)) {
+                    if (!empty($comment)) {
+                        htmlspecialchars(trim($name));
+                        htmlspecialchars(trim($comment));
+                        $commentManager->setComment($name, $comment, $id);
+                    } else {
+                        $errors['name'] = "Veuillez renseigner une description";
+                    }
+                } else {
+                    $errors['comment'] = "Veuillez mettre un pseudo";
+                }
+            } else {
+                $errors["Champs"] = "Veuillez remplir les champs";
+            }
+        }
 
         $view = new View;
-        $view->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments, 'title' => 'Chapitre', 'session' => $session]);
-    }
-
-/**
- * Permet de signaler un commentaire
- *
- * @param array $getData
- * @return void
- */
-    public function signalCommentAction(array $getData): void
-    {
-        $commentManager = new CommentsManager();
-        $commentManager->signalComment((int) $getData['get']['idComment']);
-    }
-
-/**
- * Permet d'envoyer un commentaire
- *
- * @param array $getData
- * @return void
- */
-    public function submitCommentAction(array $getData): void
-    {
-        $name = $getData['post']['name'];
-        $comment = $getData['post']['comment'];
-        $id = (int) $getData['get']['id'];
-        $commentManager = new CommentsManager();
-        if (!empty($name) || !empty($comment)) {
-            htmlspecialchars(trim($name));
-            htmlspecialchars(trim($comment));
-            $commentManager->setComment($name, $comment, $id);
-        }
+        $view->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments, 'title' => 'Chapitre', 'session' => $session, 'errors' => $errors]);
     }
 
 /**
