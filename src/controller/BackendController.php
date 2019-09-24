@@ -40,7 +40,7 @@ class BackendController
     }
 
 /**
- * Récupère la liste des chapitres sur le backend
+ * Récupère la liste des chapitres sur le Backend
  *
  * @param array $session
  * @return void
@@ -50,10 +50,19 @@ class BackendController
         if (isset($session['user'])) {
             $action = $getData['get']['action'] ?? null;
             $postManager = new PostManager();
-            $chapters = $postManager->getChapters();
+
             if ($action === 'delete') {
                 $postManager->deleteChapter((int) $getData['get']['id']);
             }
+
+            $dashboardManager = new DashboardManager;
+            if ($action === "logout") {
+                $dashboardManager->logoutUser();
+                header('Location: index.php?page=login&action=connexion');
+
+            }
+
+            $chapters = $postManager->getChapters();
             $commentManager = new CommentManager();
             $nbComments = $commentManager->nbComments();
             $view = new View();
@@ -182,35 +191,28 @@ class BackendController
  */
     public function loginAction(&$session, array $getData): void
     {
-        if (!isset($session['user'])) {
-            $dashboardManager = new DashboardManager();
-            $action = $getData['get']['action'] ?? null;
-            $errors = (isset($session['errors'])) ? $session['errors'] : null;
-            unset($session['errors']);
-            if ($action === "connexion") {
-                $passwordBdd = $dashboardManager->getPass();
-                $password = $getData["post"]['password'] ?? null;
-                if (isset($getData['post']['connexion'])) {
-                    if (!empty($password)) {
-                        if (password_verify($password, $passwordBdd)) {
-                            $session['user'] = $password;
-                        } else {
-                            $errors['Password'] = 'Ce mot de passe n\'est pas bon pas !';
-                        }
+        $dashboardManager = new DashboardManager();
+        $action = $getData['get']['action'] ?? null;
+        $errors = (isset($session['errors'])) ? $session['errors'] : null;
+        unset($session['errors']);
+        if ($action === "connexion") {
+            $passwordBdd = $dashboardManager->getPass();
+            $password = $getData["post"]['password'] ?? null;
+            if (isset($getData['post']['connexion'])) {
+                if (!empty($password)) {
+                    if (password_verify($password, $passwordBdd)) {
+                        $session['user'] = $password;
+                        header('Location: index.php?page=adminChapters');
                     } else {
-                        $errors["Champs"] = 'Champs vide !';
+                        $errors['Password'] = 'Ce mot de passe n\'est pas bon pas !';
                     }
+                } else {
+                    $errors["Champs"] = 'Champs vide !';
                 }
-            } else if ($action === "logout") {
-                $dashboardManager->logoutUser();
-                header('Location:index.php?page=home');
             }
-
-            $view = new View();
-            $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors, 'session' => $session]);
-        } else {
-            header('Location: index.php?page=adminChapters');
         }
+        $view = new View();
+        $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors, 'session' => $session]);
     }
 
     /**

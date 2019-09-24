@@ -1,6 +1,8 @@
 <div class="container">
     <div class="row">
         <?php
+var_dump($datas);
+die();
 if (!empty($datas['errors'])): ?>
         <div class="alert alert-danger col-12 col-md-12" role="alert">
             <?php foreach ($datas['errors'] as $error): ?>
