@@ -22,9 +22,9 @@ class DashboardManager
 /**
  * Retourne le mot de passe
  *
- * @return int
+ * @return string
  */
-    public function getPass(): int
+    public function getPass(): string
     {
         $query = Database::getDb()->query("SELECT password_admin FROM admins");
         $req = $query->fetch();

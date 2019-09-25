@@ -9,8 +9,9 @@ if (!empty($datas['session'])): ?>
     <div class="collapse" id="navbarToggleExternalContent">
         <div class="bg-dark">
             <li class="p-2"><a href="index.php?page=home">Retour Site</a></li>
-            <li class="p-2"><a href="index.php?page=adminComments">Liste des commentaires signalés</a></li>
             <li class="p-2"><a href="index.php?page=adminChapter">Ecrire un chapitre</a></li>
+            <li class="p-2"><a href="index.php?page=adminProfil">Mettre à jour profile</a></li>
+            <li class="p-2"><a href="index.php?page=adminComments">Liste des commentaires signalés</a></li>
             <li class="p-2"><a href="index.php?page=adminChapters">Liste des Chapitres</a></li>
             <li class="p-2"><a href="index.php?page=adminChapters&action=logout">Déconnexion</a></li>
         </div>

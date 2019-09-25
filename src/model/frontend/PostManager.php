@@ -26,7 +26,6 @@ class PostManager
                 admins.name
         FROM    posts
         JOIN    admins
-        ON      name_post = admins.name
         WHERE   posts.id = :id
         AND     posts.posted = '1'
         ";
@@ -53,7 +52,6 @@ class PostManager
                 admins.name
         FROM posts
         JOIN admins
-        ON posts.name_post=admins.name
         WHERE posted='1'
         ORDER BY date_posts DESC
         LIMIT 0,1
@@ -80,7 +78,6 @@ class PostManager
                 admins.name
         FROM posts
         JOIN admins
-        ON posts.name_post=admins.name
         WHERE posts.id=1
         ";
 

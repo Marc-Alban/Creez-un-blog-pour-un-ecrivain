@@ -18,7 +18,7 @@ class BackendController
  */
     public function adminCommentsAction(array &$session, array $getData): void
     {
-        if (isset($session['user'])) {
+        if (isset($session['mdp'])) {
 
             $commentManager = new CommentManager();
             $action = $getData['get']['action'] ?? null;
@@ -48,7 +48,7 @@ class BackendController
  */
     public function adminChaptersAction(array &$session, array $getData): void
     {
-        if (isset($session['user'])) {
+        if (isset($session['mdp'])) {
             $action = $getData['get']['action'] ?? null;
             $postManager = new PostManager();
 
@@ -82,7 +82,7 @@ class BackendController
  */
     public function adminChapterAction(array &$session, array $getData): void
     {
-        if (isset($session['user'])) {
+        if (isset($session['mdp'])) {
             $view = new View();
             $postManager = new PostManager();
             $action = $getData['get']['action'] ?? null;
@@ -172,24 +172,28 @@ class BackendController
             $pseudo = $getData["post"]['pseudo'] ?? null;
             $password = $getData["post"]['password'] ?? null;
 
-            if (!empty($pseudo)) {
-                if (!empty($password)) {
-                    if ($pseudo === $userBdd) {
-                        if (password_verify($password, $passwordBdd)) {
-                            $session['user'] = $password;
-                            header('Location: index.php?page=adminChapters');
+            if (isset($getData['post']['connexion'])) {
+                if (!empty($pseudo)) {
+                    if (!empty($password)) {
+                        if ($pseudo === $userBdd) {
+                            $session['user'] = $pseudo;
+                            if (password_verify($password, $passwordBdd)) {
+                                $session['mdp'] = $password;
+                                header('Location: index.php?page=adminChapters');
+                            } else {
+                                $errors['Password'] = 'Ce mot de passe n\'est pas bon pas';
+                            }
                         } else {
-                            $errors['Password'] = 'Ce mot de passe n\'est pas bon pas';
+                            $errors["pseudoErrors"] = "Administrateur inconnu";
                         }
                     } else {
-                        $errors["pseudoErrors"] = "Administrateur inconnu";
+                        $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
                     }
                 } else {
-                    $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
+                    $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
                 }
-            } else {
-                $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
             }
+
         }
         $view = new View();
         $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors, 'session' => $session]);
@@ -200,6 +204,8 @@ class BackendController
         $dashboardManager = new DashboardManager();
 
         $action = $getData['get']['action'] ?? null;
+        $succes = (isset($session['succes'])) ? $session['succes'] : null;
+        unset($session['succes']);
         $errors = (isset($session['errors'])) ? $session['errors'] : null;
         unset($session['errors']);
 
@@ -212,11 +218,12 @@ class BackendController
                 if (!empty($password)) {
                     if (!empty($passwordVerif)) {
                         $dashboardManager->userReplace($pseudo);
+                        $session['user'] = $pseudo;
                         $succes['user'] = "Utilisateur mis à jour";
                         if ($password === $passwordVerif) {
                             $pass = password_hash($password, PASSWORD_DEFAULT);
                             $dashboardManager->passReplace($pass);
-                            $session['user'] = $password;
+                            $session['mdp'] = $password;
                             $succes['mdp'] = "Mot de passe mis à jour";
                         } else {
                             $errors["passwordEmpty"] = 'les mots de passe ne correspond pas';
