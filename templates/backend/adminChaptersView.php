@@ -2,7 +2,7 @@
     <div class="row">
         <div class="headerTab col-12 col-md-12 col-lg-12">
             <h2>Listes des Chapitres: </h2>
-            <a href="index.php?page=adminWrite" class="btn btn-primary">Ajouter article +</a>
+            <a href="index.php?page=adminChapter" class="btn btn-primary">Ajouter article +</a>
         </div>
         <hr>
         <section class="blog-me pt-100 pb-100" id="blog">
@@ -40,7 +40,7 @@
                                 </td>
                                 <td><a href="index.php?page=adminChapter&id=<?=$chapter->id?>" id="lien"><i
                                             class="far fa-edit"></i></a></td>
-                                <td><a href="index.php?page=adminChapter&action=delete&id=<?=$chapter->id?>"><i
+                                <td><a href="index.php?page=adminChapters&action=delete&id=<?=$chapter->id?>"><i
                                             class="fas fa-trash"></i></a>
                                 </td>
                                 <td><?php echo ($chapter->posted == '0') ? '<span class="fas fa-lock"></span>' : '<i class="fas fa-eye"></i>' ?>

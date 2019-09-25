@@ -67,7 +67,7 @@ class BackendController
             $commentManager = new CommentManager();
             $nbComments = $commentManager->nbComments();
             $view = new View();
-            $view->getView('backend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres', 'session' => $session, 'nbComments' => $nbComments]);
+            $view->getView('backend', 'adminChaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres', 'session' => $session, 'nbComments' => $nbComments]);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }
@@ -147,7 +147,7 @@ class BackendController
                 $title = 'Ecrire un chapitre';
                 $chapter = null;
             }
-            $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => $title, 'errors' => $errors, 'session' => $session]);
+            $view->getView('backend', 'adminchapterView', ['chapter' => $chapter, 'title' => $title, 'errors' => $errors, 'session' => $session]);
         } else {
             header('Location: index.php?page=login&action=connexion');
         }
@@ -162,27 +162,77 @@ class BackendController
     public function loginAction(&$session, array $getData): void
     {
         $dashboardManager = new DashboardManager();
+
         $action = $getData['get']['action'] ?? null;
         $errors = (isset($session['errors'])) ? $session['errors'] : null;
         unset($session['errors']);
         if ($action === "connexion") {
+            $userBdd = $dashboardManager->getUsers();
             $passwordBdd = $dashboardManager->getPass();
+            $pseudo = $getData["post"]['pseudo'] ?? null;
             $password = $getData["post"]['password'] ?? null;
-            if (isset($getData['post']['connexion'])) {
+
+            if (!empty($pseudo)) {
                 if (!empty($password)) {
-                    if (password_verify($password, $passwordBdd)) {
-                        $session['user'] = $password;
-                        header('Location: index.php?page=adminChapters');
+                    if ($pseudo === $userBdd) {
+                        if (password_verify($password, $passwordBdd)) {
+                            $session['user'] = $password;
+                            header('Location: index.php?page=adminChapters');
+                        } else {
+                            $errors['Password'] = 'Ce mot de passe n\'est pas bon pas';
+                        }
                     } else {
-                        $errors['Password'] = 'Ce mot de passe n\'est pas bon pas !';
+                        $errors["pseudoErrors"] = "Administrateur inconnu";
                     }
                 } else {
-                    $errors["Champs"] = 'Champs vide !';
+                    $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
                 }
+            } else {
+                $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
             }
         }
         $view = new View();
         $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors, 'session' => $session]);
+    }
+
+    public function adminProfilAction(&$session, array $getData)
+    {
+        $dashboardManager = new DashboardManager();
+
+        $action = $getData['get']['action'] ?? null;
+        $errors = (isset($session['errors'])) ? $session['errors'] : null;
+        unset($session['errors']);
+
+        if ($action === "update") {
+            $pseudo = htmlspecialchars(trim($getData["post"]['pseudo'])) ?? null;
+            $password = htmlspecialchars(trim($getData["post"]['password'])) ?? null;
+            $passwordVerif = htmlspecialchars(trim($getData["post"]['passwordVerif'])) ?? null;
+
+            if (!empty($pseudo)) {
+                if (!empty($password)) {
+                    if (!empty($passwordVerif)) {
+                        $dashboardManager->userReplace($pseudo);
+                        $succes['user'] = "Utilisateur mis à jour";
+                        if ($password === $passwordVerif) {
+                            $pass = password_hash($password, PASSWORD_DEFAULT);
+                            $dashboardManager->passReplace($pass);
+                            $session['user'] = $password;
+                            $succes['mdp'] = "Mot de passe mis à jour";
+                        } else {
+                            $errors["passwordEmpty"] = 'les mots de passe ne correspond pas';
+                        }
+                    } else {
+                        $errors["passwordVerifEmpty"] = 'Veuillez mettre un mot de passe';
+                    }
+                } else {
+                    $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
+                }
+            } else {
+                $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
+            }
+        }
+        $view = new View();
+        $view->getView('backend', 'adminProfil', ['title' => 'Mettre à jour profil', 'errors' => $errors, 'session' => $session]);
     }
 
     /**

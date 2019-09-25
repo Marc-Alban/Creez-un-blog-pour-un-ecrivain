@@ -8,7 +8,7 @@ $id = $_GET['id'] ?? null;
 $action = $_GET['action'] ?? null;
 $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
-$pageBack = ['adminComments', 'adminChapters', 'adminChapter', 'adminWrite', 'login'];
+$pageBack = ['adminComments', 'adminChapters', 'adminChapter', 'adminWrite', 'login', 'adminProfil'];
 
 if (in_array($page, $pageFront)) {
     $controllerName = 'Blog\Controller\FrontendController';

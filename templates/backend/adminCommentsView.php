@@ -53,12 +53,12 @@
                                         <p><?=nl2br($comment->comment)?></p>
                                     </div>
                                     <div class="modal-footer">
-                                        <a href="index.php?page=admin&id=<?=$comment->id?>&action=valideComment"
+                                        <a href="index.php?page=adminComments&id=<?=$comment->id?>&action=valideComment"
                                             id="<?=$comment->id?>" class="see_comment"><button
                                                 class="btn btn-primary btn-circle btn-lg see_comment"><i
                                                     class="fas fa-check-circle"></i></button></a>
 
-                                        <a href="index.php?page=admin&id=<?=$comment->id?>&action=removeComment"
+                                        <a href="index.php?page=adminComments&id=<?=$comment->id?>&action=removeComment"
                                             id="<?=$comment->id?>" class="delete_comment"><button
                                                 class="btn btn-warning btn-circle btn-lg delete_comment"><i
                                                     class="fas fa-trash-alt"></i></button></a>

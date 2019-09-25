@@ -7,17 +7,50 @@ use Blog\Model\Database;
 class DashboardManager
 {
 
+    /**
+     * Retourne le mot de passe
+     *
+     * @return string
+     */
+    public function getUsers(): string
+    {
+        $query = Database::getDb()->query("SELECT name FROM admins WHERE id = '1'");
+        $req = $query->fetch();
+        return $req['name'];
+    }
+
 /**
- * Retourne true si utilisateur en bdd ou false si utilisateur non présent
+ * Retourne le mot de passe
  *
- * @return string
+ * @return int
  */
-    public function getPass(): string
+    public function getPass(): int
     {
         $query = Database::getDb()->query("SELECT password_admin FROM admins");
         $req = $query->fetch();
         $pass = $req[0];
         return $pass;
+    }
+
+    public function userReplace($pseudo)
+    {
+        $e = [
+            ':name' => $pseudo,
+        ];
+        $sql = "UPDATE admins SET name = :name";
+        $query = Database::getDb()->prepare($sql);
+        $query->execute($e);
+
+    }
+
+    public function passReplace($password)
+    {
+        $e = [
+            ':pass' => $password,
+        ];
+        $sql = "UPDATE admins SET password_admin = :pass";
+        $query = Database::getDb()->prepare($sql);
+        $query->execute($e);
     }
 
 /**
