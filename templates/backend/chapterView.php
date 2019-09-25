@@ -1,10 +1,6 @@
 <div class="container">
     <div class="row">
-        <?php if (isset($datas['chapter'])): ?>
-        <?php foreach ($datas['chapter'] as $chapters): ?>
-        <div class="col-12 col-md-12 d-flex justify-content-center mb-3">
-            <img class='img' src='img/chapter/<?=$chapters->image_posts?>' alt='<?=$chapters->title?>'>
-        </div>
+
         <?php if (!empty($datas['errors'])): ?>
         <div class="alert alert-danger col-12 col-md-12" role="alert">
             <?php foreach ($datas['errors'] as $error): ?>
@@ -12,10 +8,16 @@
             <?php endforeach?>
         </div>
         <?php endif?>
+
+        <?php if (isset($datas['chapter'])): ?>
+        <?php foreach ($datas['chapter'] as $chapters): ?>
+        <div class="col-12 col-md-12 d-flex justify-content-center mb-3">
+            <img class='img' src='img/chapter/<?=$chapters->image_posts?>' alt='<?=$chapters->title?>'>
+        </div>
         <form method="POST" class="col-12 col-md-9 postF"
             action="index.php?page=adminChapter&action=adminEdit&id=<?=$chapters->id?>" enctype="multipart/form-data">
             <p>
-                <label for="image">Changer d'image:
+                <label for="image">Image:
                     <input type="file" name="image">
                 </label>
             </p>
@@ -33,7 +35,24 @@
             </div>
         </form>
         <?php endforeach?>
-        <?php else:var_dump($datas['chapter']);?>
+        <?php else: ?>
+        <form method="POST" class="col-12 col-md-9 postF" action="index.php?page=adminChapter&action=newChapter"
+            enctype="multipart/form-data">
+            <p>
+                <label for="image">Image:
+                    <input type="file" name="image">
+                </label>
+            </p>
+            <p><label for="title">Titre du chapitre:<input type="text" id="title" name="title"></label></p>
+            <p><label for="text">Text du chapitre:<textarea type="text" id="mytextarea" name="content"></textarea></p>
+            <div class="form-check">
+                <label class="form-check-label" for="Check1">Public</label>
+                <input type="checkbox" name="public" class="form-check-input" id="Check1">
+            </div>
+            <div class="d-flex justify-content-center">
+                <input type="submit" name="newChapter" class="btn btn-primary" value="Modifier">
+            </div>
+        </form>
         <?php endif?>
     </div>
 </div>

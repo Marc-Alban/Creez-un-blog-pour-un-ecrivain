@@ -60,8 +60,6 @@ class CommentManager
     {
         $query = Database::getDb()->query("SELECT post_id, COUNT(seen) as seen FROM comments WHERE seen = '1' GROUP BY post_id");
         $result = $query->fetchAll();
-        // var_dump($result);
-        // die();
         return $result;
     }
 }

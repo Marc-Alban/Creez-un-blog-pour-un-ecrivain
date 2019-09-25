@@ -29,11 +29,12 @@
                                 <td><?=date("d/m/Y à H:i", strtotime($chapter->date_posts))?></td>
                                 <td>
                                     <?php foreach ($datas['nbComments'] as $comments): ?>
+
                                     <?php if ($chapter->id === $comments['post_id']): ?>
                                     <a href="index.php?page=adminComments&id=<?=$chapter->id?>">
                                         <button class="btn btn-warning"><?=$comments["seen"];?></button>
                                     </a>
-                                    <?php endif?>
+                                    <?php endif;?>
                                     <?php endforeach?>
 
                                 </td>
