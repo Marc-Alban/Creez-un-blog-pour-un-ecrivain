@@ -9,6 +9,7 @@ use Blog\View\View;
 
 class BackendController
 {
+
 /**
  * Retourne la page commentaire
  *
@@ -84,33 +85,26 @@ class BackendController
         if (isset($session['user'])) {
             $view = new View();
             $postManager = new PostManager();
-            if (isset($getData['get']['id'])) {
-                $id = (int) $getData['get']['id'];
-                $title = 'Modifier un Chapitre ';
-                $chapter = $postManager->getChapter($id);
-            } else {
-                $title = 'Ecrire un chapitre';
-                $chapter = null;
-            }
-
             $action = $getData['get']['action'] ?? null;
             $errors = $session['errors'] ?? null;
             unset($session['errors']);
-
             if (isset($action)) {
-
                 $title = $getData['post']['title'] ?? null;
                 $content = $getData['post']['content'] ?? null;
                 $file = $getData['files']['image']['name'] ?? null;
                 $tmpName = $getData['files']['image']['tmp_name'] ?? null;
                 $posted = (isset($getData['post']['public']) && $getData['post']['public'] == 'on') ? 1 : 0;
                 $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
-                $extention = strrchr($file, '.');
+                if (!empty($file)) {
+                    $extention = strrchr($file, '.');
+                }
+                if (!empty($title) || !empty($content)) {
+                    if (!empty($title)) {
+                        if (!empty($content)) {
 
-                if ($action === "adminEdit") {
-                    if (!empty($title) || !empty($content)) {
-                        if (!empty($title)) {
-                            if (!empty($content)) {
+                            //Modification chapitre
+                            if ($action === "adminEdit") {
+                                $id = (int) $getData['get']['id'];
                                 $postManager->editChapter($id, $title, $content, $posted);
                                 if (isset($file) && !empty($file)) {
                                     if (in_array($extention, $extentions) || $extention = ".png") {
@@ -119,22 +113,11 @@ class BackendController
                                         $errors['valide'] = 'Image n\'est pas valide! ';
                                     }
                                 }
-                            } else {
-                                $errors['emptyContent'] = 'Mettre un contenu ';
                             }
-                        } else {
-                            $errors['emptyTitle'] = 'Mettre un Titre ';
-                        }
-                    } else {
-                        $errors['ChampsVide'] = 'Veuillez remplir tous les champs !';
-                    }
 
-                } elseif ($action === 'newChapter') {
-                    $name = $postManager->getName();
-
-                    if (!empty($title) && !empty($content)) {
-                        if (!empty($title)) {
-                            if (!empty($content)) {
+                            //Nouveau chapitre
+                            if ($action === 'newChapter') {
+                                $name = $postManager->getName();
                                 if (!empty($tmpName)) {
                                     if (in_array($extention, $extentions)) {
                                         $postManager->chapterWrite($title, $content, $name["name_post"], $posted, $tmpName, $extention);
@@ -145,16 +128,24 @@ class BackendController
                                 } else {
                                     $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';
                                 }
-                            } else {
-                                $errors['emptyDesc'] = "Veuillez mettre un paragraphe";
                             }
+
                         } else {
-                            $errors['emptyTitle'] = "Veuillez mettre un titre";
+                            $errors['emptyDesc'] = "Veuillez mettre un paragraphe";
                         }
                     } else {
-                        $errors['contenu'] = 'Veuillez renseigner un contenu !';
+                        $errors['emptyTitle'] = "Veuillez mettre un titre";
                     }
+                } else {
+                    $errors['contenu'] = 'Veuillez renseigner un contenu !';
                 }
+            }
+            if (isset($getData['get']['id'])) {
+                $title = 'Modifier un Chapitre ';
+                $chapter = $postManager->getChapter((int) $getData['get']['id']);
+            } else {
+                $title = 'Ecrire un chapitre';
+                $chapter = null;
             }
             $view->getView('backend', 'chapterView', ['chapter' => $chapter, 'title' => $title, 'errors' => $errors, 'session' => $session]);
         } else {

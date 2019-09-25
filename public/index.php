@@ -22,8 +22,11 @@ $methode = $page . 'Action';
 if (in_array($page, $pageFront) || in_array($page, $pageBack)) {
     if (($action === null && $id === null) || ($action !== null && $id !== null)) {
         $controller->$methode($_SESSION, ['get' => $_GET, 'post' => $_POST, 'files' => $_FILES]);
-    } else if (($action === null || $id !== null) || ($action !== null && $id === null)) {
+    } else if ($action === null && $id !== null) {
         $controller->$methode($_SESSION, ['post' => $_POST, 'get' => $_GET]);
+    } else if ($action !== null && $id === null) {
+        $controller->$methode($_SESSION, ['post' => $_POST, 'get' => $_GET, 'files' => $_FILES]);
+
     }
 }
 $controller->errorAction();

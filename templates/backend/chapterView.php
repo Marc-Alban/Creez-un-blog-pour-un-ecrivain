@@ -50,7 +50,7 @@
                 <input type="checkbox" name="public" class="form-check-input" id="Check1">
             </div>
             <div class="d-flex justify-content-center">
-                <input type="submit" name="newChapter" class="btn btn-primary" value="Modifier">
+                <input type="submit" name="newChapter" class="btn btn-primary" value="Envoyer">
             </div>
         </form>
         <?php endif?>
