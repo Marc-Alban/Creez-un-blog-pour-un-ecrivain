@@ -22,8 +22,11 @@
         </div>
         <hr>
         <div class="row">
-            <h4>Commentaires:</h4>
-            <br><br>
+            <span class="alert alert-warning">Notes: <i class="fas fa-exclamation-triangle"></i> ->
+                obligatoire </span>
+            <div class="container">
+                <h4>Laisser un commentaires: </h4>
+            </div>
             <?php if (!empty($datas['errors'])): ?>
             <div class="alert alert-danger col-12 col-md-12" role="alert">
                 <?php foreach ($datas['errors'] as $error): ?>
@@ -33,17 +36,15 @@
             <?php endif?>
             <form class="col-md-8 col-12" method="POST"
                 action="index.php?page=chapter&id=<?php foreach ($datas['chapter'] as $table): echo $table->id;endforeach?>&action=submitComment">
-                <h4>Laisser un commentaires:</h4>
                 <div class="form-group">
+                    <label for="name">Votre pseudo <i class="fas fa-exclamation-triangle"></i></label>
                     <input id="name" name="name" type="text" class="form-control" require>
-                    <label for="name">Votre pseudo</label>
                 </div>
                 <div class="form-group">
+                    <label for="message">Message <i class=" fas fa-exclamation-triangle"></i></label>
                     <textarea id="message " name="comment" class="form-control" require></textarea>
-                    <label for="message">Message</label>
                 </div>
                 <input type="submit" class="btn btn-primary" placeholder="Envoyer">
-
             </form>
 
             <div class="col-12 ">

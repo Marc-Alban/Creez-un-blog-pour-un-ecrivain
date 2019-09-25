@@ -93,7 +93,7 @@ class BackendController
                 $content = $getData['post']['content'] ?? null;
                 $file = $getData['files']['image']['name'] ?? null;
                 $tmpName = $getData['files']['image']['tmp_name'] ?? null;
-                $posted = (isset($getData['post']['public']) && $getData['post']['public'] == 'on') ? 1 : 0;
+                $posted = (isset($getData['post']['public']) && $getData['post']['public'] === 'on') ? 1 : 0;
                 $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
                 if (!empty($file)) {
                     $extention = strrchr($file, '.');
@@ -201,45 +201,49 @@ class BackendController
 
     public function adminProfilAction(&$session, array $getData)
     {
-        $dashboardManager = new DashboardManager();
+        if (isset($session['mdp'])) {
+            $dashboardManager = new DashboardManager();
+            $action = $getData['get']['action'] ?? null;
+            $get = $getData['get'];
+            $succes = (isset($session['succes'])) ? $session['succes'] : null;
+            unset($session['succes']);
+            $errors = (isset($session['errors'])) ? $session['errors'] : null;
+            unset($session['errors']);
 
-        $action = $getData['get']['action'] ?? null;
-        $succes = (isset($session['succes'])) ? $session['succes'] : null;
-        unset($session['succes']);
-        $errors = (isset($session['errors'])) ? $session['errors'] : null;
-        unset($session['errors']);
+            if ($action === "update") {
+                $pseudo = htmlspecialchars(trim($getData["post"]['pseudo'])) ?? null;
+                $password = htmlspecialchars(trim($getData["post"]['password'])) ?? null;
+                $passwordVerif = htmlspecialchars(trim($getData["post"]['passwordVerif'])) ?? null;
 
-        if ($action === "update") {
-            $pseudo = htmlspecialchars(trim($getData["post"]['pseudo'])) ?? null;
-            $password = htmlspecialchars(trim($getData["post"]['password'])) ?? null;
-            $passwordVerif = htmlspecialchars(trim($getData["post"]['passwordVerif'])) ?? null;
-
-            if (!empty($pseudo)) {
-                if (!empty($password)) {
-                    if (!empty($passwordVerif)) {
-                        $dashboardManager->userReplace($pseudo);
-                        $session['user'] = $pseudo;
-                        $succes['user'] = "Utilisateur mis à jour";
-                        if ($password === $passwordVerif) {
-                            $pass = password_hash($password, PASSWORD_DEFAULT);
-                            $dashboardManager->passReplace($pass);
-                            $session['mdp'] = $password;
-                            $succes['mdp'] = "Mot de passe mis à jour";
+                if (!empty($pseudo)) {
+                    if (!empty($password)) {
+                        if (!empty($passwordVerif)) {
+                            $dashboardManager->userReplace($pseudo);
+                            $session['user'] = $pseudo;
+                            $succes['user'] = "Utilisateur mis à jour";
+                            if ($password === $passwordVerif) {
+                                $pass = password_hash($password, PASSWORD_DEFAULT);
+                                $dashboardManager->passReplace($pass);
+                                $session['mdp'] = $password;
+                                $succes['mdp'] = "Mot de passe mis à jour";
+                            } else {
+                                $errors["passwordEmpty"] = 'les mots de passe ne correspond pas';
+                            }
                         } else {
-                            $errors["passwordEmpty"] = 'les mots de passe ne correspond pas';
+                            $errors["passwordVerifEmpty"] = 'Veuillez mettre un mot de passe';
                         }
                     } else {
-                        $errors["passwordVerifEmpty"] = 'Veuillez mettre un mot de passe';
+                        $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
                     }
                 } else {
-                    $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
+                    $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
                 }
-            } else {
-                $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
             }
+            $view = new View();
+            $view->getView('backend', 'adminProfil', ['title' => 'Mettre à jour profil', 'errors' => $errors, 'session' => $session, 'get' => $get]);
+        } else {
+            header('Location: index.php?page=login&action=connexion');
         }
-        $view = new View();
-        $view->getView('backend', 'adminProfil', ['title' => 'Mettre à jour profil', 'errors' => $errors, 'session' => $session]);
     }
 
     /**

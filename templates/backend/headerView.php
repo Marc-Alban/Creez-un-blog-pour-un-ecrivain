@@ -1,5 +1,4 @@
-<?php
-if (!empty($datas['session'])): ?>
+<?php if (!empty($datas['session']['user'])): ?>
 <div class="pos-f-t">
     <nav class="navbar navbar-dark bg-dark">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent">

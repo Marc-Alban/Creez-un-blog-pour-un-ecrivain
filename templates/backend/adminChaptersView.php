@@ -2,7 +2,6 @@
     <div class="row">
         <div class="headerTab col-12 col-md-12 col-lg-12">
             <h2>Listes des Chapitres: </h2>
-            <a href="index.php?page=adminChapter" class="btn btn-primary">Ajouter article +</a>
         </div>
         <hr>
         <section class="blog-me pt-100 pb-100" id="blog">
@@ -51,6 +50,7 @@
                         <?php else:var_dump($datas['chapters']);?>
                         <?php endif;?>
                     </table>
+                    <a href="index.php?page=adminChapter" class="btn btn-primary">Ajouter article</a>
                 </div>
             </div>
         </section>

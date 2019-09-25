@@ -1,28 +1,44 @@
-<div class="container">
-    <div class="row">
-        <div class="col-12 d-flex justify-content-center ">
-            <?php if (!empty($datas['errors'])): ?>
-            <div class="alert alert-danger col-12 col-md-12" role="alert">
-                <?php foreach ($datas['errors'] as $error): ?>
-                <p><?=$error?></p>
-                <?php endforeach?>
+        <div class="cotainer overflow-hidden">
+            <div class="row justify-content-center ">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Partie Administration</div>
+                        <div class="card-body">
+                            <?php if (!empty($datas['errors'])): ?>
+                            <div class="alert alert-danger col-12 col-md-12" role="alert">
+                                <?php foreach ($datas['errors'] as $error): ?>
+                                <p><?=$error?></p>
+                                <?php endforeach?>
+                            </div>
+                            <?php endif?>
+                            <form action="index.php?page=login&action=connexion" method="POST">
+                                <div class="form-group row">
+                                    <label for="pseudo" class="col-md-4 col-form-label text-md-right">Pseudo</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="pseudo" class="form-control" name="pseudo"
+                                            placeholder="Pseudo" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="password" class="col-md-4 col-form-label text-md-right">Mot de
+                                        passe</label>
+                                    <div class="col-md-6">
+                                        <input type="password" id="password" class="form-control" name="password"
+                                            placeholder="Mot de passe" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 offset-md-4">
+                                    <button type="submit" class="btn btn-primary" name="connexion">
+                                        Connexion
+                                    </button>
+                                    <a class="btn btn-link" href="index.php?page=home">Retour Accueil</a>
+                                </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <?php endif?>
         </div>
-        <div class="col-12 d-flex justify-content-center ">
-            <div class="row">
-                <form class="form-signin " method="POST" action="index.php?page=login&action=connexion">
-                    <h1 class="h3 mb-3 font-weight-normal">Partie Administration</h1>
-                    <input type="text" id="inputPseudo" class="form-control" name="pseudo" placeholder="Pseudo">
-                    <input type="password" id="inputPassword" class="form-control" name="password"
-                        placeholder="Mot de passe">
-                    <input class="btn btn-lg btn-primary btn-block" type='submit' name="connexion"
-                        placeholder="Connexion">
-                </form>
-            </div>
         </div>
-        <div class="col-12">
-            <a class="btn btn-primary" href="index.php?page=home">Retour Accueil</a>
-        </div>
-    </div>
-</div>
