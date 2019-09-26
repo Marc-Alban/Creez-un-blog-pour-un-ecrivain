@@ -1,5 +1,8 @@
         <div class="cotainer overflow-hidden">
             <div class="row justify-content-center ">
+                <img src="img/admin.png" id="connexionAdmin" alt="image admin connexion ">
+            </div>
+            <div class="row justify-content-center ">
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">Partie Administration</div>
@@ -33,10 +36,10 @@
                                     <button type="submit" class="btn btn-primary" name="connexion">
                                         Connexion
                                     </button>
-                                    <a class="btn btn-link" href="index.php?page=home">Retour Accueil</a>
+                                    <a class="btn btn-primary" href="index.php?page=home">Retour Accueil</a>
                                 </div>
+                            </form>
                         </div>
-                        </form>
                     </div>
                 </div>
             </div>

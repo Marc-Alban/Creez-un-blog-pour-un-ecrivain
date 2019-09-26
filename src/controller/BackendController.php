@@ -28,6 +28,8 @@ class BackendController
                     $commentManager->validateComments($id);
                 } else if ($action === 'removeComment') {
                     $commentManager->deleteComments($id);
+                } else if ($action === 'articleComment') {
+                    $commentManager->commentsNb($id);
                 }
             }
             $comments = $commentManager->getComments();
@@ -48,7 +50,9 @@ class BackendController
  */
     public function adminChaptersAction(array &$session, array $getData): void
     {
+
         if (isset($session['mdp'])) {
+
             $action = $getData['get']['action'] ?? null;
             $postManager = new PostManager();
 

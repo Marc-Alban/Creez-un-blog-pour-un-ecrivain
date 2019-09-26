@@ -67,8 +67,10 @@ class FrontendController
             if (!empty($name) || !empty($comment)) {
                 if (!empty($name)) {
                     if (!empty($comment)) {
-                        htmlspecialchars(trim($name));
-                        htmlspecialchars(trim($comment));
+                        htmlspecialchars($name);
+                        trim($name);
+                        htmlspecialchars($comment);
+                        trim($comment);
                         $commentManager->setComment($name, $comment, $id);
                     } else {
                         $errors['name'] = "Veuillez renseigner une description";

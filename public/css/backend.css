@@ -115,7 +115,7 @@ input[type="file"]::-webkit-file-upload-button {
     justify-content: space-between;
 }
 
-.headerTab .btn-primary {
+.btn-primary {
     color: #fff;
     background-color: #343a40;
     border-color: #343a40;
@@ -132,6 +132,11 @@ input[type="file"]::-webkit-file-upload-button {
     border-color: #343a40;
 }
 
+
+#connexionAdmin {
+    width: 150px;
+    margin: 20px;
+}
 
 @media all and (min-width: 768px) {
 

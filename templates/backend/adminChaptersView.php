@@ -42,7 +42,8 @@
                                 <td><a href="index.php?page=adminChapters&action=delete&id=<?=$chapter->id?>"><i
                                             class="fas fa-trash"></i></a>
                                 </td>
-                                <td><?php echo ($chapter->posted == '0') ? '<span class="fas fa-lock"></span>' : '<i class="fas fa-eye"></i>' ?>
+                                <td>
+                                    <?=($chapter->posted == '0') ? '<span class="fas fa-lock"></span>' : '<i class="fas fa-eye"></i>'?>
                                 </td>
                             </tr>
                         </tbody>

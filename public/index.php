@@ -10,7 +10,7 @@ $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
 $pageBack = ['adminComments', 'adminChapters', 'adminChapter', 'adminWrite', 'login', 'adminProfil'];
 
-if (in_array($page, $pageFront)) {
+if (in_array($page, $pageFront) || empty($page) || !in_array($page, $pageBack)) {
     $controllerName = 'Blog\Controller\FrontendController';
 } else if (in_array($page, $pageBack)) {
     $controllerName = 'Blog\Controller\BackendController';
@@ -20,13 +20,10 @@ $controller = new $controllerName();
 $methode = $page . 'Action';
 
 if (in_array($page, $pageFront) || in_array($page, $pageBack)) {
-    if (($action === null && $id === null) || ($action !== null && $id !== null)) {
+    if (($action === null && $id === null) || ($action !== null && $id !== null || $action !== null && $id === null)) {
         $controller->$methode($_SESSION, ['get' => $_GET, 'post' => $_POST, 'files' => $_FILES]);
     } else if ($action === null && $id !== null) {
         $controller->$methode($_SESSION, ['post' => $_POST, 'get' => $_GET]);
-    } else if ($action !== null && $id === null) {
-        $controller->$methode($_SESSION, ['post' => $_POST, 'get' => $_GET, 'files' => $_FILES]);
-
     }
 }
 $controller->errorAction();

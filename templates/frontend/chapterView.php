@@ -58,7 +58,8 @@
                     <span class=" col-md-3 alert alert-danger">Commentaire signalé</span>
                     <?php else: ?>
                     <a
-                        href="index.php?page=chapter&action=signalComment&id=<?=$table->id?>&idComment=<?=$comment->id?>">(Signaler)</a>
+                        href="index.php?page=chapter&action=signalComment&id=<?=$table->id?>&idComment=<?=$comment->id?>">
+                        (Signaler)</a>
                     <?php endif?>
                     <?php endforeach?>
                     <?php endif?>
