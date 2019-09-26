@@ -22,17 +22,22 @@ class BackendController
 
             $commentManager = new CommentManager();
             $action = $getData['get']['action'] ?? null;
+            $id = isset(($getData['get']['id'])) ? (int) $getData['get']['id'] : null;
+
             if (isset($action)) {
-                $id = (int) $getData['get']['id'];
                 if ($action === 'valideComment') {
                     $commentManager->validateComments($id);
-                } else if ($action === 'removeComment') {
+                } elseif ($action === 'removeComment') {
                     $commentManager->deleteComments($id);
-                } else if ($action === 'articleComment') {
-                    $commentManager->commentsNb($id);
                 }
             }
-            $comments = $commentManager->getComments();
+
+            if ($id !== null) {
+                $comments = $commentManager->commentsNb($id);
+            } elseif ($id === null) {
+                $comments = $commentManager->getComments();
+            }
+
             $view = new View();
             $view->getView('backend', 'adminCommentsView', ['comments' => $comments, 'title' => 'Dashboard', 'session' => $session]);
 

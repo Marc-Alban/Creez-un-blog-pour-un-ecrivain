@@ -32,6 +32,28 @@ class CommentManager
         return $results;
     }
 
+    public function commentsNb(int $id)
+    {
+        $query = Database::getDb()->prepare("
+        SELECT  comments.id,
+                comments.name,
+                comments.date_comment,
+                comments.post_id,
+                comments.comment,
+                posts.title
+        FROM    comments
+        JOIN    posts
+        ON      comments.post_id = posts.id
+        WHERE   comments.seen = '1'
+        AND 	comments.post_id = :id
+        ORDER BY comments.date_comment ASC
+        ");
+        $query->execute([':id' => $id]);
+        $result = $query->fetchAll(PDO::FETCH_OBJ);
+
+        return $result;
+    }
+
 /**
  * Permet de supprimer un commentaire en bdd
  *
@@ -62,28 +84,5 @@ class CommentManager
         $result = $query->fetchAll();
         return $result;
     }
-
-    // public function commentsNb($id)
-    // {
-    //     $query = Database::getDb()->query("
-    //     SELECT  comments.id,
-    //             comments.name,
-    //             comments.date_comment,
-    //             comments.post_id,
-    //             comments.comment,
-    //             posts.title
-    //     FROM    comments
-    //     JOIN    posts
-    //     ON      comments.post_id = posts.id --> :id en param
-    //     WHERE   comments.seen = '1'
-    //     AND
-    //     ORDER BY comments.date_comment ASC
-    //     ");
-
-    //     $results = $query->fetchAll(PDO::FETCH_OBJ);
-    //     var_dump($results);
-    //     die();
-    //     return $results;
-    // }
 
 }

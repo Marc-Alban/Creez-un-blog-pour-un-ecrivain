@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="headerTab col-12 col-md-12 col-lg-12">
-            <h2>Listes des Chapitres: </h2>
+            <h2>La listes des Chapitres: </h2>
         </div>
         <hr>
         <section class="blog-me pt-100 pb-100" id="blog">
@@ -27,14 +27,19 @@
                                 <td><?=substr(nl2br($chapter->content), 0, 250)?></td>
                                 <td><?=date("d/m/Y à H:i", strtotime($chapter->date_posts))?></td>
                                 <td>
+                                    <?php if (!empty($datas['nbComments'])): ?>
                                     <?php foreach ($datas['nbComments'] as $comments): ?>
-
-                                    <?php if ($chapter->id === $comments['post_id']): ?>
+                                    <?php if ($chapter->id === $datas['nbComments']['0']['post_id']): ?>
                                     <a href="index.php?page=adminComments&id=<?=$chapter->id?>">
                                         <button class="btn btn-warning"><?=$comments["seen"];?></button>
                                     </a>
+                                    <?php else: ?>
+                                    <?='Aucun commentaire signalé'?>
                                     <?php endif;?>
                                     <?php endforeach?>
+                                    <?php else: ?>
+                                    <?='Aucun commentaire signalé'?>
+                                    <?php endif;?>
 
                                 </td>
                                 <td><a href="index.php?page=adminChapter&id=<?=$chapter->id?>" id="lien"><i
