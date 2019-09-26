@@ -138,7 +138,6 @@ class PostManager
         UPDATE posts
         SET title = :title,
             content = :content,
-            date_posts = NOW(),
             posted = :posted
         WHERE id = :id ";
 
