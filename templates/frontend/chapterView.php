@@ -39,10 +39,12 @@
                 <div class="form-group">
                     <label for="name">Votre pseudo <i class="fas fa-exclamation-triangle"></i></label>
                     <input id="name" name="name" type="text" class="form-control" require>
+                    <div id="aideName"></div>
                 </div>
                 <div class="form-group">
                     <label for="message">Message <i class=" fas fa-exclamation-triangle"></i></label>
                     <textarea id="message " name="comment" class="form-control" require></textarea>
+                    <div id="aideMessage"></div>
                 </div>
                 <div class="d-flex flex-row-reverse">
                     <input type="submit" class="btn btn-primary" placeholder="Envoyer">

@@ -32,7 +32,13 @@ class CommentManager
         return $results;
     }
 
-    public function commentsNb(int $id)
+    /**
+     *Nombre de commentaire dans
+     *
+     * @param integer $id
+     * @return void
+     */
+    public function chapterComment(int $id)
     {
         $query = Database::getDb()->prepare("
         SELECT  comments.id,
@@ -78,6 +84,11 @@ class CommentManager
         $query->execute(["id" => $id]);
     }
 
+    /**
+     * Nombre de commentaire tableau
+     *
+     * @return void
+     */
     public function nbComments()
     {
         $query = Database::getDb()->query("SELECT post_id, COUNT(seen) as seen FROM comments WHERE seen = '1' GROUP BY post_id");

@@ -19,7 +19,6 @@ class BackendController
     public function adminCommentsAction(array &$session, array $getData): void
     {
         if (isset($session['mdp'])) {
-
             $commentManager = new CommentManager();
             $action = $getData['get']['action'] ?? null;
             $id = isset(($getData['get']['id'])) ? (int) $getData['get']['id'] : null;
@@ -27,13 +26,14 @@ class BackendController
             if (isset($action)) {
                 if ($action === 'valideComment') {
                     $commentManager->validateComments($id);
+
                 } elseif ($action === 'removeComment') {
                     $commentManager->deleteComments($id);
                 }
             }
 
             if ($id !== null) {
-                $comments = $commentManager->commentsNb($id);
+                $comments = $commentManager->chapterComment($id);
             } elseif ($id === null) {
                 $comments = $commentManager->getComments();
             }

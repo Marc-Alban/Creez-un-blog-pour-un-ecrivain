@@ -49,7 +49,7 @@ class FrontendController
  */
     public function chapterAction(&$session, array $getData): void
     {
-        $id = (int) $getData['get']['id'];
+        $id = ($getData['get']['id']) ? (int) $getData['get']['id'] : 1;
         $name = $getData['post']['name'] ?? null;
         $comment = $getData['post']['comment'] ?? null;
         $action = $getData['get']['action'] ?? null;
@@ -64,22 +64,29 @@ class FrontendController
         }
 
         if ($action === 'submitComment') {
-            if (!empty($name) || !empty($comment)) {
-                if (!empty($name)) {
-                    if (!empty($comment)) {
-                        htmlspecialchars($name);
-                        trim($name);
-                        htmlspecialchars($comment);
-                        trim($comment);
-                        $commentManager->setComment($name, $comment, $id);
+            // var_dump(strlen($name));die();
+            if (strlen($name) >= 8) {
+                if (!empty($name) || !empty($comment)) {
+                    if (!empty($name)) {
+                        if (!empty($comment)) {
+                            $name = htmlspecialchars(trim($name));
+                            $comment = htmlspecialchars(trim($comment));
+                            if (preg_match('`([-_.,;:\|<>]+)`', $name) && preg_match('`([-_.,;:\|<>]+)`', $comment)) {
+                                $errors['caractere'] = "Veuillez mettre des caractères alphanumérique et non caractère spéciaux ";
+                            } else {
+                                $commentManager->setComment($name, $comment, $id);
+                            }
+                        } else {
+                            $errors['name'] = "Veuillez renseigner une description";
+                        }
                     } else {
-                        $errors['name'] = "Veuillez renseigner une description";
+                        $errors['comment'] = "Veuillez mettre un pseudo";
                     }
                 } else {
-                    $errors['comment'] = "Veuillez mettre un pseudo";
+                    $errors["Champs"] = "Veuillez remplir les champs";
                 }
             } else {
-                $errors["Champs"] = "Veuillez remplir les champs";
+                $errors['taille'] = "Veuillez mettre un pseudo de 8 caractères minimum ...";
             }
         }
 
