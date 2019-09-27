@@ -22,7 +22,7 @@
         </div>
         <hr>
         <div class="row">
-            <span class="alert alert-warning">Notes: <i class="fas fa-exclamation-triangle"></i> ->
+            <span class="alert alert-primary">Notes: <i class="fas fa-exclamation-triangle"></i> ->
                 obligatoire </span>
             <div class="container">
                 <h4>Laisser un commentaires: </h4>
@@ -34,7 +34,7 @@
                 <?php endforeach?>
             </div>
             <?php endif?>
-            <form class="col-md-8 col-12" method="POST"
+            <form class="col-md-8 col-12 dp-" method="POST"
                 action="index.php?page=chapter&id=<?php foreach ($datas['chapter'] as $table): echo $table->id;endforeach?>&action=submitComment">
                 <div class="form-group">
                     <label for="name">Votre pseudo <i class="fas fa-exclamation-triangle"></i></label>
@@ -44,7 +44,9 @@
                     <label for="message">Message <i class=" fas fa-exclamation-triangle"></i></label>
                     <textarea id="message " name="comment" class="form-control" require></textarea>
                 </div>
-                <input type="submit" class="btn btn-primary" placeholder="Envoyer">
+                <div class="d-flex flex-row-reverse">
+                    <input type="submit" class="btn btn-primary" placeholder="Envoyer">
+                </div>
             </form>
 
             <div class="col-12 ">
@@ -66,6 +68,10 @@
                 </div>
                 <?php endforeach;?>
             </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <a href="index.php?page=home" class="btn btn-primary">Retour Accueil</a>
+            <a href="index.php?page=chapters" class="btn btn-primary">Liste des chapitre</a>
         </div>
     </div>
     </div>

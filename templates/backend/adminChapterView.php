@@ -60,5 +60,6 @@
             </div>
         </form>
         <?php endif?>
+        <a href="index.php?page=adminChapters" class="btn btn-primary">Retour liste Chapitre</a>
     </div>
 </div>
