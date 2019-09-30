@@ -22,13 +22,14 @@ class BackendController
             $commentManager = new CommentManager();
             $action = $getData['get']['action'] ?? null;
             $id = isset(($getData['get']['id'])) ? (int) $getData['get']['id'] : null;
+            $idComment = isset(($getData['get']['idComment'])) ? (int) $getData['get']['idComment'] : null;
 
             if (isset($action)) {
                 if ($action === 'valideComment') {
-                    $commentManager->validateComments($id);
+                    $commentManager->validateComments($idComment);
 
                 } elseif ($action === 'removeComment') {
-                    $commentManager->deleteComments($id);
+                    $commentManager->deleteComments($idComment);
                 }
             }
 
@@ -91,75 +92,78 @@ class BackendController
  */
     public function adminChapterAction(array &$session, array $getData): void
     {
-        if (isset($session['mdp'])) {
-            $view = new View();
-            $postManager = new PostManager();
-            $action = $getData['get']['action'] ?? null;
-            $errors = $session['errors'] ?? null;
-            unset($session['errors']);
-            if (isset($action)) {
-                $title = $getData['post']['title'] ?? null;
-                $content = $getData['post']['content'] ?? null;
-                $file = $getData['files']['image']['name'] ?? null;
-                $tmpName = $getData['files']['image']['tmp_name'] ?? null;
-                $posted = (isset($getData['post']['public']) && $getData['post']['public'] === 'on') ? 1 : 0;
-                $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
-                if (!empty($file)) {
-                    $extention = strrchr($file, '.');
-                }
-                if (!empty($title) || !empty($content)) {
-                    if (!empty($title)) {
-                        if (!empty($content)) {
-
-                            //Modification chapitre
-                            if ($action === "adminEdit") {
-                                $id = (int) $getData['get']['id'];
-                                $postManager->editChapter($id, $title, $content, $posted);
-                                if (isset($file) && !empty($file)) {
-                                    if (in_array($extention, $extentions) || $extention = ".png") {
-                                        $postManager->editImageChapter($id, $title, $content, $tmpName, $extention, $posted);
-                                    } else {
-                                        $errors['valide'] = 'Image n\'est pas valide! ';
-                                    }
-                                }
-                            }
-
-                            //Nouveau chapitre
-                            if ($action === 'newChapter') {
-                                $name = $postManager->getName();
-                                if (!empty($tmpName)) {
-                                    if (in_array($extention, $extentions)) {
-                                        $postManager->chapterWrite($title, $content, $name["name_post"], $posted, $tmpName, $extention);
-                                        header('Location: index.php?page=adminChapters');
-                                    } else {
-                                        $errors['image'] = 'Image n\'est pas valide! ';
-                                    }
-                                } else {
-                                    $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';
-                                }
-                            }
-
-                        } else {
-                            $errors['emptyDesc'] = "Veuillez mettre un paragraphe";
-                        }
-                    } else {
-                        $errors['emptyTitle'] = "Veuillez mettre un titre";
-                    }
-                } else {
-                    $errors['contenu'] = 'Veuillez renseigner un contenu !';
-                }
-            }
-            if (isset($getData['get']['id'])) {
-                $title = 'Modifier un Chapitre ';
-                $chapter = $postManager->getChapter((int) $getData['get']['id']);
-            } else {
-                $title = 'Ecrire un chapitre';
-                $chapter = null;
-            }
-            $view->getView('backend', 'adminchapterView', ['chapter' => $chapter, 'title' => $title, 'errors' => $errors, 'session' => $session]);
-        } else {
+        if (!isset($session['mdp'])) {
             header('Location: index.php?page=login&action=connexion');
         }
+
+        $view = new View();
+        $postManager = new PostManager();
+        $action = $getData['get']['action'] ?? null;
+        $errors = $session['errors'] ?? null;
+        unset($session['errors']);
+
+        if (isset($action)) {
+            $title = $getData['post']['title'] ?? null;
+            $content = $getData['post']['content'] ?? null;
+            $file = $getData['files']['image']['name'] ?? null;
+            $tmpName = $getData['files']['image']['tmp_name'] ?? null;
+            $posted = (isset($getData['post']['public']) && $getData['post']['public'] === 'on') ? 1 : 0;
+            $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
+            if (!empty($file)) {
+                $extention = strrchr($file, '.');
+            }
+            if (!empty($title) || !empty($content)) {
+                if (!empty($title)) {
+                    if (!empty($content)) {
+
+                        //Modification chapitre
+                        if ($action === "adminEdit") {
+                            $id = (int) $getData['get']['id'];
+                            $postManager->editChapter($id, $title, $content, $posted);
+                            if (isset($file) && !empty($file)) {
+                                if (in_array($extention, $extentions) || $extention = ".png") {
+                                    $postManager->editImageChapter($id, $title, $content, $tmpName, $extention, $posted);
+                                } else {
+                                    $errors['valide'] = 'Image n\'est pas valide! ';
+                                }
+                            }
+                        }
+
+                        //Nouveau chapitre
+                        if ($action === 'newChapter') {
+                            $name = $postManager->getName();
+                            if (!empty($tmpName)) {
+                                if (in_array($extention, $extentions)) {
+                                    $postManager->chapterWrite($title, $content, $name["name_post"], $posted, $tmpName, $extention);
+                                    header('Location: index.php?page=adminChapters');
+                                } else {
+                                    $errors['image'] = 'Image n\'est pas valide! ';
+                                }
+                            } else {
+                                $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';
+                            }
+                        }
+
+                    } else {
+                        $errors['emptyDesc'] = "Veuillez mettre un paragraphe";
+                    }
+                } else {
+                    $errors['emptyTitle'] = "Veuillez mettre un titre";
+                }
+            } else {
+                $errors['contenu'] = 'Veuillez renseigner un contenu !';
+            }
+        }
+
+        if (isset($getData['get']['id'])) {
+            $title = 'Modifier un Chapitre ';
+            $chapter = $postManager->getChapter((int) $getData['get']['id']);
+        } else {
+            $title = 'Ecrire un chapitre';
+            $chapter = null;
+        }
+
+        $view->getView('backend', 'adminchapterView', ['chapter' => $chapter, 'title' => $title, 'errors' => $errors, 'session' => $session]);
     }
 
 /**

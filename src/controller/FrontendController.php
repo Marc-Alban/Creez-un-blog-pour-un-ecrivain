@@ -49,29 +49,28 @@ class FrontendController
  */
     public function chapterAction(&$session, array $getData): void
     {
+        $postManager = new PostManager();
+        $commentManager = new CommentsManager();
         $id = ($getData['get']['id']) ? (int) $getData['get']['id'] : 1;
+        $chapter = $postManager->getChapter($id);
         $name = $getData['post']['name'] ?? null;
         $comment = $getData['post']['comment'] ?? null;
         $action = $getData['get']['action'] ?? null;
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
-        $postManager = new PostManager();
-        $chapter = $postManager->getChapter($id);
-        $commentManager = new CommentsManager();
 
         if ($action === 'signalComment') {
             $commentManager->signalComment((int) $getData['get']['idComment']);
         }
 
         if ($action === 'submitComment') {
-            // var_dump(strlen($name));die();
             if (strlen($name) >= 8) {
                 if (!empty($name) || !empty($comment)) {
                     if (!empty($name)) {
                         if (!empty($comment)) {
-                            $name = htmlspecialchars(trim($name));
-                            $comment = htmlspecialchars(trim($comment));
-                            if (preg_match('`([-_.,;:\|<>]+)`', $name) && preg_match('`([-_.,;:\|<>]+)`', $comment)) {
+                            $name = htmlentities(trim($name));
+                            $comment = htmlentities(trim($comment));
+                            if (preg_match('`([-_.,;:\|<>]+)`', $name)) {
                                 $errors['caractere'] = "Veuillez mettre des caractères alphanumérique et non caractère spéciaux ";
                             } else {
                                 $commentManager->setComment($name, $comment, $id);

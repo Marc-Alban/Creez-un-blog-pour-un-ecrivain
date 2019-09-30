@@ -59,7 +59,7 @@
                     <?php if (isset($datas['chapter'])): ?>
                     <?php foreach ($datas['chapter'] as $table): ?>
                     <?php if ($comment->seen === "1"): ?>
-                    <span class=" col-md-3 alert alert-danger">Commentaire signalé</span>
+                    <span class=" col-md-3  ml-3 alert alert-danger">Commentaire signalé</span>
                     <?php else: ?>
                     <a
                         href="index.php?page=chapter&action=signalComment&id=<?=$table->id?>&idComment=<?=$comment->id?>">
