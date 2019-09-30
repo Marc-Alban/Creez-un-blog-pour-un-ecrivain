@@ -53,27 +53,25 @@ class BackendController
  */
     public function adminChaptersAction(array &$session, array $getData): void
     {
-        if (!isset($session['mdp'])) {
-            header('Location: index.php?page=login&action=connexion');
-        }
+        // if (empty($session['mdp'])) {
+        //     header('Location: index.php?page=login&action=connexion');
+        // }
 
-        $action = $getData['get']['action'] ?? null;
         $postManager = new PostManager();
+        $dashboardManager = new DashboardManager;
+        $commentManager = new CommentManager();
+        $action = $getData['get']['action'] ?? null;
 
         if ($action === 'delete') {
             $postManager->deleteChapter((int) $getData['get']['id']);
-        }
-
-        $dashboardManager = new DashboardManager;
-
-        if ($action === "logout") {
+        } else if ($action === "logout") {
             $dashboardManager->logoutUser();
             header('Location: index.php?page=login&action=connexion');
         }
 
         $chapters = $postManager->getChapters();
-        $commentManager = new CommentManager();
         $nbComments = $commentManager->nbComments();
+
         $view = new View();
         $view->getView('backend', 'adminChaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres', 'session' => $session, 'nbComments' => $nbComments]);
     }
@@ -159,6 +157,7 @@ class BackendController
  */
     public function loginAction(&$session, array $getData): void
     {
+
         $dashboardManager = new DashboardManager();
 
         $action = $getData['get']['action'] ?? null;
@@ -176,12 +175,13 @@ class BackendController
                 $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
             } else if (empty($password)) {
                 $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
-            } else if (!password_verify($password, $passwordBdd) && $pseudo !== $userBdd) {
+            } else if (password_verify($password, $passwordBdd) !== true && $pseudo !== $userBdd) {
                 $errors['user'] = 'Identifiants Incorects';
             }
 
             $session['user'] = $pseudo;
             $session['mdp'] = $password;
+
             header('Location: index.php?page=adminChapters');
         }
 
