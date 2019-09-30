@@ -179,35 +179,34 @@ class BackendController
         $action = $getData['get']['action'] ?? null;
         $errors = (isset($session['errors'])) ? $session['errors'] : null;
         unset($session['errors']);
+
         if ($action === "connexion") {
+
             $userBdd = $dashboardManager->getUsers();
             $passwordBdd = $dashboardManager->getPass();
             $pseudo = $getData["post"]['pseudo'] ?? null;
             $password = $getData["post"]['password'] ?? null;
 
-            if (isset($getData['post']['connexion'])) {
-                if (!empty($pseudo)) {
-                    if (!empty($password)) {
-                        if ($pseudo === $userBdd) {
-                            $session['user'] = $pseudo;
-                            if (password_verify($password, $passwordBdd)) {
-                                $session['mdp'] = $password;
-                                header('Location: index.php?page=adminChapters');
-                            } else {
-                                $errors['Password'] = 'Ce mot de passe n\'est pas bon pas';
-                            }
-                        } else {
-                            $errors["pseudoErrors"] = "Administrateur inconnu";
-                        }
-                    } else {
-                        $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
-                    }
-                } else {
-                    $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
-                }
+            if (empty($pseudo)) {
+                $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
             }
 
+            if (empty($password)) {
+                $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
+            }
+
+            if (password_verify($password, $passwordBdd)) {
+                $session['mdp'] = $password;
+                header('Location: index.php?page=adminChapters');
+            } else {
+                $errors['Password'] = 'Ce mot de passe n\'est pas bon pas';
+            }
+
+            if ($pseudo === $userBdd) {
+                $session['user'] = $pseudo;
+            }
         }
+
         $view = new View();
         $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors, 'session' => $session]);
     }
