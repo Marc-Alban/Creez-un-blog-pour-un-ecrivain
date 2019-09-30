@@ -18,34 +18,31 @@ class BackendController
  */
     public function adminCommentsAction(array &$session, array $getData): void
     {
-        if (isset($session['mdp'])) {
-            $commentManager = new CommentManager();
-            $action = $getData['get']['action'] ?? null;
-            $id = isset(($getData['get']['id'])) ? (int) $getData['get']['id'] : null;
-            $idComment = isset(($getData['get']['idComment'])) ? (int) $getData['get']['idComment'] : null;
-
-            if (isset($action)) {
-                if ($action === 'valideComment') {
-                    $commentManager->validateComments($idComment);
-
-                } elseif ($action === 'removeComment') {
-                    $commentManager->deleteComments($idComment);
-                }
-            }
-
-            if ($id !== null) {
-                $comments = $commentManager->chapterComment($id);
-            } elseif ($id === null) {
-                $comments = $commentManager->getComments();
-            }
-
-            $view = new View();
-            $view->getView('backend', 'adminCommentsView', ['comments' => $comments, 'title' => 'Dashboard', 'session' => $session]);
-
-        } else {
+        if (!isset($session['mdp'])) {
             header('Location: index.php?page=login&action=connexion');
         }
 
+        $commentManager = new CommentManager();
+        $action = $getData['get']['action'] ?? null;
+        $id = isset(($getData['get']['id'])) ? (int) $getData['get']['id'] : null;
+        $idComment = isset(($getData['get']['idComment'])) ? (int) $getData['get']['idComment'] : null;
+
+        if (isset($action)) {
+            if ($action === 'valideComment') {
+                $commentManager->validateComments($idComment);
+            } else if ($action === 'removeComment') {
+                $commentManager->deleteComments($idComment);
+            }
+        }
+
+        if ($id !== null) {
+            $comments = $commentManager->chapterComment($id);
+        } elseif ($id === null) {
+            $comments = $commentManager->getComments();
+        }
+
+        $view = new View();
+        $view->getView('backend', 'adminCommentsView', ['comments' => $comments, 'title' => 'Dashboard', 'session' => $session]);
     }
 
 /**
@@ -56,31 +53,29 @@ class BackendController
  */
     public function adminChaptersAction(array &$session, array $getData): void
     {
-
-        if (isset($session['mdp'])) {
-
-            $action = $getData['get']['action'] ?? null;
-            $postManager = new PostManager();
-
-            if ($action === 'delete') {
-                $postManager->deleteChapter((int) $getData['get']['id']);
-            }
-
-            $dashboardManager = new DashboardManager;
-            if ($action === "logout") {
-                $dashboardManager->logoutUser();
-                header('Location: index.php?page=login&action=connexion');
-
-            }
-
-            $chapters = $postManager->getChapters();
-            $commentManager = new CommentManager();
-            $nbComments = $commentManager->nbComments();
-            $view = new View();
-            $view->getView('backend', 'adminChaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres', 'session' => $session, 'nbComments' => $nbComments]);
-        } else {
+        if (!isset($session['mdp'])) {
             header('Location: index.php?page=login&action=connexion');
         }
+
+        $action = $getData['get']['action'] ?? null;
+        $postManager = new PostManager();
+
+        if ($action === 'delete') {
+            $postManager->deleteChapter((int) $getData['get']['id']);
+        }
+
+        $dashboardManager = new DashboardManager;
+
+        if ($action === "logout") {
+            $dashboardManager->logoutUser();
+            header('Location: index.php?page=login&action=connexion');
+        }
+
+        $chapters = $postManager->getChapters();
+        $commentManager = new CommentManager();
+        $nbComments = $commentManager->nbComments();
+        $view = new View();
+        $view->getView('backend', 'adminChaptersView', ['chapters' => $chapters, 'title' => 'Listes chapitres', 'session' => $session, 'nbComments' => $nbComments]);
     }
 
 /**
@@ -109,49 +104,39 @@ class BackendController
             $tmpName = $getData['files']['image']['tmp_name'] ?? null;
             $posted = (isset($getData['post']['public']) && $getData['post']['public'] === 'on') ? 1 : 0;
             $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
+
             if (!empty($file)) {
                 $extention = strrchr($file, '.');
-            }
-            if (!empty($title) || !empty($content)) {
-                if (!empty($title)) {
-                    if (!empty($content)) {
-
-                        //Modification chapitre
-                        if ($action === "adminEdit") {
-                            $id = (int) $getData['get']['id'];
-                            $postManager->editChapter($id, $title, $content, $posted);
-                            if (isset($file) && !empty($file)) {
-                                if (in_array($extention, $extentions) || $extention = ".png") {
-                                    $postManager->editImageChapter($id, $title, $content, $tmpName, $extention, $posted);
-                                } else {
-                                    $errors['valide'] = 'Image n\'est pas valide! ';
-                                }
-                            }
-                        }
-
-                        //Nouveau chapitre
-                        if ($action === 'newChapter') {
-                            $name = $postManager->getName();
-                            if (!empty($tmpName)) {
-                                if (in_array($extention, $extentions)) {
-                                    $postManager->chapterWrite($title, $content, $name["name_post"], $posted, $tmpName, $extention);
-                                    header('Location: index.php?page=adminChapters');
-                                } else {
-                                    $errors['image'] = 'Image n\'est pas valide! ';
-                                }
-                            } else {
-                                $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';
-                            }
-                        }
-
-                    } else {
-                        $errors['emptyDesc'] = "Veuillez mettre un paragraphe";
-                    }
-                } else {
-                    $errors['emptyTitle'] = "Veuillez mettre un titre";
-                }
-            } else {
+            } else if (empty($title) || empty($content)) {
                 $errors['contenu'] = 'Veuillez renseigner un contenu !';
+            } else if (empty($title)) {
+                $errors['emptyTitle'] = "Veuillez mettre un titre";
+            } else if (empty($content)) {
+                $errors['emptyDesc'] = "Veuillez mettre un paragraphe";
+            }
+
+            //Modification chapitre
+            if ($action === "adminEdit") {
+                $id = (int) $getData['get']['id'];
+                $postManager->editChapter($id, $title, $content, $posted);
+                if (!isset($file) && empty($file)) {
+                    $errors['valide'] = 'Image manquante ! ';
+                } else if (!in_array($extention, $extentions) || $extention != ".png") {
+                    $errors['valide'] = 'Image n\'est pas valide! ';
+                }
+                $postManager->editImageChapter($id, $title, $content, $tmpName, $extention, $posted);
+            }
+
+            //Nouveau chapitre
+            if ($action === 'newChapter') {
+                $name = $postManager->getName();
+                if (!empty($tmpName)) {
+                    $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';
+                } else if (!in_array($extention, $extentions)) {
+                    $errors['image'] = 'Image n\'est pas valide! ';
+                }
+                $postManager->chapterWrite($title, $content, $name["name_post"], $posted, $tmpName, $extention);
+                header('Location: index.php?page=adminChapters');
             }
         }
 
@@ -189,22 +174,15 @@ class BackendController
 
             if (empty($pseudo)) {
                 $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
-            }
-
-            if (empty($password)) {
+            } else if (empty($password)) {
                 $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
+            } else if (!password_verify($password, $passwordBdd) && $pseudo !== $userBdd) {
+                $errors['user'] = 'Identifiants Incorects';
             }
 
-            if (password_verify($password, $passwordBdd)) {
-                $session['mdp'] = $password;
-                header('Location: index.php?page=adminChapters');
-            } else {
-                $errors['Password'] = 'Ce mot de passe n\'est pas bon pas';
-            }
-
-            if ($pseudo === $userBdd) {
-                $session['user'] = $pseudo;
-            }
+            $session['user'] = $pseudo;
+            $session['mdp'] = $password;
+            header('Location: index.php?page=adminChapters');
         }
 
         $view = new View();
@@ -213,49 +191,45 @@ class BackendController
 
     public function adminProfilAction(&$session, array $getData): void
     {
-        if (isset($session['mdp'])) {
-            $dashboardManager = new DashboardManager();
-            $action = $getData['get']['action'] ?? null;
-            $get = $getData['get'];
-            $succes = (isset($session['succes'])) ? $session['succes'] : null;
-            unset($session['succes']);
-            $errors = (isset($session['errors'])) ? $session['errors'] : null;
-            unset($session['errors']);
-
-            if ($action === "update") {
-                $pseudo = htmlspecialchars(trim($getData["post"]['pseudo'])) ?? null;
-                $password = htmlspecialchars(trim($getData["post"]['password'])) ?? null;
-                $passwordVerif = htmlspecialchars(trim($getData["post"]['passwordVerif'])) ?? null;
-
-                if (!empty($pseudo)) {
-                    if (!empty($password)) {
-                        if (!empty($passwordVerif)) {
-                            $dashboardManager->userReplace($pseudo);
-                            $session['user'] = $pseudo;
-                            $succes['user'] = "Utilisateur mis à jour";
-                            if ($password === $passwordVerif) {
-                                $pass = password_hash($password, PASSWORD_DEFAULT);
-                                $dashboardManager->passReplace($pass);
-                                $session['mdp'] = $password;
-                                $succes['mdp'] = "Mot de passe mis à jour";
-                            } else {
-                                $errors["passwordEmpty"] = 'les mots de passe ne correspond pas';
-                            }
-                        } else {
-                            $errors["passwordVerifEmpty"] = 'Veuillez mettre un mot de passe';
-                        }
-                    } else {
-                        $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
-                    }
-                } else {
-                    $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
-                }
-            }
-            $view = new View();
-            $view->getView('backend', 'adminProfil', ['title' => 'Mettre à jour profil', 'errors' => $errors, 'session' => $session, 'get' => $get]);
-        } else {
+        if (!isset($session['mdp'])) {
             header('Location: index.php?page=login&action=connexion');
         }
+
+        $dashboardManager = new DashboardManager();
+        $action = $getData['get']['action'] ?? null;
+        $get = $getData['get'];
+        $succes = (isset($session['succes'])) ? $session['succes'] : null;
+        unset($session['succes']);
+        $errors = (isset($session['errors'])) ? $session['errors'] : null;
+        unset($session['errors']);
+
+        if ($action === "update") {
+
+            $pseudo = htmlspecialchars(trim($getData["post"]['pseudo'])) ?? null;
+            $password = htmlspecialchars(trim($getData["post"]['password'])) ?? null;
+            $passwordVerif = htmlspecialchars(trim($getData["post"]['passwordVerif'])) ?? null;
+
+            if (empty($pseudo)) {
+                $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
+            } else if (empty($password)) {
+                $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
+            } else if (empty($passwordVerif)) {
+                $errors["passwordVerifEmpty"] = 'Veuillez confirmer le mot de passe';
+            } else if ($password !== $passwordVerif) {
+                $errors["passwordEmpty"] = 'les mots de passe ne correspond pas';
+            }
+
+            $dashboardManager->userReplace($pseudo);
+            $session['user'] = $pseudo;
+            $succes['user'] = "Utilisateur mis à jour";
+            $pass = password_hash($password, PASSWORD_DEFAULT);
+            $dashboardManager->passReplace($pass);
+            $session['mdp'] = $password;
+            $succes['mdp'] = "Mot de passe mis à jour";
+        }
+
+        $view = new View();
+        $view->getView('backend', 'adminProfil', ['title' => 'Mettre à jour profil', 'errors' => $errors, 'session' => $session, 'get' => $get]);
     }
 
     /**

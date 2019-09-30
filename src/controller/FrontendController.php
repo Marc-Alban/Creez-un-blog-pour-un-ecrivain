@@ -64,29 +64,21 @@ class FrontendController
         }
 
         if ($action === 'submitComment') {
-            if (strlen($name) >= 8) {
-                if (!empty($name) || !empty($comment)) {
-                    if (!empty($name)) {
-                        if (!empty($comment)) {
-                            $name = htmlentities(trim($name));
-                            $comment = htmlentities(trim($comment));
-                            if (preg_match('`([-_.,;:\|<>]+)`', $name)) {
-                                $errors['caractere'] = "Veuillez mettre des caractères alphanumérique et non caractère spéciaux ";
-                            } else {
-                                $commentManager->setComment($name, $comment, $id);
-                            }
-                        } else {
-                            $errors['name'] = "Veuillez renseigner une description";
-                        }
-                    } else {
-                        $errors['comment'] = "Veuillez mettre un pseudo";
-                    }
-                } else {
-                    $errors["Champs"] = "Veuillez remplir les champs";
-                }
-            } else {
-                $errors['taille'] = "Veuillez mettre un pseudo de 8 caractères minimum ...";
+            if (empty($name) && empty($comment)) {
+                $errors["Champs"] = "Veuillez remplir les champs obligatoires";
+            } else if (empty($name)) {
+                $errors['name'] = "Veuillez mettre un pseudo";
+            } else if (empty($comment)) {
+                $errors['comment'] = "Veuillez renseigner une description";
+            } else if (preg_match('`([-_.,;:\|<>]+)`', $name)) {
+                $errors['caractere'] = "Veuillez mettre des caractères alphanumérique et non caractère spéciaux ";
+            } else if (!strlen($name) >= 6) {
+                $errors['taille'] = "Veuillez mettre un pseudo de 6 caractères minimum ...";
             }
+
+            $name = htmlentities(trim($name));
+            $comment = htmlentities(trim($comment));
+            $commentManager->setComment($name, $comment, $id);
         }
 
         $comments = $commentManager->getComments($id);
