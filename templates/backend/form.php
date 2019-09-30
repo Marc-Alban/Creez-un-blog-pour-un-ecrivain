@@ -4,19 +4,21 @@
 </div>
 
 <?php else: ?>
-<p class="alert alert-info">Notes: <i class="fas fa-exclamation-triangle"></i> -> obligatoire </p>
+<p class="alert alert-info">Notes obligatoire: <i class="fas fa-exclamation-triangle"></i> </p>
 <?php endif?>
 
 <form method="POST" class="col-12 col-md-12 postF"
     action="index.php?page=adminChapter&action=<?=isset($datas['chapter'][0]->id) ? 'adminEdit&id=' . $datas['chapter'][0]->id : 'newChapter'?>"
     enctype="multipart/form-data">
-    <p><label for="title">Titre du chapitre:<input type=" text" id="title" name="title"
-                value="<?=isset($datas['chapter'][0]->title) ? $datas['chapter'][0]->title : ''?>"></label></p>
-    <p><label for="text" class="col-12">Text du chapitre:<textarea type="text" id="mytextarea" name="content"
+    <p><label for="title">Titre du chapitre: <i class="fas fa-exclamation-triangle"></i><input type=" text" id="title"
+                name="title" value="<?=isset($datas['chapter'][0]->title) ? $datas['chapter'][0]->title : ''?>"></label>
+    </p>
+    <p><label for="text" class="col-12">Text du chapitre: <i class="fas fa-exclamation-triangle"></i><textarea
+                type="text" id="mytextarea" name="content"
                 class="col-12"><?=isset($datas['chapter'][0]->content) ? $datas['chapter'][0]->content : ''?></textarea>
     </p>
     <p>
-        <label for="image">Image:
+        <label for="image">Image: <i class="fas fa-exclamation-triangle"></i>
             <input type="file" name="image">
         </label>
     </p>
