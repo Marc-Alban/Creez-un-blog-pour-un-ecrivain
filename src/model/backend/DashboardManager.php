@@ -32,7 +32,7 @@ class DashboardManager
         return $pass;
     }
 
-    public function userReplace($pseudo)
+    public function userReplace(string $pseudo): void
     {
         $e = [
             ':name' => $pseudo,
@@ -43,7 +43,13 @@ class DashboardManager
 
     }
 
-    public function passReplace($password)
+    /**
+     * Undocumented functionRemplace le mot de pass en bdd
+     *
+     * @param integer $password
+     * @return void
+     */
+    public function passReplace(string $password): void
     {
         $e = [
             ':pass' => $password,

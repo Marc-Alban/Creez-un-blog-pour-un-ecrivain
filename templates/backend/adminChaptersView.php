@@ -27,15 +27,14 @@
                                 <td><?=substr(nl2br($chapter->content), 0, 250)?></td>
                                 <td><?=date("d/m/Y à H:i", strtotime($chapter->date_posts))?></td>
                                 <td>
-                                    <?php foreach ($datas['nbComments'] as $comments): ?>
-                                    <?php if ($chapter->id === $comments['post_id']): ?>
+                                    <?php if (!empty($datas['nbComments']) and !empty($datas['nbComments'][$chapter->id])): ?>
                                     <a href="index.php?page=adminComments&id=<?=$chapter->id?>">
-                                        <button class="btn btn-warning"><?=$comments["seen"];?></button>
+                                        <button class="btn btn-warning"><?=$datas['nbComments'][$chapter->id]?></button>
                                     </a>
                                     <?php else: ?>
                                     <?='Aucun commentaire signalé'?>
-                                    <?php endif?>
-                                    <?php endforeach?>
+                                    <?php endif;?>
+
                                 </td>
                                 <td><a href="index.php?page=adminChapter&id=<?=$chapter->id?>" id="lien"><i
                                             class="far fa-edit"></i></a></td>

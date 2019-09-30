@@ -208,7 +208,7 @@ class BackendController
         $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors, 'session' => $session]);
     }
 
-    public function adminProfilAction(&$session, array $getData)
+    public function adminProfilAction(&$session, array $getData): void
     {
         if (isset($session['mdp'])) {
             $dashboardManager = new DashboardManager();

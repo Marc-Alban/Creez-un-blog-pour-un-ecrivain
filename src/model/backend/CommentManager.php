@@ -38,7 +38,7 @@ class CommentManager
      * @param integer $id
      * @return void
      */
-    public function chapterComment(int $id)
+    public function chapterComment(int $id): array
     {
         $query = Database::getDb()->prepare("
         SELECT  comments.id,
@@ -87,13 +87,22 @@ class CommentManager
     /**
      * Nombre de commentaire tableau
      *
-     * @return void
+     * @return array
      */
-    public function nbComments()
+
+    public function nbComments(): array
     {
         $query = Database::getDb()->query("SELECT post_id, COUNT(seen) as seen FROM comments WHERE seen = '1' GROUP BY post_id");
         $result = $query->fetchAll();
-        return $result;
+
+        $sortedResult = [];
+
+        foreach ($result as $key => $value) {
+
+            $sortedResult[$value['post_id']] = $value['seen'];
+        };
+
+        return $sortedResult;
     }
 
 }
