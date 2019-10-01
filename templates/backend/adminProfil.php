@@ -3,7 +3,7 @@
         <div class="container">
             <h1>Mettre à jour le profil</h1>
             <?php if (!empty($datas['succes'])): ?>
-            <div class="alert alert-success col-12 col-md-12" role="alert">
+            <div class="alert alert-warning col-12 col-md-12" role="alert">
                 <?php foreach ($datas['succes'] as $succes): ?>
                 <p><?=$succes?></p>
                 <?php endforeach?>

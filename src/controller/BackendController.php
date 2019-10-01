@@ -53,9 +53,9 @@ class BackendController
  */
     public function adminChaptersAction(array &$session, array $getData): void
     {
-        // if (empty($session['mdp'])) {
-        //     header('Location: index.php?page=login&action=connexion');
-        // }
+        if (empty($session['mdp'])) {
+            header('Location: index.php?page=login&action=connexion');
+        }
 
         $postManager = new PostManager();
         $dashboardManager = new DashboardManager;
@@ -101,7 +101,6 @@ class BackendController
             $file = $getData['files']['image']['name'] ?? null;
             $tmpName = $getData['files']['image']['tmp_name'] ?? null;
             $posted = (isset($getData['post']['public']) && $getData['post']['public'] === 'on') ? 1 : 0;
-            $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
 
             if (!empty($file)) {
                 $extention = strrchr($file, '.');
@@ -115,26 +114,33 @@ class BackendController
 
             //Modification chapitre
             if ($action === "adminEdit") {
+                $extentions = ['jpg', 'png', 'gif', 'jpeg', 'JPG', 'PNG', 'GIF', 'JPEG'];
+                $explod = explode('/', $getData['files']['image']['type']);
+                $extention = $explod['1'];
                 $id = (int) $getData['get']['id'];
                 $postManager->editChapter($id, $title, $content, $posted);
+
                 if (!isset($file) && empty($file)) {
                     $errors['valide'] = 'Image manquante ! ';
-                } else if (!in_array($extention, $extentions) || $extention != ".png") {
+                } else if (in_array($extention, $extentions) === false) {
                     $errors['valide'] = 'Image n\'est pas valide! ';
+                } else if (empty($errors)) {
+                    $postManager->editImageChapter($id, $title, $content, $tmpName, $extention, $posted);
                 }
-                $postManager->editImageChapter($id, $title, $content, $tmpName, $extention, $posted);
             }
 
             //Nouveau chapitre
             if ($action === 'newChapter') {
+                $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
                 $name = $postManager->getName();
                 if (!empty($tmpName)) {
                     $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';
-                } else if (!in_array($extention, $extentions)) {
+                } else if (in_array($extention, $extentions) === false) {
                     $errors['image'] = 'Image n\'est pas valide! ';
+                } else if (empty($errors)) {
+                    $postManager->chapterWrite($title, $content, $name["name_post"], $posted, $tmpName, $extention);
+                    header('Location: index.php?page=adminChapters');
                 }
-                $postManager->chapterWrite($title, $content, $name["name_post"], $posted, $tmpName, $extention);
-                header('Location: index.php?page=adminChapters');
             }
         }
 
@@ -161,10 +167,11 @@ class BackendController
         $dashboardManager = new DashboardManager();
 
         $action = $getData['get']['action'] ?? null;
-        $errors = (isset($session['errors'])) ? $session['errors'] : null;
+
+        $errors = $session['errors'] ?? null;
         unset($session['errors']);
 
-        if ($action === "connexion") {
+        if (isset($getData['post']['connexion']) && $action === "connexion") {
 
             $userBdd = $dashboardManager->getUsers();
             $passwordBdd = $dashboardManager->getPass();
@@ -175,14 +182,15 @@ class BackendController
                 $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
             } else if (empty($password)) {
                 $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
-            } else if (password_verify($password, $passwordBdd) !== true && $pseudo !== $userBdd) {
-                $errors['user'] = 'Identifiants Incorects';
+            } else if (!password_verify($password, $passwordBdd) && $pseudo !== $userBdd) {
+                $errors['identifiants'] = 'Identifiants Incorrect';
             }
 
-            $session['user'] = $pseudo;
-            $session['mdp'] = $password;
-
-            header('Location: index.php?page=adminChapters');
+            if (empty($errors)) {
+                $session['user'] = $pseudo;
+                $session['mdp'] = $password;
+                header('Location: index.php?page=adminChapters');
+            }
         }
 
         $view = new View();
@@ -198,9 +206,9 @@ class BackendController
         $dashboardManager = new DashboardManager();
         $action = $getData['get']['action'] ?? null;
         $get = $getData['get'];
-        $succes = (isset($session['succes'])) ? $session['succes'] : null;
+        $succes = $session['succes'] ?? null;
         unset($session['succes']);
-        $errors = (isset($session['errors'])) ? $session['errors'] : null;
+        $errors = $session['errors'] ?? null;
         unset($session['errors']);
 
         if ($action === "update") {
@@ -219,17 +227,18 @@ class BackendController
                 $errors["passwordEmpty"] = 'les mots de passe ne correspond pas';
             }
 
-            $dashboardManager->userReplace($pseudo);
-            $session['user'] = $pseudo;
-            $succes['user'] = "Utilisateur mis à jour";
-            $pass = password_hash($password, PASSWORD_DEFAULT);
-            $dashboardManager->passReplace($pass);
-            $session['mdp'] = $password;
-            $succes['mdp'] = "Mot de passe mis à jour";
+            if (empty($errors)) {
+                $dashboardManager->userReplace($pseudo);
+                $session['user'] = $pseudo;
+                $pass = password_hash($password, PASSWORD_DEFAULT);
+                $dashboardManager->passReplace($pass);
+                $session['mdp'] = $password;
+                $succes['identifiant'] = "Identifiant mis à jours";
+            }
         }
 
         $view = new View();
-        $view->getView('backend', 'adminProfil', ['title' => 'Mettre à jour profil', 'errors' => $errors, 'session' => $session, 'get' => $get]);
+        $view->getView('backend', 'adminProfil', ['title' => 'Mettre à jour profil', 'errors' => $errors, 'succes' => $succes, 'session' => $session, 'get' => $get]);
     }
 
     /**
