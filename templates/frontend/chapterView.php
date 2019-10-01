@@ -34,7 +34,7 @@
                 <?php endforeach?>
             </div>
             <?php endif?>
-            <form class="col-md-8 col-12 dp-" method="POST"
+            <form id="myForm" onsubmit="return hello();" class="col-md-8 col-12 dp-" method="POST"
                 action="index.php?page=chapter&id=<?php foreach ($datas['chapter'] as $table): echo $table->id;endforeach?>&action=submitComment&#ancre">
                 <div class="form-group">
                     <label for="name">Votre pseudo <i class="fas fa-exclamation-triangle"></i></label>

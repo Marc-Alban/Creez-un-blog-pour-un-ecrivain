@@ -70,15 +70,18 @@ class FrontendController
                 $errors['name'] = "Veuillez mettre un pseudo";
             } else if (empty($comment)) {
                 $errors['comment'] = "Veuillez renseigner une description";
-            } else if (preg_match('`([-_.,;:\|<>]+)`', $name)) {
-                $errors['caractere'] = "Veuillez mettre des caractères alphanumérique et non caractère spéciaux ";
-            } else if (!strlen($name) >= 6) {
-                $errors['taille'] = "Veuillez mettre un pseudo de 6 caractères minimum ...";
+            } else if (strlen($name) <= 8) {
+                $errors['taille'] = "Veuillez mettre un pseudo de 8 caractères minimum ...";
+            } else if (preg_match("^([a-zéèàùûêâôë]*[\'-\s]?[a-zéèàùûêâôë\s]*){1,}[^-]$/i", $name)) {
+                $errors['caractere'] = "Veuillez mettre des caractères alphanumérique et non un caractère spéciaux ";
             }
 
-            $name = htmlentities(trim($name));
-            $comment = htmlentities(trim($comment));
-            $commentManager->setComment($name, $comment, $id);
+            if (empty($errors)) {
+                $name = htmlentities(trim($name));
+                $comment = htmlentities(trim($comment));
+                $commentManager->setComment($name, $comment, $id);
+            }
+
         }
 
         $comments = $commentManager->getComments($id);

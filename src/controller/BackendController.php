@@ -116,7 +116,7 @@ class BackendController
             if ($action === "adminEdit") {
                 $extentions = ['jpg', 'png', 'gif', 'jpeg', 'JPG', 'PNG', 'GIF', 'JPEG'];
                 $explod = explode('/', $getData['files']['image']['type']);
-                $extention = $explod['1'];
+                $extention = $explod['1'] ?? "png";
                 $id = (int) $getData['get']['id'];
                 $postManager->editChapter($id, $title, $content, $posted);
 
@@ -133,7 +133,7 @@ class BackendController
             if ($action === 'newChapter') {
                 $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
                 $name = $postManager->getName();
-                if (!empty($tmpName)) {
+                if (empty($tmpName)) {
                     $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';
                 } else if (in_array($extention, $extentions) === false) {
                     $errors['image'] = 'Image n\'est pas valide! ';

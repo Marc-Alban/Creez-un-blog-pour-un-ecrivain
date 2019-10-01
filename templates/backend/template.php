@@ -20,6 +20,8 @@
     tinymce.init({
         selector: '#mytextarea',
         encoding: "UTF-8",
+        mode: "textareas",
+        height: 1500
 
     });
     </script>
