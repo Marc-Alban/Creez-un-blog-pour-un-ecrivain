@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="headerTab col-12 col-md-12 col-lg-12">
-            <h2>La listes des Chapitres: </h2>
+            <h2>La liste des Chapitres: </h2>
         </div>
         <hr>
         <section class="blog-me pt-100 pb-100" id="blog">

@@ -9,7 +9,7 @@
         </div>
         <?php endif?>
 
-        <?php include "form.php";?>
+        <?php include "formView.php";?>
 
         <a href="index.php?page=adminChapters" class="btn btn-primary m-4">Retour liste Chapitre</a>
     </div>

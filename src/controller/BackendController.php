@@ -138,12 +138,12 @@ class BackendController
             }
         }
 
+        $title = 'Ecrire un chapitre';
+        $chapter = null;
+
         if (isset($getData['get']['id'])) {
             $title = 'Modifier un Chapitre ';
             $chapter = $postManager->getChapter((int) $getData['get']['id']);
-        } else {
-            $title = 'Ecrire un chapitre';
-            $chapter = null;
         }
 
         $view->getView('backend', 'adminchapterView', ['chapter' => $chapter, 'title' => $title, 'errors' => $errors, 'session' => $session]);
