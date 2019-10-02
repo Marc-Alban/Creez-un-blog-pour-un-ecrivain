@@ -176,7 +176,7 @@ class BackendController
                 $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
             } else if (empty($password)) {
                 $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
-            } else if (!password_verify($password, $passwordBdd) && $pseudo !== $userBdd) {
+            } else if (!password_verify($password, $passwordBdd) || $pseudo !== $userBdd) {
                 $errors['identifiants'] = 'Identifiants Incorrect';
             }
 
