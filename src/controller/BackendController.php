@@ -98,13 +98,12 @@ class BackendController
         if (isset($action)) {
             $title = $getData['post']['title'] ?? null;
             $content = $getData['post']['content'] ?? null;
-            $file = $getData['files']['image']['name'] ?? null;
+            $file = (!empty($getData['files']['image']['name'])) ? $getData['files']['image']['name'] : '.png';
             $tmpName = $getData['files']['image']['tmp_name'] ?? null;
             $posted = (isset($getData['post']['public']) && $getData['post']['public'] === 'on') ? 1 : 0;
-
-            if (!empty($file)) {
-                $extention = strrchr($file, '.');
-            } else if (empty($title) || empty($content)) {
+            $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
+            $extention = strrchr($file, '.');
+            if (empty($title) || empty($content)) {
                 $errors['contenu'] = 'Veuillez renseigner un contenu !';
             } else if (empty($title)) {
                 $errors['emptyTitle'] = "Veuillez mettre un titre";
@@ -114,14 +113,10 @@ class BackendController
 
             //Modification chapitre
             if ($action === "adminEdit") {
-                $extentions = ['jpg', 'png', 'gif', 'jpeg', 'JPG', 'PNG', 'GIF', 'JPEG'];
-                $explod = explode('/', $getData['files']['image']['type']);
-                $extention = $explod['1'] ?? "png";
                 $id = (int) $getData['get']['id'];
                 $postManager->editChapter($id, $title, $content, $posted);
-
-                if (!isset($file) && empty($file)) {
-                    $errors['valide'] = 'Image manquante ! ';
+                if (!isset($file) || empty($file)) {
+                    $errors['empty'] = 'Image manquante ! ';
                 } else if (in_array($extention, $extentions) === false) {
                     $errors['valide'] = 'Image n\'est pas valide! ';
                 } else if (empty($errors)) {
@@ -131,7 +126,6 @@ class BackendController
 
             //Nouveau chapitre
             if ($action === 'newChapter') {
-                $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
                 $name = $postManager->getName();
                 if (empty($tmpName)) {
                     $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';

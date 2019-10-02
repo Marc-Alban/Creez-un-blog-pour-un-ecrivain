@@ -72,7 +72,7 @@ class FrontendController
                 $errors['comment'] = "Veuillez renseigner une description";
             } else if (strlen($name) <= 8) {
                 $errors['taille'] = "Veuillez mettre un pseudo de 8 caractères minimum ...";
-            } else if (preg_match("^([a-zéèàùûêâôë]*[\'-\s]?[a-zéèàùûêâôë\s]*){1,}[^-]$/i", $name)) {
+            } else if (!preg_match('/^[^-]([a-zéèàùûêâôë]*[\'\-\s]?[a-zéèàùûêâôë\s]*){1,}[^-]$/i', $name)) {
                 $errors['caractere'] = "Veuillez mettre des caractères alphanumérique et non un caractère spéciaux ";
             }
 

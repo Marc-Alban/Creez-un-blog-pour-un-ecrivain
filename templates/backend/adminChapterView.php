@@ -11,6 +11,6 @@
 
         <?php include "form.php";?>
 
-        <a href="index.php?page=adminChapters" class="btn btn-primary">Retour liste Chapitre</a>
+        <a href="index.php?page=adminChapters" class="btn btn-primary m-4">Retour liste Chapitre</a>
     </div>
 </div>
