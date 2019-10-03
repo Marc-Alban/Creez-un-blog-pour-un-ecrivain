@@ -166,11 +166,8 @@ class BackendController
         if (isset($getData['post']['connexion']) && $action === "connexion") {
 
             if (isset($session['token']) and isset($getData['post']['token']) and !empty($session['token']) and !empty($getData['post']['token'])) {
-                var_dump($session['token'], $getData['post']['token']);
-                die();
                 if ($session['token'] !== $getData['post']['token']) {
-                    $errors['identifiants'] = 'Identifiants Incorrect';
-                    header('Location: index.php?page=login&action=connexion');
+                    $errors['identifiants'] = 'Attention vous n\'êtes pas l\'administrateur';
                 }
             }
 

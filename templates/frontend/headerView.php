@@ -18,7 +18,7 @@
                 </ul>
                 <hr>
 
-                <?php if (!empty($datas['session'])): ?>
+                <?php if (!empty($datas['session']['user'])): ?>
                 <a class="btn btn-sm btn-outline-secondary m-2" href="index.php?page=adminChapters">Administration</a>
                 <a class="btn btn-sm btn-outline-secondary m-2"
                     href="index.php?page=adminChapters&action=logout">Déconexion</a>
