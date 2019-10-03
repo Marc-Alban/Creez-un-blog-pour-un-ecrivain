@@ -52,7 +52,7 @@ class FrontendController
 
         if (isset($session['token']) and isset($getData['post']['token']) and !empty($session['token']) and !empty($getData['post']['token'])) {
             if ($session['token'] !== $getData['post']['token']) {
-                $errors['identifiants'] = 'Identifiants Incorrect';
+                $errors['identifiants'] = 'Attention vous n\'êtes pas l\'administrateur';
             }
         }
 

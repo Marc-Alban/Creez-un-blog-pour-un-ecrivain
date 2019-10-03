@@ -12,9 +12,10 @@ class DashboardManager
      *
      * @return string
      */
-    public function getUsers(): string
+    public function getUsers(string $pseudo): ?string
     {
-        $query = Database::getDb()->query("SELECT name FROM admins WHERE id = '1'");
+        $query = Database::getDb()->prepare("SELECT name FROM admins WHERE name = :pseudo ");
+        $query->execute(array(':pseudo' => $pseudo));
         $req = $query->fetch();
         return $req['name'];
     }

@@ -171,16 +171,16 @@ class BackendController
                 }
             }
 
-            $userBdd = $dashboardManager->getUsers();
             $passwordBdd = $dashboardManager->getPass();
             $pseudo = $getData["post"]['pseudo'] ?? null;
+            $userBdd = $dashboardManager->getUsers($pseudo);
             $password = $getData["post"]['password'] ?? null;
 
             if (empty($pseudo)) {
                 $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
             } else if (empty($password)) {
                 $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
-            } else if (!password_verify($password, $passwordBdd) || $pseudo !== $userBdd) {
+            } else if (!password_verify($password, $passwordBdd) || $userBdd === null) {
                 $errors['identifiants'] = 'Identifiants Incorrect';
             }
 
