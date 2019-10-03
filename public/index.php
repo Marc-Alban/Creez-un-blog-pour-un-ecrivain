@@ -9,6 +9,8 @@ $action = $_GET['action'] ?? null;
 $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
 $pageBack = ['adminComments', 'adminChapters', 'adminChapter', 'adminWrite', 'login', 'adminProfil'];
+$token = bin2hex(random_bytes(32));
+$_SESSION['token'] = $token;
 
 if (in_array($page, $pageFront) || empty($page) || !in_array($page, $pageBack)) {
     $controllerName = 'Blog\Controller\FrontendController';

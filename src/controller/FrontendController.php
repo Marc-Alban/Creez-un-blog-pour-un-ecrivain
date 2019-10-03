@@ -49,6 +49,13 @@ class FrontendController
  */
     public function chapterAction(&$session, array $getData): void
     {
+
+        if (isset($session['token']) and isset($getData['post']['token']) and !empty($session['token']) and !empty($getData['post']['token'])) {
+            if ($session['token'] !== $getData['post']['token']) {
+                $errors['identifiants'] = 'Identifiants Incorrect';
+            }
+        }
+
         $postManager = new PostManager();
         $commentManager = new CommentsManager();
         $id = ($getData['get']['id']) ? (int) $getData['get']['id'] : 1;

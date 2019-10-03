@@ -46,8 +46,14 @@
                     <textarea id="message " name="comment" class="form-control" require></textarea>
                     <div id="aideMessage"></div>
                 </div>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <input type="hidden" name="token" id="token"
+                            value="<?php foreach ($datas["session"] as $session => $value): echo $value;endforeach?>" />
+                    </div>
+                </div>
                 <div class="d-flex flex-row-reverse">
-                    <input type="submit" class="btn btn-primary" placeholder="Envoyer" value="submit">
+                    <input type="submit" class="btn btn-primary" placeholder="Envoyer" value="Envoyer">
                 </div>
             </form>
 

@@ -32,7 +32,12 @@
                                 <div id="aideMdp"></div>
                             </div>
                         </div>
-
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <input type="hidden" name="token" id="token"
+                                    value="<?php foreach ($datas["session"] as $session => $value): echo $value;endforeach?>" />
+                            </div>
+                        </div>
                         <div class="col-md-6 offset-md-4">
                             <button type="submit" class="btn btn-primary" name="connexion">
                                 Connexion

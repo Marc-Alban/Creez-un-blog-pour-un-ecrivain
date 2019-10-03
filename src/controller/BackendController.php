@@ -158,6 +158,12 @@ class BackendController
     public function loginAction(&$session, array $getData): void
     {
 
+        if (isset($session['token']) and isset($getData['post']['token']) and !empty($session['token']) and !empty($getData['post']['token'])) {
+            if ($session['token'] !== $getData['post']['token']) {
+                $errors['identifiants'] = 'Identifiants Incorrect';
+            }
+        }
+
         $dashboardManager = new DashboardManager();
 
         $action = $getData['get']['action'] ?? null;
