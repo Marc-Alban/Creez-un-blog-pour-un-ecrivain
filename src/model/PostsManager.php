@@ -14,7 +14,7 @@ class PostsManager
  * @param integer $id
  * @return void
  */
-    public function getChapter(?int $id, int $order): array
+    public function getChapter(int $id, int $order): array
     {
         if ($order === 1) {
             $sql1 = "

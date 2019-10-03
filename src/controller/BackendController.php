@@ -143,7 +143,7 @@ class BackendController
 
         if (isset($getData['get']['id'])) {
             $title = 'Modifier un Chapitre ';
-            $chapter = $postManager->getChapter((int) $getData['get']['id'], 2);
+            $chapter = $postManager->getChapter((int) $getData['get']['id'], 1);
         }
 
         $view->getView('backend', 'adminchapterView', ['chapter' => $chapter, 'title' => $title, 'errors' => $errors, 'session' => $session]);
