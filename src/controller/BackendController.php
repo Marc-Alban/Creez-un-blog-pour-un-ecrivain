@@ -158,20 +158,21 @@ class BackendController
     public function loginAction(&$session, array $getData): void
     {
 
-        if (isset($session['token']) and isset($getData['post']['token']) and !empty($session['token']) and !empty($getData['post']['token'])) {
-            if ($session['token'] !== $getData['post']['token']) {
-                $errors['identifiants'] = 'Identifiants Incorrect';
-            }
-        }
-
         $dashboardManager = new DashboardManager();
-
         $action = $getData['get']['action'] ?? null;
-
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
 
         if (isset($getData['post']['connexion']) && $action === "connexion") {
+
+            if (isset($session['token']) and isset($getData['post']['token']) and !empty($session['token']) and !empty($getData['post']['token'])) {
+                var_dump($session['token'], $getData['post']['token']);
+                die();
+                if ($session['token'] !== $getData['post']['token']) {
+                    $errors['identifiants'] = 'Identifiants Incorrect';
+                    header('Location: index.php?page=login&action=connexion');
+                }
+            }
 
             $userBdd = $dashboardManager->getUsers();
             $passwordBdd = $dashboardManager->getPass();
