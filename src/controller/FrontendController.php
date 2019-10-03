@@ -2,8 +2,8 @@
 declare (strict_types = 1);
 namespace Blog\Controller;
 
-use Blog\Model\Frontend\CommentsManager;
-use Blog\Model\Frontend\PostManager;
+use Blog\Model\CommentsManager;
+use Blog\Model\PostsManager;
 use Blog\View\View;
 
 class FrontendController
@@ -17,7 +17,7 @@ class FrontendController
  */
     public function homeAction(&$session): void
     {
-        $postManager = new PostManager();
+        $postManager = new PostsManager();
         $chapters = $postManager->getLimitedChapters();
         $oldChapter = $postManager->oldLimitedChapter();
 
@@ -33,8 +33,8 @@ class FrontendController
  */
     public function chaptersAction(&$session): void
     {
-        $postManager = new PostManager();
-        $chapters = $postManager->getchapters();
+        $postManager = new PostsManager();
+        $chapters = $postManager->getchapters(1);
         $view = new View;
         $view->getView('frontend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes des chapitres', 'session' => $session]);
     }
@@ -56,10 +56,10 @@ class FrontendController
             }
         }
 
-        $postManager = new PostManager();
+        $postManager = new PostsManager();
         $commentManager = new CommentsManager();
         $id = ($getData['get']['id']) ? (int) $getData['get']['id'] : 1;
-        $chapter = $postManager->getChapter($id);
+        $chapter = $postManager->getChapter($id, 2);
         $name = $getData['post']['name'] ?? null;
         $comment = $getData['post']['comment'] ?? null;
         $action = $getData['get']['action'] ?? null;

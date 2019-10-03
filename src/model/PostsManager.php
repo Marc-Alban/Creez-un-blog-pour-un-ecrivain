@@ -1,33 +1,44 @@
 <?php
 declare (strict_types = 1);
-namespace Blog\Model\Backend;
+namespace Blog\Model;
 
 use Blog\Model\Database;
 use \PDO;
 
-class PostManager
+class PostsManager
 {
 
 /**
- * Renvoie le chapitre sur la page post en bdd
+ * Renvoie le chapitre
  *
  * @param integer $id
  * @return void
  */
-    public function getChapter(int $id): array
+    public function getChapter(?int $id, int $order): array
     {
-        $sql = "
-        SELECT  id,
-                title,
-                content,
-                image_posts,
-                date_posts,
-                posted
-        FROM    posts
-        WHERE   id = :id
-        ";
+        if ($order === 1) {
+            $sql1 = "
+            SELECT  *
+            FROM    posts
+            WHERE   id = :id
+            ";
+            $query = Database::getDb()->prepare($sql1);
+        } else if ($order === 2) {
+            $sql2 = "
+            SELECT  posts.id,
+                    posts.title,
+                    posts.content,
+                    posts.image_posts,
+                    posts.date_posts,
+                    admins.name
+            FROM    posts
+            JOIN    admins
+            WHERE   posts.id = :id
+            AND     posts.posted = '1'
+            ";
+            $query = Database::getDb()->prepare($sql2);
+        }
 
-        $query = Database::getDb()->prepare($sql);
         $query->execute([":id" => $id]);
         $req = $query->fetchAll(PDO::FETCH_OBJ);
         return $req;
@@ -38,17 +49,79 @@ class PostManager
  *
  * @return array
  */
-    public function getChapters(): array
+    public function getChapters(int $order): array
     {
-        $sql = "
-        SELECT *
-        FROM posts
-        ORDER BY date_posts
-        DESC
-        ";
-        $query = Database::getDb()->query($sql);
+        if ($order === 1) {
+            $sql1 = "
+            SELECT *
+            FROM posts
+            WHERE posted='1'
+            ORDER BY date_posts
+            ASC
+            ";
+            $query = Database::getDb()->query($sql1);
+        } else if ($order === 2) {
+            $sql2 = "
+            SELECT *
+            FROM posts
+            ORDER BY date_posts
+            DESC
+            ";
+            $query = Database::getDb()->query($sql2);
+        }
+
         $req = $query->fetchAll(PDO::FETCH_OBJ);
         return $req;
+    }
+
+    /**
+     * Renvoie le dernier chapitre sur la page Accueil
+     *
+     * @return array
+     */
+    public function getLimitedChapters(): array
+    {
+        $sql = "
+    SELECT  posts.id,
+            posts.title,
+            posts.image_posts,
+            posts.date_posts,
+            posts.content,
+            admins.name
+    FROM posts
+    JOIN admins
+    WHERE posted='1'
+    ORDER BY date_posts DESC
+    LIMIT 0,1
+    ";
+
+        $query = Database::getDb()->query($sql);
+        $results = $query->fetchAll(PDO::FETCH_OBJ);
+        return $results;
+    }
+
+    /**
+     * Retourne le premier chapitre sur la page d'accueil
+     *
+     * @return array
+     */
+    public function oldLimitedChapter(): array
+    {
+        $sql = "
+        SELECT  posts.id,
+                posts.title,
+                posts.image_posts,
+                posts.date_posts,
+                posts.content,
+                admins.name
+        FROM posts
+        JOIN admins
+        WHERE posts.id=1
+        ";
+
+        $query = Database::getDb()->query($sql);
+        $results = $query->fetchAll(PDO::FETCH_OBJ);
+        return $results;
     }
 
 /**

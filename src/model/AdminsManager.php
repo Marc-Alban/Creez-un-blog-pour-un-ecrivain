@@ -1,10 +1,10 @@
 <?php
 declare (strict_types = 1);
-namespace Blog\Model\Backend;
+namespace Blog\Model;
 
 use Blog\Model\Database;
 
-class DashboardManager
+class AdminsManager
 {
 
     /**

@@ -2,9 +2,9 @@
 declare (strict_types = 1);
 namespace Blog\Controller;
 
-use Blog\Model\Backend\CommentManager;
-use Blog\Model\Backend\DashboardManager;
-use Blog\Model\Backend\PostManager;
+use Blog\Model\AdminsManager;
+use Blog\Model\CommentsManager;
+use Blog\Model\PostsManager;
 use Blog\View\View;
 
 class BackendController
@@ -22,7 +22,7 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
 
-        $commentManager = new CommentManager();
+        $commentManager = new CommentsManager();
         $action = $getData['get']['action'] ?? null;
         $id = isset(($getData['get']['id'])) ? (int) $getData['get']['id'] : null;
         $idComment = isset(($getData['get']['idComment'])) ? (int) $getData['get']['idComment'] : null;
@@ -38,7 +38,7 @@ class BackendController
         if ($id !== null) {
             $comments = $commentManager->chapterComment($id);
         } elseif ($id === null) {
-            $comments = $commentManager->getComments();
+            $comments = $commentManager->getComments(null);
         }
 
         $view = new View();
@@ -57,19 +57,19 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
 
-        $postManager = new PostManager();
-        $dashboardManager = new DashboardManager;
-        $commentManager = new CommentManager();
+        $postManager = new PostsManager();
+        $AdminsManager = new AdminsManager;
+        $commentManager = new CommentsManager();
         $action = $getData['get']['action'] ?? null;
 
         if ($action === 'delete') {
             $postManager->deleteChapter((int) $getData['get']['id']);
         } else if ($action === "logout") {
-            $dashboardManager->logoutUser();
+            $AdminsManager->logoutUser();
             header('Location: index.php?page=login&action=connexion');
         }
 
-        $chapters = $postManager->getChapters();
+        $chapters = $postManager->getChapters(2);
         $nbComments = $commentManager->nbComments();
 
         $view = new View();
@@ -89,8 +89,8 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
 
+        $postManager = new PostsManager();
         $view = new View();
-        $postManager = new PostManager();
         $action = $getData['get']['action'] ?? null;
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
@@ -143,7 +143,7 @@ class BackendController
 
         if (isset($getData['get']['id'])) {
             $title = 'Modifier un Chapitre ';
-            $chapter = $postManager->getChapter((int) $getData['get']['id']);
+            $chapter = $postManager->getChapter((int) $getData['get']['id'], 2);
         }
 
         $view->getView('backend', 'adminchapterView', ['chapter' => $chapter, 'title' => $title, 'errors' => $errors, 'session' => $session]);
@@ -158,7 +158,7 @@ class BackendController
     public function loginAction(&$session, array $getData): void
     {
 
-        $dashboardManager = new DashboardManager();
+        $AdminsManager = new AdminsManager();
         $action = $getData['get']['action'] ?? null;
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
@@ -171,9 +171,9 @@ class BackendController
                 }
             }
 
-            $passwordBdd = $dashboardManager->getPass();
+            $passwordBdd = $AdminsManager->getPass();
             $pseudo = $getData["post"]['pseudo'] ?? null;
-            $userBdd = $dashboardManager->getUsers($pseudo);
+            $userBdd = $AdminsManager->getUsers($pseudo);
             $password = $getData["post"]['password'] ?? null;
 
             if (empty($pseudo)) {
@@ -201,7 +201,7 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
 
-        $dashboardManager = new DashboardManager();
+        $AdminsManager = new AdminsManager();
         $action = $getData['get']['action'] ?? null;
         $get = $getData['get'];
         $succes = $session['succes'] ?? null;
@@ -226,10 +226,10 @@ class BackendController
             }
 
             if (empty($errors)) {
-                $dashboardManager->userReplace($pseudo);
+                $AdminsManager->userReplace($pseudo);
                 $session['user'] = $pseudo;
                 $pass = password_hash($password, PASSWORD_DEFAULT);
-                $dashboardManager->passReplace($pass);
+                $AdminsManager->passReplace($pass);
                 $session['mdp'] = $password;
                 $succes['identifiant'] = "Identifiant mis à jours";
             }
