@@ -250,33 +250,31 @@ class PostsManager
  */
     public function chapterWrite(string $title, string $description, string $name, int $posted, string $tmpName, string $extention): void
     {
+        if (!$tmpName) {
+            $id = "post";
+            $extention = ".png";
+        }
 
-        //   id = &($id) ??? je ne sais pas comment récupérer l'id d'en bas
+        $query = Database::getDb()->query('SELECT MAX(id) FROM posts ORDER BY date_posts = NOW()');
+        $response = $query->fetch();
+        $id = $response['MAX(id)'] + 1;
+
+        $p = [
+            'title' => $title,
+            'content' => $description,
+            'name_post' => $name,
+            'image_posts' => $id . $extention,
+            'posted' => $posted,
+        ];
 
         $sql = "
         INSERT INTO posts(title, content, name_post, image_posts, date_posts, posted)
         VALUES(:title, :content, :name_post, :image_posts, NOW(), :posted)
         ";
 
-        $p = [
-            'title' => $title,
-            'content' => $description,
-            'name_post' => $name,
-            'image_posts' => $id . $extention, // ici l'id pose problème, il y a un moyen de faire une référence à l'id du bas ?
-            'posted' => $posted,
-        ];
-
         $query = Database::getDb()->prepare($sql);
         $query->execute($p);
 
-        $query = Database::getDb()->query('SELECT MAX(id) FROM posts ORDER BY date_posts = NOW()');
-        $response = $query->fetch();
-        $id = $response['MAX(id)'];
-
-        if (!$tmpName) {
-            $id = "post";
-            $extention = ".png";
-        }
         move_uploaded_file($tmpName, "img/chapter/" . $id . $extention);
 
     }
