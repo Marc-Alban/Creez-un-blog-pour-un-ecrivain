@@ -138,7 +138,8 @@ class PostsManager
     }
 
     /**
-     * Met à jour le chapitre modifié en BDD
+     * Met à jour le chapitre modifié
+     * en BDD avec une image
      *
      * @param integer $id
      * @param string $title
@@ -191,6 +192,7 @@ class PostsManager
 
     /**
      * Permet d'éditer un chapitre en back office
+     *sans image
      *
      * @param integer $id
      * @param string $title
@@ -236,7 +238,7 @@ class PostsManager
     }
 
 /**
- * Insert en bdd un nouveau post en bdd
+ * Insert un nouveau chapitre en bdd
  *
  * @param string $title
  * @param string $content
@@ -248,39 +250,35 @@ class PostsManager
  */
     public function chapterWrite(string $title, string $description, string $name, int $posted, string $tmpName, string $extention): void
     {
-        $sql_id = "
-        SELECT MAX(id)
-        FROM posts
-        ORDER BY id
-        DESC
+
+        //   id = &($id) ??? je ne sais pas comment récupérer l'id d'en bas
+
+        $sql = "
+        INSERT INTO posts(title, content, name_post, image_posts, date_posts, posted)
+        VALUES(:title, :content, :name_post, :image_posts, NOW(), :posted)
         ";
-
-        $req = Database::getDb()->query($sql_id);
-        $response = $req->fetch();
-        $id = $response[0];
-
-        if (!$tmpName) {
-            $id = "post";
-            $extention = ".png";
-        } else {
-            move_uploaded_file($tmpName, "img/chapter/" . $id . $extention);
-        }
 
         $p = [
             'title' => $title,
             'content' => $description,
             'name_post' => $name,
-            'image_posts' => $id . $extention,
+            'image_posts' => $id . $extention, // ici l'id pose problème, il y a un moyen de faire une référence à l'id du bas ?
             'posted' => $posted,
         ];
 
-        $sql = "
-    INSERT INTO posts(title, content, name_post, image_posts, date_posts, posted)
-    VALUES(:title, :content, :name_post, :image_posts, NOW(), :posted)
-    ";
-
         $query = Database::getDb()->prepare($sql);
         $query->execute($p);
+
+        $query = Database::getDb()->query('SELECT MAX(id) FROM posts ORDER BY date_posts = NOW()');
+        $response = $query->fetch();
+        $id = $response['MAX(id)'];
+
+        if (!$tmpName) {
+            $id = "post";
+            $extention = ".png";
+        }
+        move_uploaded_file($tmpName, "img/chapter/" . $id . $extention);
+
     }
 
 }

@@ -103,6 +103,7 @@ class BackendController
             $posted = (isset($getData['post']['public']) && $getData['post']['public'] === 'on') ? 1 : 0;
             $extentions = ['.jpg', '.png', '.gif', '.jpeg', '.JPG', '.PNG', '.GIF', '.JPEG'];
             $extention = strrchr($file, '.');
+
             if (empty($title) || empty($content)) {
                 $errors['contenu'] = 'Veuillez renseigner un contenu !';
             } else if (empty($title)) {

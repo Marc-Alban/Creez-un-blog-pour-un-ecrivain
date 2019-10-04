@@ -3,7 +3,7 @@
         <div id="styleBloc">
             <?php if (isset($datas['chapters'])): ?>
             <?php foreach ($datas['chapters'] as $chapter): ?>
-            <div class="col-md-6 col-12 blogShort">
+            <div class="col-md-6 col-6 col-lg-6 blogShort">
                 <a href="index.php?page=chapter&id=<?=$chapter->id?>" id="lien">
                     <h1><?=$chapter->title?></h1>
                     <img src="img/chapter/<?=$chapter->image_posts?>" alt="<?=$chapter->title?>"
