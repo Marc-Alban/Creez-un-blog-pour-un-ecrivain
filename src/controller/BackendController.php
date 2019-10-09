@@ -89,6 +89,12 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
 
+        if (isset($session['token']) and isset($getData['post']['token']) and !empty($session['token']) and !empty($getData['post']['token'])) {
+            if ($session['token'] !== $getData['post']['token']) {
+                $errors['identifiants'] = 'Attention vous n\'êtes pas l\'administrateur';
+            }
+        }
+
         $postManager = new PostsManager();
         $view = new View();
         $action = $getData['get']['action'] ?? null;

@@ -6,6 +6,9 @@ use \PDO;
 
 class Database
 {
+    // const DSN = 'mysql:host=localhost;dbname=dbs185636';
+    // const USER = 'dbu94874';
+    // const PASSWORD = 'adminTest123.';
     const DSN = 'mysql:host=localhost;dbname=blog';
     const USER = 'root';
     const PASSWORD = '';

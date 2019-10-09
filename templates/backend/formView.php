@@ -27,6 +27,12 @@
             <?=(isset($datas['chapter'][0]->posted) and $datas['chapter'][0]->posted == 1) ? 'checked' : ''?>>
         <label class="form-check-label" for="Check1">Public</label>
     </div>
+    <div class="form-group row">
+        <div class="col-md-6">
+            <input type="hidden" name="token" id="token"
+                value="<?php foreach ($datas["session"] as $session => $value): echo $value;endforeach?>" />
+        </div>
+    </div>
     <div class="d-flex justify-content-center">
         <input type="submit" name="modified" class="btn btn-primary"
             value="<?=isset($datas['chapter'][0]->id) ? 'Modifier' : 'Créer'?>">
