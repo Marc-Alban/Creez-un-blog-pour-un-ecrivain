@@ -9,8 +9,11 @@ $action = $_GET['action'] ?? null;
 $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
 $pageBack = ['adminComments', 'adminChapters', 'adminChapter', 'adminWrite', 'login', 'adminProfil'];
-$token = sha1(session_id() . 'jeanforteroche');
+$cryptoken = openssl_random_pseudo_bytes(16);
+
+$token = bin2hex($cryptoken);
 $_SESSION['token'] = $token;
+
 if (in_array($page, $pageFront) || empty($page) || !in_array($page, $pageBack)) {
     $controllerName = 'Blog\Controller\FrontendController';
 } else if (in_array($page, $pageBack)) {

@@ -16,15 +16,15 @@ class PostsManager
  */
     public function getChapter(int $id, int $order): array
     {
+        $sql = null;
         if ($order === 1) {
-            $sql1 = "
+            $sql = "
             SELECT  *
             FROM    posts
             WHERE   id = :id
             ";
-            $query = Database::getDb()->prepare($sql1);
         } else if ($order === 2) {
-            $sql2 = "
+            $sql = "
             SELECT  posts.id,
                     posts.title,
                     posts.content,
@@ -36,9 +36,9 @@ class PostsManager
             WHERE   posts.id = :id
             AND     posts.posted = '1'
             ";
-            $query = Database::getDb()->prepare($sql2);
         }
 
+        $query = Database::getDb()->prepare($sql);
         $query->execute([":id" => $id]);
         $req = $query->fetchAll(PDO::FETCH_OBJ);
         return $req;
@@ -51,25 +51,25 @@ class PostsManager
  */
     public function getChapters(int $order): array
     {
+        $sql = null;
         if ($order === 1) {
-            $sql1 = "
+            $sql = "
             SELECT *
             FROM posts
             WHERE posted='1'
             ORDER BY date_posts
             ASC
             ";
-            $query = Database::getDb()->query($sql1);
         } else if ($order === 2) {
-            $sql2 = "
+            $sql = "
             SELECT *
             FROM posts
             ORDER BY date_posts
             DESC
             ";
-            $query = Database::getDb()->query($sql2);
         }
 
+        $query = Database::getDb()->query($sql);
         $req = $query->fetchAll(PDO::FETCH_OBJ);
         return $req;
     }
@@ -151,13 +151,13 @@ class PostsManager
      */
     public function editImageChapter(int $id, string $title, string $content, string $tmpName, string $extention, int $posted): void
     {
-        $sql_id = "
+        $sqlId = "
         SELECT id
         FROM posts
         WHERE id = :id
         ";
 
-        $req = Database::getDb()->prepare($sql_id);
+        $req = Database::getDb()->prepare($sqlId);
         $req->execute([':id' => $id]);
         $response = $req->fetch(PDO::FETCH_ASSOC);
         $id = $response['id'];
@@ -165,7 +165,7 @@ class PostsManager
         if (!$tmpName) {
             $id = "post";
             $extention = ".png";
-        } else {
+        } else if (!empty($tmpName) && !empty($id) && !empty($extention)) {
             move_uploaded_file($tmpName, "img/chapter/" . $id . $extention);
         }
 

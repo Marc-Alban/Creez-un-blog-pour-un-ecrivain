@@ -24,8 +24,9 @@ class BackendController
 
         $commentManager = new CommentsManager();
         $action = $getData['get']['action'] ?? null;
-        $id = isset(($getData['get']['id'])) ? (int) $getData['get']['id'] : null;
-        $idComment = isset(($getData['get']['idComment'])) ? (int) $getData['get']['idComment'] : null;
+        $comments = null;
+        $id = isset($getData['get']['id']) ? (int) $getData['get']['id'] : 0;
+        $idComment = isset($getData['get']['idComment']) ? (int) $getData['get']['idComment'] : 0;
 
         if (isset($action)) {
             if ($action === 'valideComment') {
@@ -90,8 +91,8 @@ class BackendController
         }
 
         if (isset($session['token']) and isset($getData['post']['token']) and !empty($session['token']) and !empty($getData['post']['token'])) {
-            if ($session['token'] !== $getData['post']['token']) {
-                $errors['identifiants'] = 'Attention vous n\'êtes pas l\'administrateur';
+            if ($getData['post']['token'] !== $session['token']) {
+                $errors['identifiants'] = 'Formulaire incorrect !';
             }
         }
 
@@ -171,10 +172,9 @@ class BackendController
         unset($session['errors']);
 
         if (isset($getData['post']['connexion']) && $action === "connexion") {
-
             if (isset($session['token']) and isset($getData['post']['token']) and !empty($session['token']) and !empty($getData['post']['token'])) {
-                if ($session['token'] !== $getData['post']['token']) {
-                    $errors['identifiants'] = 'Attention vous n\'êtes pas l\'administrateur';
+                if ($getData['post']['token'] !== $session['token']) {
+                    $errors['identifiants'] = 'Formulaire incorrect !';
                 }
             }
 

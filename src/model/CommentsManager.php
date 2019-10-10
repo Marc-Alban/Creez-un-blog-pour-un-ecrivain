@@ -14,6 +14,7 @@ class CommentsManager
  */
     public function getComments(?int $id): array
     {
+        $sql = null;
         if (isset($id)) {
             $sql = "
             SELECT *
@@ -28,7 +29,7 @@ class CommentsManager
             return $results;
 
         } else if (!isset($id) && $id === null) {
-            $query = Database::getDb()->query("
+            $sql = "
             SELECT  comments.id,
                     comments.name,
                     comments.date_comment,
@@ -40,7 +41,8 @@ class CommentsManager
             ON      comments.post_id = posts.id
             WHERE   comments.seen = '1'
             ORDER BY comments.date_comment ASC
-            ");
+            ";
+            $query = Database::getDb()->query($sql);
             $results = $query->fetchAll(PDO::FETCH_OBJ);
             return $results;
         }
@@ -151,7 +153,7 @@ class CommentsManager
 
         $sortedResult = [];
 
-        foreach ($result as $key => $value) {
+        foreach ($result as $value) {
 
             $sortedResult[$value['post_id']] = $value['seen'];
         };
