@@ -172,6 +172,7 @@ class BackendController
         unset($session['errors']);
 
         if (isset($getData['post']['connexion']) && $action === "connexion") {
+
             if (isset($session['token']) and isset($getData['post']['token']) and !empty($session['token']) and !empty($getData['post']['token'])) {
                 if ($getData['post']['token'] !== $session['token']) {
                     $errors['identifiants'] = 'Formulaire incorrect !';
