@@ -67,6 +67,7 @@ class BackendController
             $postManager->deleteChapter((int) $getData['get']['id']);
         } else if ($action === "logout") {
             $AdminsManager->logoutUser();
+            unset($session['token']);
             header('Location: index.php?page=login&action=connexion');
         }
 
@@ -173,11 +174,7 @@ class BackendController
 
         if (isset($getData['post']['connexion']) && $action === "connexion") {
 
-            if (isset($session['token']) and isset($getData['post']['token']) and !empty($session['token']) and !empty($getData['post']['token'])) {
-                if ($getData['post']['token'] !== $session['token']) {
-                    $errors['identifiants'] = 'Formulaire incorrect !';
-                }
-            }
+            if ($session['valideToken'] === false) {echo 'Formulaire incorrect';}
 
             $passwordBdd = $AdminsManager->getPass();
             $pseudo = $getData["post"]['pseudo'] ?? null;

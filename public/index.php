@@ -9,11 +9,16 @@ $action = $_GET['action'] ?? null;
 $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
 $pageBack = ['adminComments', 'adminChapters', 'adminChapter', 'adminWrite', 'login', 'adminProfil'];
-if (!isset($_SESSION['token'])) {
-    $cryptoken = openssl_random_pseudo_bytes(16);
-    $token = bin2hex($cryptoken);
-    $_SESSION['token'] = $token;
+
+// Si on a reçu un token venant d'un formulaire ou d'un lien on vérifie qu'il correspond bien à celui en session
+if (!empty($_POST['token'])) {
+    $checkToken = $_POST['token'];
+    $_SESSION['valideToken'] = ($checkToken === $_SESSION['token']) ? true : false;
 }
+
+$cryptoken = random_bytes(16);
+$_SESSION['token'] = bin2hex($cryptoken);
+
 if (in_array($page, $pageFront) || empty($page) || !in_array($page, $pageBack)) {
     $controllerName = 'Blog\Controller\FrontendController';
 } else if (in_array($page, $pageBack)) {
