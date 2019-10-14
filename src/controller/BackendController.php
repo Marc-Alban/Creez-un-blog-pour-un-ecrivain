@@ -36,10 +36,10 @@ class BackendController
             }
         }
 
-        if ($id !== null) {
+        if ($id !== 0) {
             $comments = $commentManager->chapterComment($id);
-        } elseif ($id === null) {
-            $comments = $commentManager->getComments(null);
+        } elseif ($id === 0) {
+            $comments = $commentManager->getComments(0);
         }
 
         $view = new View();
@@ -91,11 +91,7 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
 
-        if (isset($session['token']) and isset($getData['post']['token']) and !empty($session['token']) and !empty($getData['post']['token'])) {
-            if ($getData['post']['token'] !== $session['token']) {
-                $errors['identifiants'] = 'Formulaire incorrect !';
-            }
-        }
+        if ($session['valideToken'] === false) {echo 'Formulaire incorrect';}
 
         $postManager = new PostsManager();
         $view = new View();

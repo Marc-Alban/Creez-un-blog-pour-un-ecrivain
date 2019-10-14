@@ -10,8 +10,8 @@ $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
 $pageBack = ['adminComments', 'adminChapters', 'adminChapter', 'adminWrite', 'login', 'adminProfil'];
 
-// Si on a reçu un token venant d'un formulaire ou d'un lien on vérifie qu'il correspond bien à celui en session
-if (!empty($_POST['token'])) {
+// Si on a reçu un token venant d'un formulaire  on vérifie qu'il correspond bien à celui en session
+if (!empty($_POST['token']) && isset($_POST['token'])) {
     $checkToken = $_POST['token'];
     $_SESSION['valideToken'] = ($checkToken === $_SESSION['token']) ? true : false;
 }
