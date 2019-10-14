@@ -48,8 +48,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-md-6">
-                        <input type="hidden" name="token" id="token"
-                            value="<?php foreach ($datas["session"] as $session => $value): echo $value;endforeach?>" />
+                        <input type="hidden" name="token" id="token" value="<?=$datas["session"]['token']?>" />
                     </div>
                 </div>
                 <div class="d-flex flex-row-reverse">

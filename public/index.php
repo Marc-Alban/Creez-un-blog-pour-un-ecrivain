@@ -19,6 +19,8 @@ if (!empty($_POST['token']) && isset($_POST['token'])) {
 $cryptoken = random_bytes(16);
 $_SESSION['token'] = bin2hex($cryptoken);
 
+// var_dump($_SESSION);die();
+
 if (in_array($page, $pageFront) || empty($page) || !in_array($page, $pageBack)) {
     $controllerName = 'Blog\Controller\FrontendController';
 } else if (in_array($page, $pageBack)) {
