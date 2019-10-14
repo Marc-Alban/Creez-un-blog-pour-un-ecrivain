@@ -91,7 +91,7 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
 
-        if ($session['valideToken'] === false) {echo 'Formulaire incorrect';}
+        if ($session['valideToken'] === false) {$errors["token"] = "Formulaire Incorrect";}
 
         $postManager = new PostsManager();
         $view = new View();
@@ -170,7 +170,7 @@ class BackendController
 
         if (isset($getData['post']['connexion']) && $action === "connexion") {
 
-            if ($session['valideToken'] === false) {echo 'Formulaire incorrect';}
+            if ($session['valideToken'] === false) {$errors["token"] = "Formulaire Incorrect";}
 
             $passwordBdd = $AdminsManager->getPass();
             $pseudo = $getData["post"]['pseudo'] ?? null;

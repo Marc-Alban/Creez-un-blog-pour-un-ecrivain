@@ -50,7 +50,7 @@ class FrontendController
     public function chapterAction(&$session, array $getData): void
     {
 
-        if ($session['valideToken'] === false) {echo 'Formulaire incorrect';}
+        if ($session['valideToken'] === false) {$errors["token"] = "Formulaire Incorrect";}
 
         $postManager = new PostsManager();
         $commentManager = new CommentsManager();
