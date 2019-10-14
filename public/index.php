@@ -9,17 +9,21 @@ $action = $_GET['action'] ?? null;
 $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
 $pageBack = ['adminComments', 'adminChapters', 'adminChapter', 'adminWrite', 'login', 'adminProfil'];
+
+$_SESSION['token'] = null;
 $_SESSION['valideToken'] = null;
 
-if (!empty($_POST['token']) && isset($_POST['token'])) {
+if (!empty($_POST['token'])) {
     $checkToken = $_POST['token'];
     $_SESSION['valideToken'] = ($checkToken === $_SESSION['token']) ? true : false;
 }
 
-$cryptoken = random_bytes(16);
-$_SESSION['token'] = bin2hex($cryptoken);
+if (is_null($_SESSION['token'])) {
+    $cryptoken = random_bytes(16);
+    $_SESSION['token'] = bin2hex($cryptoken);
+}
 
-// var_dump($_SESSION);die();
+//var_dump($_SESSION, $_POST);die();
 
 if (in_array($page, $pageFront) || empty($page) || !in_array($page, $pageBack)) {
     $controllerName = 'Blog\Controller\FrontendController';

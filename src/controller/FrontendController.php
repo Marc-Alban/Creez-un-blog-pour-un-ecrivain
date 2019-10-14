@@ -50,8 +50,6 @@ class FrontendController
     public function chapterAction(&$session, array $getData): void
     {
 
-        if ($session['valideToken'] === false) {$errors["token"] = "Formulaire Incorrect";}
-
         $postManager = new PostsManager();
         $commentManager = new CommentsManager();
         $id = ($getData['get']['id']) ? (int) $getData['get']['id'] : 1;
@@ -65,6 +63,8 @@ class FrontendController
         if ($action === 'signalComment') {
             $commentManager->signalComment((int) $getData['get']['idComment']);
         }
+
+        if ($session['valideToken'] === false) {$errors["token"] = "Formulaire Incorrect";}
 
         if ($action === 'submitComment') {
             if (empty($name) && empty($comment)) {

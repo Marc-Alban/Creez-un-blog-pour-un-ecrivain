@@ -56,7 +56,7 @@ class CommentsManager
      * @param integer $post_id
      * @return void
      */
-    public function setComment(string $name, string $comment, int $postId): void
+    public function setComment(string $name, string $comment, ?int $postId): void
     {
         $sql = "
         INSERT INTO comments(name, comment, post_id, date_comment)
@@ -77,7 +77,7 @@ class CommentsManager
      * @param integer $commentid
      * @return void
      */
-    public function signalComment(int $commentId): void
+    public function signalComment(?int $commentId): void
     {
         $sql = "
         UPDATE comments
@@ -94,7 +94,7 @@ class CommentsManager
      * @param integer $id
      * @return void
      */
-    public function chapterComment(int $id): array
+    public function chapterComment(?int $id): array
     {
         $query = Database::getDb()->prepare("
         SELECT  comments.id,
@@ -122,7 +122,7 @@ class CommentsManager
  * @param integer $id
  * @return void
  */
-    public function deleteComments(int $id): void
+    public function deleteComments(?int $id): void
     {
         $query = Database::getDb()->prepare("DELETE FROM comments WHERE id = :id");
         $query->execute(["id" => $id]);
@@ -134,7 +134,7 @@ class CommentsManager
  * @param integer $id
  * @return void
  */
-    public function validateComments(int $id): void
+    public function validateComments(?int $id): void
     {
         $query = Database::getDb()->prepare("UPDATE comments SET seen = '0' WHERE id = :id");
         $query->execute(["id" => $id]);

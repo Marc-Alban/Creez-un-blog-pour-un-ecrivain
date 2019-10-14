@@ -35,7 +35,7 @@
             </div>
             <?php endif?>
             <form id="myForm" class="col-md-8 col-12 dp-" method="POST"
-                action="index.php?page=chapter&id=<?php foreach ($datas['chapter'] as $table): echo $table->id;endforeach?>&action=submitComment&#ancre">
+                action="index.php?page=chapter&id=<?php foreach ($datas['chapter'] as $table): echo $table->id;endforeach?>&action=submitComment#ancre">
                 <div class="form-group">
                     <label for="name">Votre pseudo <i class="fas fa-exclamation-triangle"></i></label>
                     <input id="name" name="name" type="text" class="form-control" require>
@@ -67,7 +67,7 @@
                     <span class=" col-md-3  ml-3 alert alert-danger" id="ancre">Commentaire signalé</span>
                     <?php else: ?>
                     <a
-                        href="index.php?page=chapter&action=signalComment&id=<?=$table->id?>&idComment=<?=$comment->id?>&#ancre">
+                        href="index.php?page=chapter&action=signalComment&id=<?=$table->id?>&idComment=<?=$comment->id?>#ancre">
                         (Signaler)</a>
                     <?php endif?>
                     <?php endforeach?>

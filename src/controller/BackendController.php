@@ -25,8 +25,8 @@ class BackendController
         $commentManager = new CommentsManager();
         $action = $getData['get']['action'] ?? null;
         $comments = null;
-        $id = isset($getData['get']['id']) ? (int) $getData['get']['id'] : 0;
-        $idComment = isset($getData['get']['idComment']) ? (int) $getData['get']['idComment'] : 0;
+        $id = isset($getData['get']['id']) ? (int) $getData['get']['id'] : null;
+        $idComment = isset($getData['get']['idComment']) ? (int) $getData['get']['idComment'] : null;
 
         if (isset($action)) {
             if ($action === 'valideComment') {
@@ -36,10 +36,10 @@ class BackendController
             }
         }
 
-        if ($id !== 0) {
+        if ($id !== null) {
             $comments = $commentManager->chapterComment($id);
-        } elseif ($id === 0) {
-            $comments = $commentManager->getComments(0);
+        } elseif ($id === null) {
+            $comments = $commentManager->getComments(null);
         }
 
         $view = new View();
