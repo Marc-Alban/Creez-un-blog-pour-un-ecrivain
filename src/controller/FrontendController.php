@@ -64,7 +64,10 @@ class FrontendController
             $commentManager->signalComment((int) $getData['get']['idComment']);
         }
 
-        if ($session['valideToken'] === false) {$errors["token"] = "Formulaire Incorrect";}
+        if (!empty($getData['post']['token'])) {
+            if ($session['valideToken'] !== $getData['post']['token']) {$errors["token"] = "Formulaire Incorrect";}
+            unset($session['token']);
+        }
 
         if ($action === 'submitComment') {
             if (empty($name) && empty($comment)) {

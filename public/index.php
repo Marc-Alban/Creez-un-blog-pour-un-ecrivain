@@ -10,20 +10,8 @@ $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
 $pageBack = ['adminComments', 'adminChapters', 'adminChapter', 'adminWrite', 'login', 'adminProfil'];
 
-$_SESSION['token'] = null;
-$_SESSION['valideToken'] = null;
-
-if (!empty($_POST['token'])) {
-    $checkToken = $_POST['token'];
-    $_SESSION['valideToken'] = ($checkToken === $_SESSION['token']) ? true : false;
-}
-
-if (is_null($_SESSION['token'])) {
-    $cryptoken = random_bytes(16);
-    $_SESSION['token'] = bin2hex($cryptoken);
-}
-
-//var_dump($_SESSION, $_POST);die();
+$cryptoken = random_bytes(16);
+$_SESSION['token'] = bin2hex($cryptoken);
 
 if (in_array($page, $pageFront) || empty($page) || !in_array($page, $pageBack)) {
     $controllerName = 'Blog\Controller\FrontendController';

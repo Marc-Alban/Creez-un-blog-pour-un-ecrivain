@@ -14,7 +14,7 @@
                         <?php endforeach?>
                     </div>
                     <?php endif?>
-                    <form action="index.php?page=login&action=connexion" method="POST">
+                    <form action="index.php?page=login&action=connexion&<?=$datas["session"]['token']?>" method="POST">
                         <div class="form-group row">
                             <label for="pseudo" class="col-md-4 col-form-label text-md-right">Pseudo</label>
                             <div class="col-md-6">
@@ -34,8 +34,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-md-6">
-                                <input type="hidden" name="token" id="token"
-                                    value="<?php foreach ($datas["session"] as $session => $value): echo $value;endforeach?>" />
+                                <input type="hidden" name="token" id="token" value="<?=$datas["session"]['token']?>" />
                             </div>
                         </div>
                         <div class="col-md-6 offset-md-4">
