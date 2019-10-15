@@ -153,7 +153,7 @@ class BackendController
             $chapter = $postManager->getChapter((int) $getData['get']['id'], 1);
         }
 
-        $view->getView('backend', 'adminchapterView', ['chapter' => $chapter, 'title' => $title, 'errors' => $errors, 'session' => $session]);
+        $view->getView('backend', 'adminChapterView', ['chapter' => $chapter, 'title' => $title, 'errors' => $errors, 'session' => $session]);
     }
 
 /**
