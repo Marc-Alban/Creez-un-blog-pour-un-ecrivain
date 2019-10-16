@@ -15,7 +15,7 @@ class AdminsManager
     public function getUsers(string $pseudo): ?string
     {
         $query = Database::getDb()->prepare("SELECT name FROM admins WHERE name = :pseudo ");
-        $query->execute(array(':pseudo' => $pseudo));
+        $query->execute([':pseudo' => $pseudo]);
         $req = $query->fetch();
         return $req['name'];
     }

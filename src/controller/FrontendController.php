@@ -21,12 +21,12 @@ class FrontendController
         $chapters = $postManager->getLimitedChapters();
         $oldChapter = $postManager->oldLimitedChapter();
 
-        $view = new View;
+        $view = new View();
         $view->getView('frontend', 'homeView', ['chapters' => $chapters, 'oldChapter' => $oldChapter, 'title' => 'Accueil', 'session' => $session]);
     }
 
 /**
- * Renvoie les chapitres sur la page chapitres
+ * Renvoie la liste des chapitres
  *
  * @param [type] $session
  * @return void
@@ -35,13 +35,13 @@ class FrontendController
     {
         $postManager = new PostsManager();
         $chapters = $postManager->getchapters(1);
-        $view = new View;
+        $view = new View();
         $view->getView('frontend', 'chaptersView', ['chapters' => $chapters, 'title' => 'Listes des chapitres', 'session' => $session]);
     }
 
 /**
  * Renvoie les commentaires et le chapitre
- * et signale les commentaires
+ * permet de signaler un commentaire
  *
  * @param array $getData
  * @param [type] $session
@@ -60,26 +60,27 @@ class FrontendController
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
 
+        $cryptoken = random_bytes(16);
+        $_SESSION['token'] = bin2hex($cryptoken);
+
         if ($action === 'signalComment') {
             $commentManager->signalComment((int) $getData['get']['idComment']);
-        }
-
-        if (!empty($getData['post']['token'])) {
-            if ($session['token'] !== $getData['post']['token']) {$errors["token"] = "Formulaire Incorrect";}
-            unset($session['token']);
         }
 
         if ($action === 'submitComment') {
             if (empty($name) && empty($comment)) {
                 $errors["Champs"] = "Veuillez remplir les champs obligatoires";
-            } else if (empty($name)) {
+            } elseif (empty($name)) {
                 $errors['name'] = "Veuillez mettre un pseudo";
-            } else if (empty($comment)) {
+            } elseif (empty($comment)) {
                 $errors['comment'] = "Veuillez renseigner une description";
-            } else if (strlen($name) <= 8) {
+            } elseif (strlen($name) <= 8) {
                 $errors['taille'] = "Veuillez mettre un pseudo de 8 caractères minimum ...";
-            } else if (!preg_match('/^[^-]([a-zéèàùûêâôë]*[\'\-\s]?[a-zéèàùûêâôë\s]*){1,}[^-]$/i', $name)) {
+            } elseif (!preg_match('/^[^-]([a-zéèàùûêâôë]*[\'\-\s]?[a-zéèàùûêâôë\s]*){1,}[^-]$/i', $name)) {
                 $errors['caractere'] = "Veuillez mettre des caractères alphanumérique et non un caractère spéciaux ";
+            } elseif ($session['token'] !== $getData['post']['token']) {
+                $errors["token"] = "Formulaire Incorrect";
+                unset($session['token']);
             }
 
             if (empty($errors)) {
@@ -92,7 +93,7 @@ class FrontendController
 
         $comments = $commentManager->getComments($id);
 
-        $view = new View;
+        $view = new View();
         $view->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments, 'title' => 'Chapitre', 'session' => $session, 'errors' => $errors]);
     }
 

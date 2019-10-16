@@ -31,7 +31,7 @@ class BackendController
         if (isset($action)) {
             if ($action === 'valideComment') {
                 $commentManager->validateComments($idComment);
-            } else if ($action === 'removeComment') {
+            } elseif ($action === 'removeComment') {
                 $commentManager->deleteComments($idComment);
             }
         }
@@ -59,14 +59,14 @@ class BackendController
         }
 
         $postManager = new PostsManager();
-        $AdminsManager = new AdminsManager;
+        $adminsManager = new AdminsManager();
         $commentManager = new CommentsManager();
         $action = $getData['get']['action'] ?? null;
 
         if ($action === 'delete') {
             $postManager->deleteChapter((int) $getData['get']['id']);
-        } else if ($action === "logout") {
-            $AdminsManager->logoutUser();
+        } elseif ($action === "logout") {
+            $adminsManager->logoutUser();
             header('Location: index.php?page=login&action=connexion');
         }
 
@@ -80,6 +80,7 @@ class BackendController
 /**
  * Permet de récupérer un chapitre
  * Modifie un chapitre
+ * Ecrit un chapitre
  * @param array $getData
  * @param array $session
  * @return void
@@ -90,16 +91,14 @@ class BackendController
             header('Location: index.php?page=login&action=connexion');
         }
 
-        if (!empty($getData['post']['token'])) {
-            if ($session['token'] !== $getData['post']['token']) {$errors["token"] = "Formulaire Incorrect";}
-            unset($session['token']);
-        }
-
         $postManager = new PostsManager();
         $view = new View();
         $action = $getData['get']['action'] ?? null;
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
+
+        $cryptoken = random_bytes(16);
+        $_SESSION['token'] = bin2hex($cryptoken);
 
         if (isset($action)) {
             $title = $getData['post']['title'] ?? null;
@@ -112,9 +111,9 @@ class BackendController
 
             if (empty($title) || empty($content)) {
                 $errors['contenu'] = 'Veuillez renseigner un contenu !';
-            } else if (empty($title)) {
+            } elseif (empty($title)) {
                 $errors['emptyTitle'] = "Veuillez mettre un titre";
-            } else if (empty($content)) {
+            } elseif (empty($content)) {
                 $errors['emptyDesc'] = "Veuillez mettre un paragraphe";
             }
 
@@ -124,9 +123,12 @@ class BackendController
                 $postManager->editChapter($id, $title, $content, $posted);
                 if (!isset($file) || empty($file)) {
                     $errors['empty'] = 'Image manquante ! ';
-                } else if (in_array($extention, $extentions) === false) {
+                } elseif (in_array($extention, $extentions) === false) {
                     $errors['valide'] = 'Image n\'est pas valide! ';
-                } else if (empty($errors)) {
+                } elseif ($session['token'] !== $getData['post']['token']) {
+                    $errors["token"] = "Formulaire Incorrect";
+                    unset($session['token']);
+                } elseif (empty($errors)) {
                     $postManager->editImageChapter($id, $title, $content, $tmpName, $extention, $posted);
                 }
             }
@@ -136,9 +138,12 @@ class BackendController
                 $name = $postManager->getName();
                 if (empty($tmpName)) {
                     $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';
-                } else if (in_array($extention, $extentions) === false) {
+                } elseif (in_array($extention, $extentions) === false) {
                     $errors['image'] = 'Image n\'est pas valide! ';
-                } else if (empty($errors)) {
+                } elseif ($session['token'] !== $getData['post']['token']) {
+                    $errors["token"] = "Formulaire Incorrect";
+                    unset($session['token']);
+                } elseif (empty($errors)) {
                     $postManager->chapterWrite($title, $content, $name["name_post"], $posted, $tmpName, $extention);
                     header('Location: index.php?page=adminChapters');
                 }
@@ -165,30 +170,30 @@ class BackendController
     public function loginAction(&$session, array $getData): void
     {
 
-        $AdminsManager = new AdminsManager();
+        $adminsManager = new AdminsManager();
         $action = $getData['get']['action'] ?? null;
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
 
+        $cryptoken = random_bytes(16);
+        $_SESSION['token'] = bin2hex($cryptoken);
+
         if (isset($getData['post']['connexion']) && $action === "connexion") {
 
-            if (!empty($getData['post']['token'])) {
-                if ($session["token"] !== $getData['post']['token']) {
-                    $errors["token"] = "Formulaire Incorrect";unset($session['token']);
-                }
-            }
-
-            $passwordBdd = $AdminsManager->getPass();
+            $passwordBdd = $adminsManager->getPass();
             $pseudo = $getData["post"]['pseudo'] ?? null;
-            $userBdd = $AdminsManager->getUsers($pseudo);
+            $userBdd = $adminsManager->getUsers($pseudo);
             $password = $getData["post"]['password'] ?? null;
 
             if (empty($pseudo)) {
                 $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
-            } else if (empty($password)) {
+            } elseif (empty($password)) {
                 $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
-            } else if (!password_verify($password, $passwordBdd) || $userBdd === null) {
+            } elseif (!password_verify($password, $passwordBdd) || $userBdd === null) {
                 $errors['identifiants'] = 'Identifiants Incorrect';
+            } elseif ($session['token'] !== $getData['post']['token']) {
+                $errors["token"] = "Formulaire Incorrect";
+                unset($session['token']);
             }
 
             if (empty($errors)) {
@@ -202,19 +207,29 @@ class BackendController
         $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors, 'session' => $session]);
     }
 
+    /**
+     * Permet de modifier les identifiants de connexion
+     *
+     * @param [type] $session
+     * @param array $getData
+     * @return void
+     */
     public function adminProfilAction(&$session, array $getData): void
     {
         if (!isset($session['mdp'])) {
             header('Location: index.php?page=login&action=connexion');
         }
 
-        $AdminsManager = new AdminsManager();
+        $adminsManager = new AdminsManager();
         $action = $getData['get']['action'] ?? null;
         $get = $getData['get'];
         $succes = $session['succes'] ?? null;
         unset($session['succes']);
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
+
+        $cryptoken = random_bytes(16);
+        $_SESSION['token'] = bin2hex($cryptoken);
 
         if ($action === "update") {
 
@@ -224,19 +239,22 @@ class BackendController
 
             if (empty($pseudo)) {
                 $errors["pseudoEmpty"] = 'Veuillez mettre un pseudo ';
-            } else if (empty($password)) {
+            } elseif (empty($password)) {
                 $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
-            } else if (empty($passwordVerif)) {
+            } elseif (empty($passwordVerif)) {
                 $errors["passwordVerifEmpty"] = 'Veuillez confirmer le mot de passe';
-            } else if ($password !== $passwordVerif) {
+            } elseif ($password !== $passwordVerif) {
                 $errors["passwordEmpty"] = 'les mots de passe ne correspond pas';
+            } elseif ($session['token'] !== $getData['post']['token']) {
+                $errors["token"] = "Formulaire Incorrect";
+                unset($session['token']);
             }
 
             if (empty($errors)) {
-                $AdminsManager->userReplace($pseudo);
+                $adminsManager->userReplace($pseudo);
                 $session['user'] = $pseudo;
                 $pass = password_hash($password, PASSWORD_DEFAULT);
-                $AdminsManager->passReplace($pass);
+                $adminsManager->passReplace($pass);
                 $session['mdp'] = $password;
                 $succes['identifiant'] = "Identifiant mis à jours";
             }

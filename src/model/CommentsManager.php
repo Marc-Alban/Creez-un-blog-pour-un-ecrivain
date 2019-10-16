@@ -28,7 +28,7 @@ class CommentsManager
             $results = $query->fetchAll(PDO::FETCH_OBJ);
             return $results;
 
-        } else if (!isset($id) && $id === null) {
+        } elseif (!isset($id) && $id === null) {
             $sql = "
             SELECT  comments.id,
                     comments.name,
@@ -62,11 +62,11 @@ class CommentsManager
         INSERT INTO comments(name, comment, post_id, date_comment)
         VALUES(:name, :comment, :postId, NOW())
         ";
-        $commentArray = array(
+        $commentArray = [
             ':name' => $name,
             ':comment' => $comment,
             ':postId' => $postId,
-        );
+        ];
         $req = Database::getDb()->prepare($sql);
         $req->execute($commentArray);
     }

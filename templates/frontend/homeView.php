@@ -1,4 +1,4 @@
-<main role="main" class="container">
+<main class="container">
     <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
         <div class="col-md-9 px-0">
             <h1 class="display-4 font-italic">A Propos de l'auteur</h1>
@@ -28,8 +28,7 @@
                             lire</a>
                     </div>
                     <div class="col-auto d-none d-lg-block">
-                        <img src="img/chapter/<?=$oldChapter->image_posts?>" width='250px' class="pt-4"
-                            alt="<?=$oldChapter->title?>">
+                        <img src="img/chapter/<?=$oldChapter->image_posts?>" class="pt-4" alt="<?=$oldChapter->title?>">
                     </div>
                 </div>
             </div>

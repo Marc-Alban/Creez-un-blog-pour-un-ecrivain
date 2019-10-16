@@ -10,12 +10,9 @@ $page = $_GET['page'] ?? 'home';
 $pageFront = ['home', 'chapters', 'chapter'];
 $pageBack = ['adminComments', 'adminChapters', 'adminChapter', 'adminWrite', 'login', 'adminProfil'];
 
-$cryptoken = random_bytes(16);
-$_SESSION['token'] = bin2hex($cryptoken);
-
 if (in_array($page, $pageFront) || empty($page) || !in_array($page, $pageBack)) {
     $controllerName = 'Blog\Controller\FrontendController';
-} else if (in_array($page, $pageBack)) {
+} elseif (in_array($page, $pageBack)) {
     $controllerName = 'Blog\Controller\BackendController';
 }
 
@@ -25,7 +22,7 @@ $methode = $page . 'Action';
 if (in_array($page, $pageFront) || in_array($page, $pageBack)) {
     if (($action === null && $id === null) || ($action !== null && $id !== null || $action !== null && $id === null)) {
         $controller->$methode($_SESSION, ['get' => $_GET, 'post' => $_POST, 'files' => $_FILES]);
-    } else if ($action === null && $id !== null) {
+    } elseif ($action === null && $id !== null) {
         $controller->$methode($_SESSION, ['post' => $_POST, 'get' => $_GET]);
     }
 }

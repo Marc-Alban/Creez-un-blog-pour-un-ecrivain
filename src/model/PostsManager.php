@@ -23,7 +23,7 @@ class PostsManager
             FROM    posts
             WHERE   id = :id
             ";
-        } else if ($order === 2) {
+        } elseif ($order === 2) {
             $sql = "
             SELECT  posts.id,
                     posts.title,
@@ -60,7 +60,7 @@ class PostsManager
             ORDER BY date_posts
             ASC
             ";
-        } else if ($order === 2) {
+        } elseif ($order === 2) {
             $sql = "
             SELECT *
             FROM posts
@@ -165,7 +165,7 @@ class PostsManager
         if (!$tmpName) {
             $id = "post";
             $extention = ".png";
-        } else if (!empty($tmpName) && !empty($id) && !empty($extention)) {
+        } elseif (!empty($tmpName) && !empty($id) && !empty($extention)) {
             move_uploaded_file($tmpName, "img/chapter/" . $id . $extention);
         }
 

@@ -1,5 +1,5 @@
 <div class="container">
-    <header class="blog-header py-3">
+    <header class="py-3">
         <div class="row justify-content-between align-items-center">
             <div class="container">
                 <a href="index.php?page=home">
@@ -32,6 +32,5 @@
                 <span class="controller-close">X</span>
             </div>
         </div>
-</div>
-</header>
+    </header>
 </div>
