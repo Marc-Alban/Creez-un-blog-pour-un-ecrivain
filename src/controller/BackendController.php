@@ -173,8 +173,9 @@ class BackendController
         if (isset($getData['post']['connexion']) && $action === "connexion") {
 
             if (!empty($getData['post']['token'])) {
-                if ($session['token'] !== $getData['post']['token']) {$errors["token"] = "Formulaire Incorrect";}
-                unset($session['token']);
+                if ($session["token"] !== $getData['post']['token']) {
+                    $errors["token"] = "Formulaire Incorrect";unset($session['token']);
+                }
             }
 
             $passwordBdd = $AdminsManager->getPass();
