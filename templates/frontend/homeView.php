@@ -27,8 +27,8 @@
                         <a href="index.php?page=chapter&id=<?=$oldChapter->id?>" class="stretched-link">Continuer à
                             lire</a>
                     </div>
-                    <div class="col-auto d-none d-lg-block">
-                        <img src="img/chapter/<?=$oldChapter->image_posts?>" class="pt-4" alt="<?=$oldChapter->title?>">
+                    <div class="col-auto d-none widImg d-lg-block">
+                        <img src="img/chapter/<?=$oldChapter->image_posts?>" alt="<?=$oldChapter->title?>">
                     </div>
                 </div>
             </div>
@@ -55,9 +55,8 @@
                         <a href="index.php?page=chapter&id=<?=$chapter->id?>" class="stretched-link">Continuer à
                             lire</a>
                     </div>
-                    <div class="col-auto d-none d-lg-block">
-                        <img src="img/chapter/<?=$chapter->image_posts?>" width='250px' class="pt-4"
-                            alt="<?=$chapter->title?>">
+                    <div class="col-auto d-none widImg d-lg-block">
+                        <img src="img/chapter/<?=$chapter->image_posts?>" alt="<?=$chapter->title?>">
                     </div>
                 </div>
             </div>
