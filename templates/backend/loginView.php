@@ -14,7 +14,7 @@
                         <?php endforeach?>
                     </div>
                     <?php endif?>
-                    <form action="index.php?page=login&action=connexion&<?=$datas["session"]['token']?>" method="POST">
+                    <form action="index.php?page=login&action=connexion" method="POST">
                         <div class="form-group row">
                             <label for="pseudo" class="col-md-4 col-form-label text-md-right">Pseudo</label>
                             <div class="col-md-6">

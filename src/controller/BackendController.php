@@ -9,22 +9,29 @@ use Blog\View\View;
 
 class BackendController
 {
-
+    //Création d'une proprieté
     private $token = null;
 
+    //méthode créer un token et l'insert en session
     public function createSessionToken(&$session): void
     {
+        //création du token
         $this->token = bin2hex(random_bytes(32));
+        //insertion du token en session
         $session['token'] = $this->token;
 
     }
 
+    //methode pour comparer les tokens
     public function compareTokens(&$session, array $getData): void
     {
+        //erreur = $_SESSION['errors'] ou null
         $errors = $session['errors'] ?? null;
+        //suppression de la session
         unset($session['errors']);
-
-        if (!isset($session['token']) && !isset($getData['post']['token']) && empty($session['token']) && empty($getData['post']['token'])) {
+        //Condition pour savoir si il existe bien un token en session, il existe bien un token envoyé en post, si la session du token et le post ne sont pas vide
+        //mais egalement si la session est egal au token du post
+        if (!isset($session['token']) || !isset($getData['post']['token']) || empty($session['token']) || empty($getData['post']['token']) || $session['token'] !== $getData['post']['token']) {
             $errors['formtoken'] = "Formulaire incorrect";
         }
     }
@@ -142,7 +149,6 @@ class BackendController
                 } elseif (in_array($extention, $extentions) === false) {
                     $errors['valide'] = 'Image n\'est pas valide! ';
                 } elseif (empty($errors)) {
-                    $this->createSessionToken($session['token'], $getData['post']['token']);
                     $postManager->editImageChapter($id, $title, $content, $tmpName, $extention, $posted);
                 }
             }
@@ -155,7 +161,6 @@ class BackendController
                 } elseif (in_array($extention, $extentions) === false) {
                     $errors['image'] = 'Image n\'est pas valide! ';
                 } elseif (empty($errors)) {
-                    $this->createSessionToken($session['token'], $getData['post']['token']);
                     $postManager->chapterWrite($title, $content, $name["name_post"], $posted, $tmpName, $extention);
                     header('Location: index.php?page=adminChapters');
                 }
@@ -187,6 +192,7 @@ class BackendController
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
 
+        //Création du token
         $this->createSessionToken($session);
 
         if (isset($getData['post']['connexion']) && $action === "connexion") {
@@ -204,11 +210,9 @@ class BackendController
                 $errors['identifiants'] = 'Identifiants Incorrect';
             }
 
-            $tokenPost = str_split($getData['post']['token'], 64);
-            // var_dump($getData['post']['token']);
-            // var_dump($tokenPost);die();
+            //utilisation de la méthode pour comparer
+            $this->compareTokens($session, $getData);
 
-            $this->compareTokens($session['token'], $tokenPost);
             if (empty($errors)) {
                 $session['user'] = $pseudo;
                 $session['mdp'] = $password;
@@ -256,8 +260,6 @@ class BackendController
             } elseif ($password !== $passwordVerif) {
                 $errors["passwordEmpty"] = 'les mots de passe ne correspond pas';
             }
-
-            $this->createSessionToken($session['token'], $getData['post']['token']);
 
             if (empty($errors)) {
                 $adminsManager->userReplace($pseudo);
