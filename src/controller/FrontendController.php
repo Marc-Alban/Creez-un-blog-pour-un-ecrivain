@@ -2,6 +2,7 @@
 declare (strict_types = 1);
 namespace Blog\Controller;
 
+use Blog\Controller\BackendController;
 use Blog\Model\CommentsManager;
 use Blog\Model\PostsManager;
 use Blog\View\View;
@@ -52,6 +53,7 @@ class FrontendController
 
         $postManager = new PostsManager();
         $commentManager = new CommentsManager();
+        $backenController = new BackendController();
         $id = ($getData['get']['id']) ? (int) $getData['get']['id'] : 1;
         $chapter = $postManager->getChapter($id, 2);
         $name = $getData['post']['name'] ?? null;
@@ -66,9 +68,6 @@ class FrontendController
 
         if ($action === 'submitComment') {
 
-            $cryptoken = random_bytes(16);
-            $_SESSION['token'] = bin2hex($cryptoken);
-
             if (empty($name) && empty($comment)) {
                 $errors["Champs"] = "Veuillez remplir les champs obligatoires";
             } elseif (empty($name)) {
@@ -81,6 +80,13 @@ class FrontendController
                 $errors['caractere'] = "Veuillez mettre des caractères alphanumérique et non un caractère spéciaux ";
             }
 
+            $errors['token'] = $backenController->compareTokens($session, $getData);
+            $backenController->createSessionToken($session);
+
+            if ($errors['token'] === null || is_null($errors['token'])) {
+                unset($errors['token']);
+            }
+
             if (empty($errors)) {
                 $name = htmlentities(trim($name));
                 $comment = htmlentities(trim($comment));
@@ -88,6 +94,8 @@ class FrontendController
             }
 
         }
+
+        $backenController->createSessionToken($session);
 
         $comments = $commentManager->getComments($id);
 

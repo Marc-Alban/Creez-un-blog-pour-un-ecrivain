@@ -207,7 +207,7 @@ class BackendController
             $this->createSessionToken($session);
 
             if ($errors['token'] === null || is_null($errors['token'])) {
-                unset($session['errors']);
+                unset($errors['token']);
             }
 
             if (empty($errors)) {
