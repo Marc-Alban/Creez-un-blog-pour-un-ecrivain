@@ -2,13 +2,41 @@
 declare (strict_types = 1);
 namespace Blog\Controller;
 
-use Blog\Controller\BackendController;
 use Blog\Model\CommentsManager;
 use Blog\Model\PostsManager;
 use Blog\View\View;
 
 class FrontendController
 {
+
+    private $token = null;
+
+    /**
+     * Créer les tokens
+     *
+     * @param [type] $session
+     * @return void
+     */
+    public function createSessionToken(&$session): void
+    {
+        $this->token = bin2hex(random_bytes(32));
+        $session['token'] = $this->token;
+    }
+
+    /**
+     * Compare les tokens
+     *
+     * @param [type] $session
+     * @param array $getData
+     * @return string|null
+     */
+    public function compareTokens(&$session, array $getData): ?string
+    {
+        if (!isset($session['token']) || !isset($getData['post']['token']) || empty($session['token']) || empty($getData['post']['token']) || $session['token'] !== $getData['post']['token']) {
+            return "Formulaire incorrect";
+        }
+        return null;
+    }
 
 /**
  * Renvoie les chapitres sur la page Accueil
@@ -53,7 +81,7 @@ class FrontendController
 
         $postManager = new PostsManager();
         $commentManager = new CommentsManager();
-        $backenController = new BackendController();
+
         $id = ($getData['get']['id']) ? (int) $getData['get']['id'] : 1;
         $chapter = $postManager->getChapter($id, 2);
         $name = $getData['post']['name'] ?? null;
@@ -80,8 +108,8 @@ class FrontendController
                 $errors['caractere'] = "Veuillez mettre des caractères alphanumérique et non un caractère spéciaux ";
             }
 
-            $errors['token'] = $backenController->compareTokens($session, $getData);
-            $backenController->createSessionToken($session);
+            $errors['token'] = $this->compareTokens($session, $getData);
+            $this->createSessionToken($session);
 
             if ($errors['token'] === null || is_null($errors['token'])) {
                 unset($errors['token']);
@@ -95,9 +123,8 @@ class FrontendController
 
         }
 
-        $backenController->createSessionToken($session);
-
         $comments = $commentManager->getComments($id);
+        $this->createSessionToken($session);
 
         $view = new View();
         $view->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments, 'title' => 'Chapitre', 'session' => $session, 'errors' => $errors]);

@@ -9,26 +9,32 @@ use Blog\View\View;
 
 class BackendController
 {
-    //Création d'une proprieté
     private $token = null;
 
-    //méthode créer un token et l'insert en session
+    /**
+     * Créer les tokens
+     *
+     * @param [type] $session
+     * @return void
+     */
     public function createSessionToken(&$session): void
     {
-        //création du token
         $this->token = bin2hex(random_bytes(32));
-        //insertion du token en session
         $session['token'] = $this->token;
-
     }
 
-    //methode pour comparer les tokens
+    /**
+     * Compare les tokens
+     *
+     * @param [type] $session
+     * @param array $getData
+     * @return string|null
+     */
     public function compareTokens(&$session, array $getData): ?string
     {
         if (!isset($session['token']) || !isset($getData['post']['token']) || empty($session['token']) || empty($getData['post']['token']) || $session['token'] !== $getData['post']['token']) {
             return "Formulaire incorrect";
         }
-
         return null;
     }
 
