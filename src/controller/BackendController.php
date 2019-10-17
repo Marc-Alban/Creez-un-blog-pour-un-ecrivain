@@ -10,6 +10,31 @@ use Blog\View\View;
 class BackendController
 {
 
+    private $token = null;
+    private $certifiedToken;
+
+    public function createSessionToken(&$session, string $getData)
+    {
+        if (!empty($session['token'])) {
+            $this->certifiedToken = $this->compareTokens($session['token'], $getData['post']['token']);
+
+        }
+
+        if (empty($session['token'])) {
+            $this->token = bin2hex(random_bytes(32));
+            $session['token'] = $this->token;
+        }
+    }
+
+    public function compareTokens(&$session, string $getData)
+    {
+        $errors = $session['errors'] ?? null;
+        unset($session['errors']);
+        if (!isset($session['token']) && !isset($getData['post']['token']) && empty($session['token']) && empty($getData['post']['token'])) {
+            $errors['token'] = "Formulaire incorrect";
+        }
+    }
+
 /**
  * Retourne la page commentaire
  *
@@ -97,9 +122,6 @@ class BackendController
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
 
-        $cryptoken = random_bytes(16);
-        $_SESSION['token'] = bin2hex($cryptoken);
-
         if (isset($action)) {
             $title = $getData['post']['title'] ?? null;
             $content = $getData['post']['content'] ?? null;
@@ -125,10 +147,8 @@ class BackendController
                     $errors['empty'] = 'Image manquante ! ';
                 } elseif (in_array($extention, $extentions) === false) {
                     $errors['valide'] = 'Image n\'est pas valide! ';
-                } elseif ($session['token'] !== $getData['post']['token']) {
-                    $errors["token"] = "Formulaire Incorrect";
-                    unset($session['token']);
                 } elseif (empty($errors)) {
+                    $this->createSessionToken($session['token'], $getData['post']['token']);
                     $postManager->editImageChapter($id, $title, $content, $tmpName, $extention, $posted);
                 }
             }
@@ -140,10 +160,8 @@ class BackendController
                     $errors['imageVide'] = 'Image obligatoire pour un chapitre ! ';
                 } elseif (in_array($extention, $extentions) === false) {
                     $errors['image'] = 'Image n\'est pas valide! ';
-                } elseif ($session['token'] !== $getData['post']['token']) {
-                    $errors["token"] = "Formulaire Incorrect";
-                    unset($session['token']);
                 } elseif (empty($errors)) {
+                    $this->createSessionToken($session['token'], $getData['post']['token']);
                     $postManager->chapterWrite($title, $content, $name["name_post"], $posted, $tmpName, $extention);
                     header('Location: index.php?page=adminChapters');
                 }
@@ -174,11 +192,9 @@ class BackendController
         $action = $getData['get']['action'] ?? null;
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
-
-        $cryptoken = random_bytes(16);
-        $_SESSION['token'] = bin2hex($cryptoken);
-
+        var_dump($session, $getData);die();
         if (isset($getData['post']['connexion']) && $action === "connexion") {
+            var_dump($session, $getData);die();
 
             $passwordBdd = $adminsManager->getPass();
             $pseudo = $getData["post"]['pseudo'] ?? null;
@@ -191,11 +207,8 @@ class BackendController
                 $errors["passwordEmpty"] = 'Veuillez mettre un mot de passe';
             } elseif (!password_verify($password, $passwordBdd) || $userBdd === null) {
                 $errors['identifiants'] = 'Identifiants Incorrect';
-            } elseif ($session['token'] !== $getData['post']['token']) {
-                $errors["token"] = "Formulaire Incorrect";
-                unset($session['token']);
             }
-
+            $this->createSessionToken($session['token'], $getData['post']['token']);
             if (empty($errors)) {
                 $session['user'] = $pseudo;
                 $session['mdp'] = $password;
@@ -228,9 +241,6 @@ class BackendController
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
 
-        $cryptoken = random_bytes(16);
-        $_SESSION['token'] = bin2hex($cryptoken);
-
         if ($action === "update") {
 
             $pseudo = htmlspecialchars(trim($getData["post"]['pseudo'])) ?? null;
@@ -245,10 +255,9 @@ class BackendController
                 $errors["passwordVerifEmpty"] = 'Veuillez confirmer le mot de passe';
             } elseif ($password !== $passwordVerif) {
                 $errors["passwordEmpty"] = 'les mots de passe ne correspond pas';
-            } elseif ($session['token'] !== $getData['post']['token']) {
-                $errors["token"] = "Formulaire Incorrect";
-                unset($session['token']);
             }
+
+            $this->createSessionToken($session['token'], $getData['post']['token']);
 
             if (empty($errors)) {
                 $adminsManager->userReplace($pseudo);

@@ -60,14 +60,15 @@ class FrontendController
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
 
-        $cryptoken = random_bytes(16);
-        $_SESSION['token'] = bin2hex($cryptoken);
-
         if ($action === 'signalComment') {
             $commentManager->signalComment((int) $getData['get']['idComment']);
         }
 
         if ($action === 'submitComment') {
+
+            $cryptoken = random_bytes(16);
+            $_SESSION['token'] = bin2hex($cryptoken);
+
             if (empty($name) && empty($comment)) {
                 $errors["Champs"] = "Veuillez remplir les champs obligatoires";
             } elseif (empty($name)) {
@@ -78,9 +79,6 @@ class FrontendController
                 $errors['taille'] = "Veuillez mettre un pseudo de 8 caractères minimum ...";
             } elseif (!preg_match('/^[^-]([a-zéèàùûêâôë]*[\'\-\s]?[a-zéèàùûêâôë\s]*){1,}[^-]$/i', $name)) {
                 $errors['caractere'] = "Veuillez mettre des caractères alphanumérique et non un caractère spéciaux ";
-            } elseif ($session['token'] !== $getData['post']['token']) {
-                $errors["token"] = "Formulaire Incorrect";
-                unset($session['token']);
             }
 
             if (empty($errors)) {
