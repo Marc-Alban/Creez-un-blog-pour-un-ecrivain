@@ -11,27 +11,21 @@ class BackendController
 {
 
     private $token = null;
-    private $certifiedToken;
 
-    public function createSessionToken(&$session, string $getData)
+    public function createSessionToken(&$session): void
     {
-        if (!empty($session['token'])) {
-            $this->certifiedToken = $this->compareTokens($session['token'], $getData['post']['token']);
+        $this->token = bin2hex(random_bytes(32));
+        $session['token'] = $this->token;
 
-        }
-
-        if (empty($session['token'])) {
-            $this->token = bin2hex(random_bytes(32));
-            $session['token'] = $this->token;
-        }
     }
 
-    public function compareTokens(&$session, string $getData)
+    public function compareTokens(&$session, array $getData): void
     {
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
+
         if (!isset($session['token']) && !isset($getData['post']['token']) && empty($session['token']) && empty($getData['post']['token'])) {
-            $errors['token'] = "Formulaire incorrect";
+            $errors['formtoken'] = "Formulaire incorrect";
         }
     }
 
@@ -192,9 +186,10 @@ class BackendController
         $action = $getData['get']['action'] ?? null;
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
-        var_dump($session, $getData);die();
+
+        $this->createSessionToken($session);
+
         if (isset($getData['post']['connexion']) && $action === "connexion") {
-            var_dump($session, $getData);die();
 
             $passwordBdd = $adminsManager->getPass();
             $pseudo = $getData["post"]['pseudo'] ?? null;
@@ -208,7 +203,12 @@ class BackendController
             } elseif (!password_verify($password, $passwordBdd) || $userBdd === null) {
                 $errors['identifiants'] = 'Identifiants Incorrect';
             }
-            $this->createSessionToken($session['token'], $getData['post']['token']);
+
+            $tokenPost = str_split($getData['post']['token'], 64);
+            // var_dump($getData['post']['token']);
+            // var_dump($tokenPost);die();
+
+            $this->compareTokens($session['token'], $tokenPost);
             if (empty($errors)) {
                 $session['user'] = $pseudo;
                 $session['mdp'] = $password;
