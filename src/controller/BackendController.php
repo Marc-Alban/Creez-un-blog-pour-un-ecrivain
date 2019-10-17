@@ -23,17 +23,13 @@ class BackendController
     }
 
     //methode pour comparer les tokens
-    public function compareTokens(&$session, array $getData): void
+    public function compareTokens(&$session, array $getData): ?string
     {
-        //erreur = $_SESSION['errors'] ou null
-        $errors = $session['errors'] ?? null;
-        //suppression de la session
-        unset($session['errors']);
-        //Condition pour savoir si il existe bien un token en session, il existe bien un token envoyé en post, si la session du token et le post ne sont pas vide
-        //mais egalement si la session est egal au token du post
         if (!isset($session['token']) || !isset($getData['post']['token']) || empty($session['token']) || empty($getData['post']['token']) || $session['token'] !== $getData['post']['token']) {
-            $errors['formtoken'] = "Formulaire incorrect";
+            return "Formulaire incorrect";
         }
+
+        return null;
     }
 
 /**
@@ -192,9 +188,6 @@ class BackendController
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
 
-        //Création du token
-        $this->createSessionToken($session);
-
         if (isset($getData['post']['connexion']) && $action === "connexion") {
 
             $passwordBdd = $adminsManager->getPass();
@@ -210,8 +203,12 @@ class BackendController
                 $errors['identifiants'] = 'Identifiants Incorrect';
             }
 
-            //utilisation de la méthode pour comparer
-            $this->compareTokens($session, $getData);
+            $errors['token'] = $this->compareTokens($session, $getData);
+            $this->createSessionToken($session);
+
+            if ($errors['token'] === null || is_null($errors['token'])) {
+                unset($session['errors']);
+            }
 
             if (empty($errors)) {
                 $session['user'] = $pseudo;
@@ -219,6 +216,8 @@ class BackendController
                 header('Location: index.php?page=adminChapters');
             }
         }
+
+        $this->createSessionToken($session);
 
         $view = new View();
         $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors, 'session' => $session]);
