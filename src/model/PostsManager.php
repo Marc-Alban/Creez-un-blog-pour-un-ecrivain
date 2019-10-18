@@ -117,6 +117,7 @@ class PostsManager
         FROM posts
         JOIN admins
         WHERE posts.id=1
+        AND posts.posted = 1
         ";
 
         $query = Database::getDb()->query($sql);

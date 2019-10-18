@@ -71,7 +71,7 @@ class BackendController
         }
 
         $view = new View();
-        $view->getView('backend', 'adminCommentsView', ['comments' => $comments, 'title' => 'Dashboard', 'session' => $session]);
+        $view->getView('backend', 'adminCommentsView', ['comments' => $comments, 'title' => 'Dashboard', 'session' => $session, $getData['get']]);
     }
 
 /**
