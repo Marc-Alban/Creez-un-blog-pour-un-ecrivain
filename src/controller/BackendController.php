@@ -48,6 +48,7 @@ class BackendController
     {
         if (!isset($session['mdp'])) {
             header('Location: index.php?page=login&action=connexion');
+            exit;
         }
 
         $commentManager = new CommentsManager();
@@ -84,6 +85,7 @@ class BackendController
     {
         if (empty($session['mdp'])) {
             header('Location: index.php?page=login&action=connexion');
+            exit;
         }
 
         $postManager = new PostsManager();
@@ -96,6 +98,7 @@ class BackendController
         } elseif ($action === "logout") {
             $adminsManager->logoutUser();
             header('Location: index.php?page=login&action=connexion');
+            exit;
         }
 
         $chapters = $postManager->getChapters(2);
@@ -117,6 +120,7 @@ class BackendController
     {
         if (!isset($session['mdp'])) {
             header('Location: index.php?page=login&action=connexion');
+            exit;
         }
 
         $postManager = new PostsManager();
@@ -165,6 +169,7 @@ class BackendController
                 } elseif (empty($errors)) {
                     $postManager->chapterWrite($title, $content, $name["name_post"], $posted, $tmpName, $extention);
                     header('Location: index.php?page=adminChapters');
+                    exit;
                 }
             }
         }
@@ -210,7 +215,6 @@ class BackendController
             }
 
             $errors['token'] = $this->compareTokens($session, $getData);
-            $this->createSessionToken($session);
 
             if ($errors['token'] === null || is_null($errors['token'])) {
                 unset($errors['token']);
@@ -220,6 +224,7 @@ class BackendController
                 $session['user'] = $pseudo;
                 $session['mdp'] = $password;
                 header('Location: index.php?page=adminChapters');
+                exit;
             }
         }
 
@@ -240,6 +245,7 @@ class BackendController
     {
         if (!isset($session['mdp'])) {
             header('Location: index.php?page=login&action=connexion');
+            exit;
         }
 
         $adminsManager = new AdminsManager();
