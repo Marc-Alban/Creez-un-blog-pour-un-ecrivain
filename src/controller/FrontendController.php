@@ -86,7 +86,7 @@ class FrontendController
 
             $errors['token'] = $token->compareTokens($session, $getData);
 
-            if ($errors['token'] === null || is_null($errors['token'])) {
+            if ($errors['token'] === null) {
                 unset($errors['token']);
             }
 
