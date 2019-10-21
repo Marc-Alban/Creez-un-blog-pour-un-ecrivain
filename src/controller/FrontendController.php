@@ -5,6 +5,7 @@ namespace Blog\Controller;
 use Blog\Model\CommentsManager;
 use Blog\Controller\BackendController;
 use Blog\Model\PostsManager;
+use Blog\Token\Token;
 use Blog\View\View;
 
 class FrontendController
@@ -55,6 +56,7 @@ class FrontendController
         $postManager = new PostsManager();
         $commentManager = new CommentsManager();
         $backendController = new BackendController();
+        $token = new Token();
 
         $id = ($getData['get']['id']) ? (int) $getData['get']['id'] : 1;
         $chapter = $postManager->getChapter($id, 2);
@@ -82,7 +84,7 @@ class FrontendController
                 $errors['caractere'] = "Veuillez mettre des caractères alphanumérique et non un caractère spéciaux ";
             }
 
-            $errors['token'] = $backendController->compareTokens($session, $getData);
+            $errors['token'] = $token->compareTokens($session, $getData);
 
             if ($errors['token'] === null || is_null($errors['token'])) {
                 unset($errors['token']);
@@ -97,7 +99,7 @@ class FrontendController
         }
 
         $comments = $commentManager->getComments($id);
-        $backendController->createSessionToken($session);
+        $token->createSessionToken($session);
 
         $view = new View();
         $view->getView('frontend', 'chapterView', ['chapter' => $chapter, 'comments' => $comments, 'title' => 'Chapitre', 'session' => $session, 'errors' => $errors]);

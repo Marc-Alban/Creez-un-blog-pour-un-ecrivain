@@ -5,38 +5,12 @@ namespace Blog\Controller;
 use Blog\Model\AdminsManager;
 use Blog\Model\CommentsManager;
 use Blog\Model\PostsManager;
+use Blog\Token\Token;
 use Blog\View\View;
 
 class BackendController
 {
-    private $token = null;
 
-    /**
-     * Créer les tokens
-     *
-     * @param [type] $session
-     * @return void
-     */
-    public function createSessionToken(&$session): void
-    {
-        $this->token = bin2hex(random_bytes(32));
-        $session['token'] = $this->token;
-    }
-
-    /**
-     * Compare les tokens
-     *
-     * @param [type] $session
-     * @param array $getData
-     * @return string|null
-     */
-    public function compareTokens(&$session, array $getData): ?string
-    {
-        if (!isset($session['token']) || !isset($getData['post']['token']) || empty($session['token']) || empty($getData['post']['token']) || $session['token'] !== $getData['post']['token']) {
-            return "Formulaire incorrect";
-        }
-        return null;
-    }
 
 /**
  * Retourne la page commentaire
@@ -195,6 +169,7 @@ class BackendController
     {
 
         $adminsManager = new AdminsManager();
+        $token = new Token();
         $action = $getData['get']['action'] ?? null;
         $errors = $session['errors'] ?? null;
         unset($session['errors']);
@@ -214,7 +189,7 @@ class BackendController
                 $errors['identifiants'] = 'Identifiants Incorrect';
             }
 
-            $errors['token'] = $this->compareTokens($session, $getData);
+            $errors['token'] = $token->compareTokens($session, $getData);
 
             if ($errors['token'] === null || is_null($errors['token'])) {
                 unset($errors['token']);
@@ -228,7 +203,7 @@ class BackendController
             }
         }
 
-        $this->createSessionToken($session);
+        $token->createSessionToken($session);
 
         $view = new View();
         $view->getView('backend', 'loginView', ['title' => 'Connexion', 'errors' => $errors, 'session' => $session]);
